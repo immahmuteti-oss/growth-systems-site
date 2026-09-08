@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Offline Gate 1 qualification and precision-dispatch console for Growth Systems.">
+    <title>Gate 1 Console | Growth Systems</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="operator.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="wordmark" href="index.html" aria-label="Growth Systems home">GS<span>.</span></a>
+      <p>Gate 1 / precision dispatch</p>
+      <a class="quiet-link" href="index.html">Client site</a>
+    </header>
+
+    <main>
+      <section class="intro">
+        <p class="eyebrow">Operator tool</p>
+        <h1>Earn the right to send.</h1>
+        <p>Record only what is evidenced. This console produces a permission-first message and an internal account brief. It does not send messages, store data remotely, or make performance claims.</p>
+      </section>
+
+      <form id="dispatch-form">
+        <section class="panel account-panel" aria-labelledby="account-title">
+          <div class="section-heading">
+            <p class="eyebrow">01</p>
+            <h2 id="account-title">Account and condition</h2>
+          </div>
+          <div class="field-grid">
+            <label>Business name<input name="business" required placeholder="Business name"></label>
+            <label>Decision-maker<input name="buyer" required placeholder="Name and role"></label>
+            <label>Professional route<input name="route" required placeholder="Published email, introduction, or business WhatsApp"></label>
+            <label>Research date<input name="researchDate" type="date" required></label>
+            <label class="wide">Evidence source<input name="evidence" required placeholder="Public page, introduction, or source record"></label>
+            <label class="wide">Observed condition<textarea name="condition" required rows="3" placeholder="One specific, observable condition. Do not diagnose beyond the evidence."></textarea></label>
+            <label class="wide">Bounded consequence<textarea name="consequence" required rows="3" placeholder="A plausible consequence, framed as a hypothesis where needed."></textarea></label>
+            <label class="wide">Current trigger<textarea name="moment" required rows="2" placeholder="Why it may be timely now: live inventory, launch, operational change, referral."></textarea></label>
+            <label class="wide">What could make this wrong or irrelevant<textarea name="limit" required rows="2" placeholder="The evidence boundary or a reason not to approach."></textarea></label>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="offer-title">
+          <div class="section-heading">
+            <p class="eyebrow">02</p>
+            <h2 id="offer-title">Offer and method</h2>
+          </div>
+          <div class="field-grid compact-grid">
+            <label>Entry offer
+              <select name="offer" id="offer" required>
+                <option value="signal">System Signal Review</option>
+                <option value="diagnostic" selected>Growth System Diagnostic</option>
+                <option value="operations">Client Operations Flow Blueprint</option>
+              </select>
+            </label>
+            <label>Pricing mode
+              <select name="pricing" id="pricing" required>
+                <option value="launch" selected>Launch-client</option>
+                <option value="standard">Standard</option>
+              </select>
+            </label>
+            <label>Currency
+              <select name="currency" id="currency" required>
+                <option value="KES" selected>KES / local</option>
+                <option value="USD">USD / international</option>
+              </select>
+            </label>
+            <div class="offer-summary" aria-live="polite">
+              <span id="offer-timeline">Five working days</span>
+              <strong id="offer-price">KES 35,000</strong>
+              <span id="offer-credit">KES 20,000 implementation credit within 14 days</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="authority-title">
+          <div class="section-heading">
+            <p class="eyebrow">03</p>
+            <h2 id="authority-title">Send authority</h2>
+          </div>
+          <p class="instruction">Score every control from 0 to 2. Send requires at least 8/10 and no score below 1.</p>
+          <div class="score-grid">
+            <label>Target<select class="score" name="target"><option value="0">0 - unknown</option><option value="1" selected>1 - plausible</option><option value="2">2 - evidenced</option></select></label>
+            <label>Contact<select class="score" name="contact"><option value="0">0 - unknown</option><option value="1" selected>1 - plausible</option><option value="2">2 - evidenced</option></select></label>
+            <label>Moment<select class="score" name="timing"><option value="0">0 - unknown</option><option value="1" selected>1 - plausible</option><option value="2">2 - evidenced</option></select></label>
+            <label>Approach<select class="score" name="approach"><option value="0">0 - unknown</option><option value="1" selected>1 - plausible</option><option value="2">2 - evidenced</option></select></label>
+            <label>Method<select class="score" name="method"><option value="0">0 - unknown</option><option value="1" selected>1 - plausible</option><option value="2">2 - evidenced</option></select></label>
+          </div>
+          <div id="send-status" class="send-status" role="status">5/10. Continue research before sending.</div>
+        </section>
+
+        <section class="actions" aria-label="Create operating assets">
+          <button type="button" id="copy-message">Copy permission message</button>
+          <button type="button" id="download-brief" class="secondary">Download account brief</button>
+          <button type="reset" class="text-button">Clear form</button>
+          <p id="action-status" role="status"></p>
+        </section>
+      </form>
+    </main>
+    <script src="operator.js"></script>
+  </body>
+</html>

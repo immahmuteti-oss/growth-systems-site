@@ -2,6 +2,8 @@
 
 Static client-facing capture page for the first Growth Systems doorway.
 
+`operator.html` is a separate offline Gate 1 console for internal qualification, dispatch preparation, and account-brief export. It does not transmit prospect data or send outreach.
+
 ## Publication Before Launch
 
 - Replace the placeholder copied-request workflow in `app.js` with the verified business email, form endpoint, or CRM intake route.
