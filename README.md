@@ -6,7 +6,7 @@ Static client-facing capture page for the first Growth Systems doorway.
 
 ## Publication Before Launch
 
-- Replace the placeholder copied-request workflow in `app.js` with the verified business email, form endpoint, or CRM intake route.
+- Configure the blank `contact-config.js` with a verified business email or HTTPS form endpoint. See `contact-config.example.js`; no credential belongs in a public site file.
 - Add the actual legal business name, contact details, privacy policy, refund policy, and delivery terms before accepting payment links.
 - Verify the image license and replace it with an owned or properly licensed asset before public launch.
 - Test the form, mobile layout, and payment-to-intake handoff after the verified payment route is available.
