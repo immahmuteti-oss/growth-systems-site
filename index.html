@@ -3,135 +3,65 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Growth Systems diagnoses and builds the client journeys businesses rely on to earn trust, enquiries, and decisions.">
-    <title>Growth Systems</title>
+    <meta name="description" content="Growth Systems traces the points where a serious buyer loses clarity, trust, or momentum, then builds the system that makes the next decision simpler.">
+    <title>Growth Systems | Clearer paths to decision</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
+    <div class="cursor-dot" aria-hidden="true"></div>
+    <div class="cursor-ring" aria-hidden="true"></div>
     <header class="site-header">
       <a class="wordmark" href="#top" aria-label="Growth Systems home">GS<span>.</span></a>
-      <nav aria-label="Primary navigation">
-        <a href="#work">What changes</a>
-        <a href="#engagement">Start here</a>
-        <a href="#request">Request review</a>
-      </nav>
-      <a class="header-action" href="#request">Request review</a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-navigation"><span></span><span></span><span></span><span class="sr-only">Open navigation</span></button>
+      <nav id="site-navigation" aria-label="Primary navigation"><a href="index.html#work">What changes</a><a href="services.html">Capabilities</a><a href="pricing.html">Investment</a><a href="approach.html">Approach</a><a href="contact.html">Request review</a></nav>
+      <a class="header-action" href="#request" data-magnetic>Request review <span aria-hidden="true">&#8599;</span></a>
     </header>
-
     <main id="top">
-      <section class="hero">
-        <img class="hero-image" src="https://professional.uchicago.edu/sites/default/files/images/2026-02/iStock-2232504103.jpg" alt="Professional working on a customer journey at a laptop">
-        <div class="hero-shade"></div>
+      <section class="hero" aria-labelledby="hero-title">
+        <canvas id="hero-canvas" aria-hidden="true"></canvas><div class="hero-grid" aria-hidden="true"></div>
         <div class="hero-content content-width">
-          <p class="eyebrow">Growth systems</p>
-          <h1>Make it easier for the right client to choose you.</h1>
-          <p class="hero-copy">We find the point where a serious buyer loses clarity, trust, or momentum, then build the system that makes the next decision simpler.</p>
-          <div class="hero-actions">
-            <a class="button button-light" href="#request">Request a review</a>
-            <a class="text-link on-dark" href="#work">See what changes <span aria-hidden="true">&rarr;</span></a>
-          </div>
+          <p class="eyebrow light-eyebrow"><span></span> Growth systems / Nairobi + remote</p>
+          <h1 id="hero-title">A clearer path is a growth system.</h1>
+          <p class="hero-copy">We find the moment a serious buyer loses clarity, trust, or momentum, then design the next decision to feel natural instead of uncertain.</p>
+          <div class="hero-actions"><a class="button button-light" href="#request" data-magnetic>Request a review <span aria-hidden="true">&#8594;</span></a><a class="text-link on-dark" href="#method">How we work <span aria-hidden="true">&#8594;</span></a></div>
+        </div>
+        <div class="hero-index content-width" aria-label="Growth Systems focus areas"><span>01 / Discover</span><span>02 / Decide</span><span>03 / Build</span><span>04 / Improve</span></div>
+      </section>
+      <section id="work" class="section content-width split-section reveal">
+        <div><p class="eyebrow">The work</p><h2>Your business should not depend on a buyer guessing what to do next.</h2></div>
+        <div class="body-copy"><p>When people can find you but do not enquire, when enquiries disappear into messages and spreadsheets, or when management cannot see what is working, the issue is often the system between interest and decision.</p><p>We work across growth, operations, and decision intelligence. The first conversation begins with one live condition, not a technology shopping list.</p></div>
+      </section>
+      <section id="method" class="method-section">
+        <div class="content-width method-heading reveal"><p class="eyebrow">A decision before a build</p><h2>Trace the system. Find the constraint. Make the next move visible.</h2></div>
+        <div class="method-rail content-width">
+          <article class="method-step reveal"><p class="step-number">01</p><h3>Observe</h3><p>One buyer journey, workflow, or decision point. We distinguish what is visible from what is merely assumed.</p></article>
+          <article class="method-step reveal"><p class="step-number">02</p><h3>Prioritize</h3><p>We identify the constraint most worth solving now and the evidence a decision-maker needs to act.</p></article>
+          <article class="method-step reveal"><p class="step-number">03</p><h3>Build</h3><p>Only after the decision is clear: a bounded system scope, quality checks, handover, and an optional care path.</p></article>
         </div>
       </section>
-
-      <section id="work" class="section content-width split-section">
-        <div>
-          <p class="eyebrow">The work</p>
-          <h2>Your business should not rely on customers guessing what to do next.</h2>
-        </div>
-        <div class="body-copy">
-          <p>When people can find you but do not enquire, when enquiries disappear into messages and spreadsheets, or when management cannot see what is actually working, the problem is often the system between interest and decision.</p>
-          <p>We work across growth, operations, and decision intelligence. You begin with one live condition, not a technology shopping list.</p>
-        </div>
-      </section>
-
-      <section class="signal-band">
-        <div class="content-width signal-grid">
-          <article>
-            <p class="signal-number">01</p>
-            <h3>Find the constraint</h3>
-            <p>Trace the journey, workflow, or decision point that is currently carrying unnecessary friction.</p>
-          </article>
-          <article>
-            <p class="signal-number">02</p>
-            <h3>Make one decision</h3>
-            <p>Receive a clear recommendation, bounded scope, and the evidence needed to decide what is worth building.</p>
-          </article>
-          <article>
-            <p class="signal-number">03</p>
-            <h3>Build and improve</h3>
-            <p>Implement the agreed system, then keep the parts that matter reliable, visible, and improving.</p>
-          </article>
-        </div>
-      </section>
-
       <section id="engagement" class="section content-width engagement-section">
-        <div class="section-intro">
-          <p class="eyebrow">Engagement</p>
-          <h2>Start at the level your decision needs.</h2>
+        <div class="section-intro reveal"><p class="eyebrow">Engagement</p><h2>Start at the level your decision needs.</h2></div>
+        <div class="engagement-list reveal">
+          <article class="engagement-row"><div class="row-label"><span class="row-mark"></span>Signal review</div><div class="row-copy">One condition. A two-day review that tells you whether deeper work is justified.</div><div class="row-meta">From KES 15,000</div></article>
+          <article class="engagement-row featured-row"><div class="row-label"><span class="row-mark"></span>System diagnostic</div><div class="row-copy">One client journey or workflow. A decision brief that identifies the highest-value constraint and the sensible next move.</div><div class="row-meta">From KES 35,000</div></article>
+          <article class="engagement-row"><div class="row-label"><span class="row-mark"></span>System build</div><div class="row-copy">A fixed, accepted system scope with delivery milestones, quality checks, handover, and an optional care path.</div><div class="row-meta">Scoped after diagnosis</div></article>
         </div>
-        <div class="engagement-list">
-          <article class="engagement-row">
-            <div class="row-label">Signal review</div>
-            <div class="row-copy">One condition. A two-day review that tells you whether deeper work is justified.</div>
-            <div class="row-meta">From KES 15,000</div>
-          </article>
-          <article class="engagement-row featured-row">
-            <div class="row-label">System diagnostic</div>
-            <div class="row-copy">One client journey or workflow. A decision brief that identifies the highest-value constraint and the sensible next move.</div>
-            <div class="row-meta">From KES 35,000</div>
-          </article>
-          <article class="engagement-row">
-            <div class="row-label">System build</div>
-            <div class="row-copy">A fixed, accepted system scope with delivery milestones, quality checks, handover, and an optional care path.</div>
-            <div class="row-meta">Scoped after diagnosis</div>
-          </article>
-        </div>
-        <p class="engagement-note">Launch-client investments are limited, transparent, and tied to a defined scope. We do not sell unlimited consulting or promise outcomes before the evidence exists.</p>
+        <p class="engagement-note reveal">Launch-client investments are limited, transparent, and tied to a defined scope. We do not sell unlimited consulting or promise outcomes before the evidence exists.</p>
       </section>
-
       <section id="request" class="request-section">
         <div class="content-width request-layout">
-          <div class="request-intro">
-            <p class="eyebrow">Request a review</p>
-            <h2>Bring one condition that deserves a clear answer.</h2>
-            <p>We will first decide whether a Signal Review, full Diagnostic, or no engagement is the honest next step.</p>
-          </div>
-          <form id="review-form" class="review-form">
-            <label>
-              Your name
-              <input required name="name" autocomplete="name">
-            </label>
-            <label>
-              Business email
-              <input required type="email" name="email" autocomplete="email">
-            </label>
-            <label>
-              Business or organisation
-              <input required name="business" autocomplete="organization">
-            </label>
-            <label>
-              What is the one condition you want to understand?
-              <textarea required name="condition" rows="4" placeholder="For example: visitors ask basic questions before they can decide whether to enquire."></textarea>
-            </label>
-            <label>
-              What would a useful next decision look like?
-              <textarea required name="decision" rows="3"></textarea>
-            </label>
-            <button class="button button-dark" type="submit">Prepare review request</button>
-            <p class="form-status" id="form-status" role="status"></p>
+          <div class="request-intro reveal"><p class="eyebrow light-eyebrow"><span></span> Request a review</p><h2>Bring one condition that deserves a clear answer.</h2><p>We will first decide whether a Signal Review, full Diagnostic, or no engagement is the honest next step.</p></div>
+          <form id="review-form" class="review-form reveal">
+            <label>Your name<input required name="name" autocomplete="name"></label><label>Business email<input required type="email" name="email" autocomplete="email"></label><label>Business or organisation<input required name="business" autocomplete="organization"></label><label>What is the one condition you want to understand?<textarea required name="condition" rows="4" placeholder="For example: visitors ask basic questions before they can decide whether to enquire."></textarea></label><label>What would a useful next decision look like?<textarea required name="decision" rows="3"></textarea></label>
+            <button class="button button-light" type="submit" data-magnetic>Prepare review request <span aria-hidden="true">&#8594;</span></button><p class="form-status" id="form-status" role="status"></p>
           </form>
         </div>
       </section>
     </main>
-
-    <footer class="site-footer content-width">
-      <span>Growth Systems</span>
-      <span>Clear decisions. Bounded systems. Better client journeys.</span>
-    </footer>
-    <script src="contact-config.js"></script>
-    <script src="app.js"></script>
+    <footer class="site-footer content-width"><span>Growth Systems</span><span>Clear decisions. Bounded systems. Better client journeys.</span></footer>
+    <script src="contact-config.js"></script><script type="module" src="hero-scene.js"></script><script src="app.js"></script>
   </body>
 </html>

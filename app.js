@@ -16,12 +16,12 @@ function requestText(data) {
   return { subject, body };
 }
 
-form.addEventListener("submit", async (event) => {
+if (form && status) form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const data = new FormData(form);
   const { subject, body } = requestText(data);
 
-  if (contact.formEndpoint.startsWith("https://")) {
+  if ((contact.formEndpoint || "").startsWith("https://")) {
     status.textContent = "Sending your review request...";
     try {
       const response = await fetch(contact.formEndpoint, { method: "POST", body: data, headers: { Accept: "application/json" } });
@@ -35,7 +35,7 @@ form.addEventListener("submit", async (event) => {
     }
   }
 
-  if (contact.contactEmail.includes("@")) {
+  if ((contact.contactEmail || "").includes("@")) {
     window.location.href = `mailto:${encodeURIComponent(contact.contactEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     status.textContent = "Your email client is opening with the completed request.";
     return;
@@ -48,3 +48,75 @@ form.addEventListener("submit", async (event) => {
     status.textContent = "Your request is ready. Copy the details from the completed form and send them to the Growth Systems contact channel.";
   }
 });
+
+const menuToggle = document.querySelector(".menu-toggle");
+const siteNavigation = document.querySelector("#site-navigation");
+
+if (menuToggle && siteNavigation) {
+  menuToggle.addEventListener("click", () => {
+    const open = menuToggle.getAttribute("aria-expanded") === "true";
+    menuToggle.setAttribute("aria-expanded", String(!open));
+    siteNavigation.classList.toggle("is-open", !open);
+    document.body.classList.toggle("menu-open", !open);
+  });
+  siteNavigation.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => {
+    menuToggle.setAttribute("aria-expanded", "false");
+    siteNavigation.classList.remove("is-open");
+    document.body.classList.remove("menu-open");
+  }));
+}
+
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const revealItems = document.querySelectorAll(".reveal");
+
+if (reducedMotion || !("IntersectionObserver" in window)) {
+  revealItems.forEach((item) => item.classList.add("is-visible"));
+} else {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealItems.forEach((item) => observer.observe(item));
+}
+
+if (window.matchMedia("(hover: hover) and (pointer: fine)").matches && !reducedMotion) {
+  const dot = document.querySelector(".cursor-dot");
+  const ring = document.querySelector(".cursor-ring");
+  let ringX = 0;
+  let ringY = 0;
+  let targetX = 0;
+  let targetY = 0;
+
+  const drawCursor = () => {
+    ringX += (targetX - ringX) * 0.18;
+    ringY += (targetY - ringY) * 0.18;
+    ring.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+    window.requestAnimationFrame(drawCursor);
+  };
+
+  window.addEventListener("pointermove", (event) => {
+    targetX = event.clientX;
+    targetY = event.clientY;
+    dot.style.transform = `translate(${targetX}px, ${targetY}px) translate(-50%, -50%)`;
+    dot.style.opacity = "1";
+    ring.style.opacity = "1";
+  });
+  document.querySelectorAll("a, button, input, textarea").forEach((item) => {
+    item.addEventListener("pointerenter", () => ring.classList.add("is-active"));
+    item.addEventListener("pointerleave", () => ring.classList.remove("is-active"));
+  });
+  document.querySelectorAll("[data-magnetic]").forEach((item) => {
+    item.addEventListener("pointermove", (event) => {
+      const box = item.getBoundingClientRect();
+      const x = (event.clientX - box.left - box.width / 2) * 0.12;
+      const y = (event.clientY - box.top - box.height / 2) * 0.12;
+      item.style.transform = `translate(${x}px, ${y}px)`;
+    });
+    item.addEventListener("pointerleave", () => { item.style.transform = ""; });
+  });
+  drawCursor();
+}
