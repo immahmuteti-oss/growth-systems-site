@@ -4,6 +4,6 @@
  */
 window.GrowthSystemsContact = {
   formEndpoint: "",
-  contactEmail: "",
-  legalBusinessName: "",
+  contactEmail: "immahmuteti@gmail.com",
+  legalBusinessName: "Emmanuel Muteti",
 };
