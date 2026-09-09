@@ -8,10 +8,17 @@ function requestText(data) {
     `Name: ${data.get("name")}`,
     `Business: ${data.get("business")}`,
     `Email: ${data.get("email")}`,
+    `Role: ${data.get("role") || "Not provided"}`,
+    `Website: ${data.get("website") || "Not provided"}`,
+    `Focus: ${data.get("focus") || "Not provided"}`,
+    `Decision timing: ${data.get("timing") || "Not provided"}`,
     "",
     `Condition: ${data.get("condition")}`,
     "",
     `Useful next decision: ${data.get("decision")}`,
+    "",
+    `Page: ${data.get("page") || window.location.href}`,
+    `Referrer: ${data.get("referrer") || document.referrer || "Direct"}`,
   ].join("\n");
   return { subject, body };
 }
@@ -19,6 +26,9 @@ function requestText(data) {
 if (form && status) form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const data = new FormData(form);
+  if (data.get("website_confirm")) return;
+  data.set("page", window.location.href);
+  data.set("referrer", document.referrer || "Direct");
   const { subject, body } = requestText(data);
 
   if ((contact.formEndpoint || "").startsWith("https://")) {
