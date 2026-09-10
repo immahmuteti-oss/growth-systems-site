@@ -2,6 +2,14 @@ const form = document.querySelector("#review-form");
 const status = document.querySelector("#form-status");
 const contact = window.GrowthSystemsContact || {};
 
+document.querySelectorAll("[data-whatsapp-link]").forEach((link) => {
+  if ((contact.whatsappUrl || "").startsWith("https://wa.me/")) {
+    const message = "Hello Emmanuel, I would like to discuss a business growth or systems condition.";
+    link.href = `${contact.whatsappUrl}?text=${encodeURIComponent(message)}`;
+    link.hidden = false;
+  }
+});
+
 function requestText(data) {
   const subject = `Growth Systems review request: ${data.get("business")}`;
   const body = [
@@ -29,6 +37,8 @@ if (form && status) form.addEventListener("submit", async (event) => {
   if (data.get("website_confirm")) return;
   data.set("page", window.location.href);
   data.set("referrer", document.referrer || "Direct");
+  data.set("_subject", `Growth Systems review request: ${data.get("business")}`);
+  data.set("_template", "table");
   const { subject, body } = requestText(data);
 
   if ((contact.formEndpoint || "").startsWith("https://")) {
@@ -37,7 +47,7 @@ if (form && status) form.addEventListener("submit", async (event) => {
       const response = await fetch(contact.formEndpoint, { method: "POST", body: data, headers: { Accept: "application/json" } });
       if (!response.ok) throw new Error("Request was not accepted.");
       form.reset();
-      status.textContent = `Your request has been received${contact.legalBusinessName ? ` by ${contact.legalBusinessName}` : ""}. We will review the condition before recommending a next step.`;
+      status.textContent = `Your request has been sent${contact.legalBusinessName ? ` to ${contact.legalBusinessName}` : ""}. We will review the condition before recommending a next step.`;
       return;
     } catch {
       status.textContent = "The request could not be sent. Please use the contact route provided by the business.";

@@ -1,0 +1,4 @@
+.button-outline { border-color: rgba(255, 255, 255, .68); color: var(--white); }
+.button-outline:hover { border-color: var(--mint); background: var(--mint); color: var(--ink); }
+.button-dark { margin-top: 8px; border-color: var(--ink); background: var(--ink); color: var(--white); }
+.button-dark:hover { background: var(--rust); border-color: var(--rust); }

@@ -3,7 +3,7 @@
  * A public form endpoint is not a secret; API keys must never be added here.
  */
 window.GrowthSystemsContact = {
-  formEndpoint: "",
+  formEndpoint: "https://formsubmit.co/ajax/immahmuteti@gmail.com",
   contactEmail: "immahmuteti@gmail.com",
   legalBusinessName: "Emmanuel Muteti",
   phone: "+25740562812",
