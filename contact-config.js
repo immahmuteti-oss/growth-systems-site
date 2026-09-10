@@ -6,4 +6,7 @@ window.GrowthSystemsContact = {
   formEndpoint: "",
   contactEmail: "immahmuteti@gmail.com",
   legalBusinessName: "Emmanuel Muteti",
+  phone: "+25740562812",
+  whatsappUrl: "https://wa.me/25740562812",
+  location: "Kamakis, Ruiru, Kenya",
 };
