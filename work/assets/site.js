@@ -173,3 +173,56 @@
     window.open('https://wa.me/254740562812?text=' + encodeURIComponent(msg.trim()), '_blank', 'noopener');
   });
 })();
+
+/* v2: rotating industry line + enquiry simulator */
+(function () {
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var rot = document.querySelector('.rot');
+  if (rot && !reduce) {
+    var words = rot.dataset.words.split('|'), i = 0;
+    setInterval(function () {
+      rot.classList.add('out');
+      setTimeout(function () { i = (i + 1) % words.length; rot.textContent = words[i]; rot.classList.remove('out'); }, 360);
+    }, 2400);
+  }
+  var chat = document.getElementById('simchat'), log = document.getElementById('simlog');
+  if (!chat || !log) return;
+  var script = [
+    ['them', 'Hi, is the 1 acre near Kenol still available? What\'s the price?', 'Buyer · 10:02 pm'],
+    ['me', 'Hi! 👋 Yes, the 1 acre on Thika Road near Kenol is available at KES 27M, with direct road frontage. Are you buying to build, or as an investment?', 'Auto-reply · 10:02 pm'],
+    ['them', 'Investment. Can I see it this weekend?', 'Buyer · 10:03 pm'],
+    ['me', 'Of course. Saturday 10am or Sunday 2pm? I\'ll send the location pin and the title details. 📍', 'Auto-reply · 10:03 pm'],
+    ['them', 'Saturday 10am works', 'Buyer · 10:04 pm'],
+    ['me', 'Booked ✅ Saturday 10am, Kenol. You\'ll get a reminder the evening before. See you there!', 'Auto-reply · 10:04 pm']
+  ];
+  var leads = [
+    ['New enquiry · 1 acre, Kenol', [['KES 27M', ''], ['Investment', '']]],
+    ['Site visit booked · Sat 10am', [['Hot lead', 'hot'], ['Reminder set', 'ok']]]
+  ];
+  function esc(t) { var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+  function addBubble(m) {
+    var b = document.createElement('div'); b.className = 'bub ' + m[0];
+    b.innerHTML = esc(m[1]) + '<small>' + esc(m[2]) + '</small>';
+    chat.appendChild(b); requestAnimationFrame(function () { requestAnimationFrame(function () { b.classList.add('in'); }); });
+  }
+  function addLead(l) {
+    var e = log.querySelector('.ll-empty'); if (e) e.remove();
+    var d = document.createElement('div'); d.className = 'lead';
+    d.innerHTML = '<b>' + esc(l[0]) + '</b><div class="row2">' + l[1].map(function (k) { return '<span class="k ' + k[1] + '">' + esc(k[0]) + '</span>'; }).join('') + '</div>';
+    log.appendChild(d); requestAnimationFrame(function () { requestAnimationFrame(function () { d.classList.add('in'); }); });
+  }
+  var typing = document.createElement('div'); typing.className = 'typing'; typing.innerHTML = '<i></i><i></i><i></i>';
+  function run() {
+    chat.innerHTML = ''; log.innerHTML = '<div class="ll-empty">Waiting for enquiries…</div>'; chat.appendChild(typing);
+    if (reduce) { script.forEach(addBubble); leads.forEach(addLead); return; }
+    var t = 400;
+    script.forEach(function (m, k) {
+      if (m[0] === 'me') { setTimeout(function () { chat.appendChild(typing); typing.classList.add('on'); }, t); t += 1100; }
+      setTimeout(function () { typing.classList.remove('on'); addBubble(m); if (k === 1) addLead(leads[0]); if (k === 5) addLead(leads[1]); }, t);
+      t += m[0] === 'them' ? 1700 : 1500;
+    });
+    setTimeout(run, t + 5000);
+  }
+  var started = false;
+  new IntersectionObserver(function (es) { if (es[0].isIntersecting && !started) { started = true; run(); } }, { threshold: .3 }).observe(chat);
+})();
