@@ -1,142 +1,201 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>About Us — Malazo Realtors | Your First Choice Real Estate in Kenya</title>
-  <meta name="description" content="Meet the team behind Malazo Realtors — Christine Eve, Aleesha Brown, and our dedicated agents helping you find your dream property in Kenya.">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'DM Sans', sans-serif; color: #1a1a2e; line-height: 1.6; background: #fff; }
-    .hero { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: #fff; padding: 80px 0 60px; text-align: center; }
-    .hero p.tag { color: #e94560; font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
-    .hero h1 { font-size: clamp(2rem, 5vw, 3.2rem); max-width: 700px; margin: 0 auto 20px; }
-    .hero .sub { color: #a8b2d1; font-size: 17px; max-width: 580px; margin: 0 auto; }
-    .container { width: min(1100px, calc(100% - 48px)); margin: 0 auto; }
-    .section { padding: 72px 0; }
-    .section-alt { background: #f8f9fb; }
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
-    .story h2 { font-size: 28px; margin-bottom: 16px; }
-    .story p { color: #555; margin-bottom: 14px; }
-    .accent { color: #e94560; }
-    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 40px; }
-    .stat { text-align: center; padding: 28px 16px; background: #fff; border: 1px solid #eee; border-radius: 8px; }
-    .stat .num { font-size: 32px; font-weight: 700; color: #e94560; }
-    .stat .label { font-size: 13px; color: #777; margin-top: 4px; }
-    .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 40px; }
-    .team-card { text-align: center; padding: 32px 20px; background: #fff; border: 1px solid #eee; border-radius: 8px; }
-    .team-card .avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #e94560, #1a1a2e); margin: 0 auto 16px; display: grid; place-items: center; color: #fff; font-size: 28px; font-weight: 700; }
-    .team-card h3 { font-size: 18px; margin-bottom: 4px; }
-    .team-card .role { color: #e94560; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
-    .team-card p { color: #666; font-size: 14px; margin-top: 12px; }
-    .values { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 32px; }
-    .value { padding: 24px; border-left: 3px solid #e94560; background: #fff; }
-    .value h3 { font-size: 16px; margin-bottom: 6px; }
-    .value p { color: #666; font-size: 14px; }
-    .cta-section { background: #1a1a2e; color: #fff; padding: 64px 0; text-align: center; }
-    .cta-section h2 { font-size: 28px; margin-bottom: 12px; }
-    .cta-section p { color: #a8b2d1; margin-bottom: 24px; }
-    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; background: #e94560; color: #fff; border: none; font: 700 15px 'DM Sans', sans-serif; text-decoration: none; border-radius: 4px; cursor: pointer; }
-    .btn:hover { background: #d63851; }
-    .proto-banner { background: #25D366; color: #fff; text-align: center; padding: 12px; font-size: 13px; font-weight: 600; }
-    .proto-banner a { color: #fff; text-decoration: underline; }
-    @media (max-width: 768px) { .grid-2, .team-grid, .stats, .values { grid-template-columns: 1fr; } .hero { padding: 60px 0 40px; } }
-  </style>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1 Acre on Thika Road near Kenol — KES 27M | Malazo Realtors (prototype)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --purple:#662d91; --purple-dk:#4e2170; --purple-lt:#f3edf8;
+    --grey:#939598; --ink:#1f1d24; --muted:#5d5a66; --line:#e6e3ea; --bg:#faf9fb;
+    --wa:#1f9d55; --todo-bg:#fff7e0; --todo-bd:#e8c35a; --todo-ink:#7a5a00;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg);line-height:1.55}
+  a{color:inherit}
+  img{max-width:100%;display:block}
+  .wrap{max-width:1120px;margin:0 auto;padding-inline:20px}
+
+  .proto{background:var(--ink);color:#fff;font-size:12.5px;text-align:center;padding:7px 16px;letter-spacing:.02em}
+  .proto b{color:#e5c9ff}
+
+  header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:68px}
+  header img{height:44px;width:auto}
+  header nav{display:flex;gap:22px;font-size:15px;font-weight:500}
+  header nav a{text-decoration:none;color:var(--muted)}
+  header nav a.on{color:var(--purple)}
+  .hdr-call{font-weight:600;color:var(--purple);text-decoration:none;white-space:nowrap}
+
+  .crumbs{font-size:13px;color:var(--muted);padding-block:18px 6px}
+  .crumbs a{text-decoration:none}
+
+  .top{display:grid;grid-template-columns:1.45fr 1fr;gap:28px;align-items:start;padding-bottom:40px}
+  .top > *{min-width:0}
+  .gallery{display:grid;grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr;gap:8px;height:520px;border-radius:14px;overflow:hidden}
+  .gallery img{width:100%;height:100%;object-fit:cover}
+  .gallery img:first-child{grid-row:1 / span 2}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px;position:sticky;top:88px}
+  .tag{display:inline-block;background:var(--purple-lt);color:var(--purple);font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:99px}
+  h1{font-size:28px;line-height:1.2;margin:12px 0 6px}
+  .loc{color:var(--muted);margin:0 0 18px}
+  .price{font-size:30px;font-weight:700;color:var(--purple);margin:0}
+  .price small{display:block;font-size:13px;font-weight:500;color:var(--muted)}
+  .facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0}
+  .fact{border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .fact span{display:block;font-size:12px;color:var(--muted)}
+  .fact b{font-size:15px}
+  .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px 16px;border-radius:10px;font-weight:600;font-size:16px;text-decoration:none;border:0;cursor:pointer;margin-top:10px}
+  .btn-wa{background:var(--wa);color:#fff}
+  .btn-pri{background:var(--purple);color:#fff}
+  .btn-sec{background:#fff;color:var(--purple);border:1.5px solid var(--purple)}
+  .agent{display:flex;gap:12px;align-items:center;margin-top:18px;padding-top:16px;border-top:1px solid var(--line);font-size:14px}
+  .avatar{width:44px;height:44px;border-radius:50%;background:var(--purple-lt);display:grid;place-items:center;color:var(--purple);font-weight:700}
+
+  .todo{background:var(--todo-bg);border:1px dashed var(--todo-bd);color:var(--todo-ink);border-radius:6px;padding:1px 7px;font-size:.92em;font-weight:500;white-space:nowrap}
+
+  section.block{background:#fff;border:1px solid var(--line);border-radius:14px;padding:28px;margin-bottom:22px}
+  section.block h2{font-size:21px;margin:0 0 14px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .feat{border-left:3px solid var(--purple);padding:4px 0 4px 14px}
+  .feat h3{font-size:16px;margin:0 0 4px}
+  .feat p{margin:0;color:var(--muted);font-size:15px}
+  table.spec{width:100%;border-collapse:collapse;font-size:15px}
+  table.spec td{padding:11px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.spec td:first-child{color:var(--muted);width:42%}
+  .map{height:260px;border-radius:10px;background:
+      repeating-linear-gradient(45deg,#f1eef4 0 12px,#ece8f0 12px 24px);
+      display:grid;place-items:center;color:var(--muted);text-align:center;padding:16px}
+  .steps{counter-reset:s;list-style:none;padding:0;margin:0;display:grid;gap:12px}
+  .steps li{counter-increment:s;display:flex;gap:12px;align-items:flex-start}
+  .steps li::before{content:counter(s);flex:0 0 28px;height:28px;border-radius:50%;background:var(--purple);color:#fff;display:grid;place-items:center;font-weight:700;font-size:14px}
+
+  footer{background:var(--purple-dk);color:#e9e1f1;margin-top:40px;padding-block:36px;font-size:14px}
+  footer .wrap{display:flex;flex-wrap:wrap;gap:28px;justify-content:space-between;align-items:center}
+  footer img{height:48px;width:auto}
+
+  .mbar{display:none}
+  @media (max-width:880px){
+    header nav{display:none}
+    .top{grid-template-columns:1fr}
+    .gallery{height:360px}
+    .card{position:static}
+    .grid2{grid-template-columns:1fr}
+    .mbar{display:flex;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:30;background:#fff;border-top:1px solid var(--line);padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px))}
+    .mbar .btn{margin:0;font-size:15px;padding:12px}
+    body{padding-bottom:76px}
+  }
+</style>
 </head>
 <body>
-  <div class="proto-banner">
-    ✨ PROTOTYPE — Built by Growth Systems for Malazo Realtors. <a href="https://wa.me/254740562812?text=Hi%20Emmanuel%2C%20I%20saw%20the%20Malazo%20prototype.%20Let%27s%20talk.">WhatsApp us</a> to deploy this to your live site.
+
+<div class="proto"><b>PROTOTYPE</b> — built by Emmanuel Muteti (Growth Systems) to show what this listing could look like. Not the live Malazo site. Yellow boxes are details only Malazo can confirm.</div>
+
+<header>
+  <div class="wrap">
+    <img src="img/logo.png" alt="Malazo Realtors">
+    <nav>
+      <a href="#">Home</a><a class="on" href="#">Properties</a><a href="#">Projects</a><a href="#">About</a><a href="#">Contact</a>
+    </nav>
+    <a class="hdr-call" href="tel:+254703916993">0703 916 993</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="crumbs"><a href="#">Properties</a> › <a href="#">Land</a> › 1 Acre on Thika Road near Kenol</div>
+
+  <div class="top">
+    <div class="gallery">
+      <img src="img/kenol.jpeg" alt="Red-soil plot with direct frontage onto Thika Road near Kenol">
+      <img src="img/kenol-3.jpeg" alt="Paved walkway and guard rail along the Thika Road frontage">
+      <img src="img/kenol-4.jpeg" alt="Further view of the plot">
+    </div>
+
+    <aside class="card">
+      <span class="tag">Land · For sale · Commercial</span>
+      <h1>1 Acre on Thika Road near Kenol</h1>
+      <p class="loc">Thika Road, near Kenol · next to Montezuma Funeral Home</p>
+      <p class="price">KES 27,000,000<small>Asking price · <span class="todo">negotiable? — confirm</span></small></p>
+
+      <div class="facts">
+        <div class="fact"><span>Size</span><b>1 acre</b></div>
+        <div class="fact"><span>Frontage</span><b>Direct on Thika Rd</b></div>
+        <div class="fact"><span>Soil</span><b>Red soil</b></div>
+        <div class="fact"><span>Title</span><b><span class="todo">freehold / lease?</span></b></div>
+      </div>
+
+      <a class="btn btn-wa" href="https://wa.me/254703916993?text=Hi%20Malazo%2C%20I%27m%20interested%20in%20the%201%20Acre%20on%20Thika%20Road%20near%20Kenol%20(KES%2027M).%20Is%20it%20still%20available%3F">
+        WhatsApp about this plot</a>
+      <a class="btn btn-pri" href="#visit">Book a site visit</a>
+      <a class="btn btn-sec" href="tel:+254703916993">Call 0703 916 993</a>
+
+      <div class="agent">
+        <div class="avatar">M</div>
+        <div><b><span class="todo">Agent name</span></b><br>Malazo Realtors · 5th Floor, Kose Heights, Hurlingham</div>
+      </div>
+    </aside>
   </div>
 
-  <section class="hero">
-    <div class="container">
-      <p class="tag">About Malazo Realtors</p>
-      <h1>Your first choice real estate partner in Kenya</h1>
-      <p class="sub">Since our founding, we've helped hundreds of families and investors find their perfect property — from prime Nairobi plots to coastal retreats.</p>
+  <section class="block">
+    <h2>About the property</h2>
+    <p>A prime 1-acre plot of red-soil land with direct frontage on Thika Road near Kenol, next to Montezuma Funeral Home. Its highway position gives it strong visibility and easy access, which suits commercial development such as a fuel station, shopping complex, warehouse, hotel or office block. The Thika Road corridor around Kenol is growing quickly, which supports the case for long-term value.</p>
+  </section>
+
+  <section class="block">
+    <h2>Why this plot</h2>
+    <div class="grid2">
+      <div class="feat"><h3>Prime location</h3><p>High-traffic stretch of Thika Road near Kenol, suited to businesses that depend on being seen and reached easily.</p></div>
+      <div class="feat"><h3>Road access &amp; visibility</h3><p>Touches Thika Road directly, putting the plot in front of thousands of commuters every day.</p></div>
+      <div class="feat"><h3>Development potential</h3><p>Suited to fuel stations, shopping complexes, warehouses, hotels or office blocks.</p></div>
+      <div class="feat"><h3>Investment case</h3><p>A foothold in the fast-developing Thika Road corridor.</p></div>
     </div>
   </section>
 
-  <section class="section">
-    <div class="container grid-2">
-      <div class="story">
-        <h2>Built on <span class="accent">trust</span>, driven by results</h2>
-        <p>Malazo Realtors was founded by Christine Eve and Aleesha Brown with a clear mission: make property ownership in Kenya accessible, transparent, and rewarding.</p>
-        <p>Based in Hurlingham, Nairobi, we specialise in residential and commercial properties across Kenya — from land in Malindi to premium plots in Woodley and beyond. Every transaction is guided by one principle: your investment should feel as secure as it is exciting.</p>
-        <p>We don't just list properties. We walk the ground, verify every title, and stand behind every deal. That's why our clients come back — and bring their friends.</p>
-      </div>
-      <div>
-        <div class="stats">
-          <div class="stat"><div class="num">200+</div><div class="label">Properties Sold</div></div>
-          <div class="stat"><div class="num">5+</div><div class="label">Years Experience</div></div>
-          <div class="stat"><div class="num">98%</div><div class="label">Client Satisfaction</div></div>
-        </div>
-      </div>
-    </div>
+  <section class="block">
+    <h2>Key details buyers ask for</h2>
+    <table class="spec">
+      <tr><td>Asking price</td><td>KES 27,000,000</td></tr>
+      <tr><td>Land size</td><td>1 acre</td></tr>
+      <tr><td>Location</td><td>Thika Road near Kenol, next to Montezuma Funeral Home</td></tr>
+      <tr><td>Title type &amp; status</td><td><span class="todo">Freehold / leasehold · title ready?</span></td></tr>
+      <tr><td>Road frontage (metres)</td><td><span class="todo">metres — confirm</span></td></tr>
+      <tr><td>Zoning / approved use</td><td><span class="todo">Commercial? — confirm</span></td></tr>
+      <tr><td>Power &amp; water</td><td><span class="todo">On site / nearby?</span></td></tr>
+      <tr><td>Payment terms</td><td><span class="todo">Cash / instalments?</span></td></tr>
+    </table>
   </section>
 
-  <section class="section section-alt">
-    <div class="container">
-      <h2>Meet the <span class="accent">team</span></h2>
-      <div class="team-grid">
-        <div class="team-card">
-          <div class="avatar">CE</div>
-          <h3>Christine Eve</h3>
-          <p class="role">Founder & CEO</p>
-          <p>Christine leads Malazo's vision and client relationships. With deep knowledge of the Kenyan property market, she ensures every client finds the right investment.</p>
-        </div>
-        <div class="team-card">
-          <div class="avatar">AB</div>
-          <h3>Aleesha Brown</h3>
-          <p class="role">Co-Founder</p>
-          <p>Aleesha manages operations and partnerships. Her attention to detail ensures that every property listing is verified, photographed, and presented with integrity.</p>
-        </div>
-        <div class="team-card">
-          <div class="avatar">MK</div>
-          <h3>Mbugua Kabati</h3>
-          <p class="role">Senior Agent</p>
-          <p>Mbugua brings hands-on market expertise to every deal. He specialises in land acquisition and development opportunities across Greater Nairobi.</p>
-        </div>
-      </div>
-    </div>
+  <section class="block">
+    <h2>Location</h2>
+    <div class="map">Google Map pin goes here<br><span class="todo">exact plot location from Malazo</span></div>
   </section>
 
-  <section class="section">
-    <div class="container">
-      <h2>What we <span class="accent">stand for</span></h2>
-      <div class="values">
-        <div class="value">
-          <h3>Verified Listings Only</h3>
-          <p>Every property we list is personally inspected and title-verified. No surprises, no disputes, no risk.</p>
-        </div>
-        <div class="value">
-          <h3>Transparent Pricing</h3>
-          <p>Our fees are upfront. What you see is what you pay — no hidden commissions or last-minute charges.</p>
-        </div>
-        <div class="value">
-          <h3>End-to-End Support</h3>
-          <p>From first viewing to title transfer, we handle the paperwork, legal coordination, and follow-up so you don't have to.</p>
-        </div>
-        <div class="value">
-          <h3>Client-First Approach</h3>
-          <p>We succeed when you succeed. That's why most of our business comes from referrals — happy clients telling others.</p>
-        </div>
-      </div>
-    </div>
+  <section class="block" id="visit">
+    <h2>How to view this plot</h2>
+    <ol class="steps">
+      <li><div><b>Message or call Malazo</b> on 0703 916 993. We confirm the plot is still available the same day.</div></li>
+      <li><div><b>Book a site visit.</b> We meet you on Thika Road at Kenol and walk the boundary with you.</div></li>
+      <li><div><b>Review the documents.</b> Ask us for the title documents and search before you commit.</div></li>
+    </ol>
   </section>
+</main>
 
-  <section class="cta-section">
-    <div class="container">
-      <h2>Ready to find your next property?</h2>
-      <p>Talk to our team today. We'll help you find the right investment — no pressure, no obligation.</p>
-      <a class="btn" href="tel:+254703916993">📞 Call Us: +254 703 916 993</a>
-      &nbsp;&nbsp;
-      <a class="btn" href="https://wa.me/254703916993" style="background:#25D366">💬 WhatsApp Us</a>
-    </div>
-  </section>
+<footer>
+  <div class="wrap">
+    <img src="img/logo-rev.png" alt="Malazo Realtors">
+    <div>5th Floor, Kose Heights, Argwings Kodhek Rd, Hurlingham, Nairobi<br>0703 916 993 · sales@malazorealtors.co.ke</div>
+    <div>© 2026 Malazo Realtors</div>
+  </div>
+</footer>
 
-  <footer style="text-align:center; padding:24px; color:#999; font-size:12px;">
-    Prototype built by <a href="https://immahmuteti-oss.github.io/growth-systems-site/" style="color:#e94560">Growth Systems</a> — Emmanuel Muteti
-  </footer>
+<div class="mbar">
+  <a class="btn btn-wa" href="https://wa.me/254703916993?text=Hi%20Malazo%2C%20I%27m%20interested%20in%20the%201%20Acre%20on%20Thika%20Road%20near%20Kenol%20(KES%2027M).%20Is%20it%20still%20available%3F">WhatsApp</a>
+  <a class="btn btn-sec" href="tel:+254703916993">Call</a>
+</div>
+
 </body>
 </html>

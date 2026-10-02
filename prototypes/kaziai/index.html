@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KaziAI — Nairobi Living City Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+
+  :root {
+    --kazi-sky-deep: #070F1E;
+    --kazi-sky-mid: #0A1428;
+    --kazi-sky-horizon: #1A2F52;
+    --kazi-amber: #FF6200;
+    --kazi-amber-soft: #FF8C42;
+    --kazi-green: #00A651;
+    --kazi-green-glow: rgba(0,166,81,0.35);
+    --kazi-teal: #0D7377;
+    --kazi-cream: #F0EEE8;
+    --kazi-muted: rgba(240,238,232,0.45);
+    --kazi-glass: rgba(10,20,40,0.72);
+    --kazi-glass-border: rgba(0,166,81,0.18);
+    --font-display: 'Syne', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--kazi-sky-deep);
+    overflow: hidden;
+    font-family: var(--font-display);
+    color: var(--kazi-cream);
+    cursor: default;
+  }
+
+  /* ── 3D CANVAS ── */
+  #kazi-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+  }
+
+  /* ── ATMOSPHERE OVERLAY — depth fog ── */
+  #atmosphere {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(ellipse 120% 60% at 50% 100%,
+      rgba(255,98,0,0.08) 0%,
+      transparent 60%);
+  }
+
+  /* ── SCAN LINES — cinematic texture ── */
+  #scanlines {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0,0,0,0.04) 3px,
+      rgba(0,0,0,0.04) 4px
+    );
+  }
+
+  /* ── MAIN UI LAYER ── */
+  #ui-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  /* ── TOP NAV ── */
+  #top-nav {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    padding: 20px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    pointer-events: all;
+    border-bottom: 1px solid rgba(0,166,81,0.08);
+    backdrop-filter: blur(2px);
+    animation: fadeSlideDown 1.2s cubic-bezier(0.16,1,0.3,1) both;
+  }
+
+  .kazi-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .kazi-logo-orb {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: conic-gradient(from 180deg, #00A651, #0D7377, #00A651);
+    box-shadow: 0 0 18px rgba(0,166,81,0.5);
+    animation: orbSpin 12s linear infinite;
+    flex-shrink: 0;
+  }
+  .kazi-logo-text {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--kazi-cream);
+  }
+  .kazi-logo-text span {
+    color: var(--kazi-green);
+  }
+
+  .nav-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--kazi-muted);
+    text-transform: uppercase;
+  }
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--kazi-green);
+    animation: statusPulse 2.5s ease-in-out infinite;
+  }
+
+  .nav-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .nav-tier-badge {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    padding: 4px 10px;
+    border: 1px solid var(--kazi-glass-border);
+    border-radius: 20px;
+    background: var(--kazi-glass);
+    color: var(--kazi-green);
+    backdrop-filter: blur(8px);
+  }
+  .nav-avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--kazi-teal), var(--kazi-green));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+    cursor: pointer;
+    border: 1.5px solid rgba(0,166,81,0.4);
+    transition: box-shadow 0.2s;
+  }
+  .nav-avatar:hover { box-shadow: 0 0 16px var(--kazi-green-glow); }
+
+  /* ── ALTITUDE COMPASS — left rail ── */
+  #altitude-rail {
+    position: absolute;
+    left: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    pointer-events: none;
+    animation: fadeIn 2s 0.8s both;
+  }
+
+  .altitude-label {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    color: var(--kazi-muted);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .altitude-track {
+    width: 2px;
+    height: 160px;
+    background: rgba(240,238,232,0.08);
+    border-radius: 2px;
+    position: relative;
+    overflow: visible;
+  }
+
+  .altitude-fill {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, var(--kazi-green), transparent);
+    border-radius: 2px;
+    transition: height 0.8s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .altitude-marker {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--kazi-green);
+    box-shadow: 0 0 12px var(--kazi-green-glow);
+    transition: bottom 0.8s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .altitude-value {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--kazi-green);
+    margin-top: 10px;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── WELCOME HEADLINE ── */
+  #hero-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -55%);
+    text-align: center;
+    pointer-events: none;
+    animation: heroReveal 1.8s cubic-bezier(0.16,1,0.3,1) 0.4s both;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--kazi-green);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    opacity: 0.85;
+  }
+
+  .hero-title {
+    font-size: clamp(42px, 7vw, 88px);
+    font-weight: 800;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    color: var(--kazi-cream);
+    margin-bottom: 18px;
+  }
+
+  .hero-title em {
+    font-style: normal;
+    color: var(--kazi-green);
+    position: relative;
+  }
+
+  .hero-title em::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--kazi-green), transparent);
+    border-radius: 2px;
+  }
+
+  .hero-sub {
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: var(--kazi-muted);
+    max-width: 360px;
+    margin: 0 auto 32px;
+    line-height: 1.6;
+  }
+
+  .hero-cta-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    pointer-events: all;
+  }
+
+  .btn-primary {
+    padding: 12px 28px;
+    background: var(--kazi-green);
+    color: #fff;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 0 28px rgba(0,166,81,0.4);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 42px rgba(0,166,81,0.6);
+  }
+
+  .btn-ghost {
+    padding: 12px 28px;
+    background: var(--kazi-glass);
+    color: var(--kazi-cream);
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    border: 1px solid var(--kazi-glass-border);
+    border-radius: 40px;
+    cursor: pointer;
+    transition: all 0.2s;
+    backdrop-filter: blur(12px);
+  }
+  .btn-ghost:hover {
+    border-color: rgba(0,166,81,0.5);
+    transform: translateY(-2px);
+  }
+
+  /* ── BOTTOM ZONE SELECTOR ── */
+  #zone-bar {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    pointer-events: all;
+    animation: fadeSlideUp 1.4s cubic-bezier(0.16,1,0.3,1) 1s both;
+  }
+
+  .zone-btn {
+    position: relative;
+    padding: 10px 20px;
+    background: var(--kazi-glass);
+    border: 1px solid var(--kazi-glass-border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.25s;
+    backdrop-filter: blur(16px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 90px;
+  }
+
+  .zone-btn:hover {
+    border-color: rgba(0,166,81,0.55);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.4), 0 0 24px var(--kazi-green-glow);
+  }
+
+  .zone-btn.active {
+    border-color: var(--kazi-green);
+    box-shadow: 0 0 24px var(--kazi-green-glow);
+  }
+
+  .zone-icon {
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .zone-label {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--kazi-green);
+  }
+
+  .zone-desc {
+    font-size: 9px;
+    color: var(--kazi-muted);
+    white-space: nowrap;
+  }
+
+  .zone-glow {
+    position: absolute;
+    inset: -1px;
+    border-radius: 12px;
+    border: 1px solid var(--kazi-green);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .zone-btn:hover .zone-glow { opacity: 1; }
+
+  /* ── RIGHT RAIL — stats ── */
+  #stats-rail {
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+    animation: fadeIn 2s 1s both;
+  }
+
+  .stat-card {
+    background: var(--kazi-glass);
+    border: 1px solid var(--kazi-glass-border);
+    border-radius: 12px;
+    padding: 10px 14px;
+    backdrop-filter: blur(12px);
+    min-width: 110px;
+  }
+
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--kazi-muted);
+    margin-bottom: 4px;
+  }
+
+  .stat-value {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--kazi-green);
+    line-height: 1;
+  }
+
+  .stat-sub {
+    font-size: 9px;
+    color: var(--kazi-muted);
+    margin-top: 2px;
+  }
+
+  /* ── CAMERA DRIFT INDICATOR ── */
+  #drift-indicator {
+    position: absolute;
+    bottom: 80px;
+    right: 24px;
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    color: var(--kazi-muted);
+    text-transform: uppercase;
+    animation: fadeIn 2s 1.5s both;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-end;
+  }
+
+  .drift-coords {
+    color: var(--kazi-green);
+    font-size: 9px;
+  }
+
+  /* ── INWARD DRAW OVERLAY ── */
+  #inward-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(16px);
+    background: rgba(7,15,30,0.88);
+  }
+
+  #inward-overlay.active { display: flex; }
+
+  .inward-panel {
+    background: rgba(10,20,40,0.92);
+    border: 1px solid rgba(0,166,81,0.3);
+    border-radius: 24px;
+    padding: 36px 40px;
+    max-width: 520px;
+    width: 90%;
+    position: relative;
+    box-shadow: 0 0 80px rgba(0,0,0,0.6), 0 0 40px rgba(0,166,81,0.1);
+    animation: inwardZoom 0.6s cubic-bezier(0.16,1,0.3,1) both;
+    pointer-events: all;
+  }
+
+  .inward-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--kazi-muted);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .inward-close:hover { background: rgba(255,255,255,0.12); color: var(--kazi-cream); }
+
+  .inward-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: var(--kazi-green);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    opacity: 0.8;
+  }
+
+  .inward-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--kazi-cream);
+    margin-bottom: 8px;
+    line-height: 1.1;
+  }
+
+  .inward-desc {
+    font-size: 13px;
+    color: var(--kazi-muted);
+    line-height: 1.65;
+    margin-bottom: 28px;
+  }
+
+  .inward-feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .inward-feature {
+    background: rgba(0,166,81,0.06);
+    border: 1px solid rgba(0,166,81,0.15);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 11px;
+    color: var(--kazi-cream);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .inward-feature-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--kazi-green);
+    flex-shrink: 0;
+  }
+
+  .inward-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  /* ── ACHIEVEMENT TOAST ── */
+  #achievement-toast {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    z-index: 100;
+    background: rgba(10,20,40,0.95);
+    border: 1px solid var(--kazi-green);
+    border-radius: 16px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 280px;
+    box-shadow: 0 0 32px rgba(0,166,81,0.25);
+    transform: translateY(120px);
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
+    pointer-events: none;
+  }
+
+  #achievement-toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .achievement-icon {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--kazi-green-glow);
+    border: 2px solid var(--kazi-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    animation: achievePulse 1s ease-in-out infinite;
+  }
+
+  .achievement-label {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    color: var(--kazi-green);
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+
+  .achievement-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--kazi-cream);
+  }
+
+  /* ── PARTICLE BURST ── */
+  .particle {
+    position: fixed;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--kazi-green);
+    pointer-events: none;
+    z-index: 200;
+  }
+
+  /* ── SCROLL HINT ── */
+  #scroll-hint {
+    position: absolute;
+    bottom: 110px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    pointer-events: none;
+    animation: fadeIn 2s 2.5s both;
+    opacity: 0.4;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, var(--kazi-green), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  .scroll-text {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--kazi-muted);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeSlideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translate(-50%, 20px); }
+    to   { opacity: 1; transform: translate(-50%, 0); }
+  }
+
+  @keyframes heroReveal {
+    from { opacity: 0; transform: translate(-50%, -48%); filter: blur(8px); }
+    to   { opacity: 1; transform: translate(-50%, -55%); filter: blur(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes orbSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  @keyframes statusPulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,166,81,0.5); }
+    50%       { opacity: 0.6; box-shadow: 0 0 0 5px rgba(0,166,81,0); }
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 1; height: 48px; }
+    50%       { opacity: 0.4; height: 28px; }
+  }
+
+  @keyframes inwardZoom {
+    from { transform: scale(0.88); opacity: 0; filter: blur(6px); }
+    to   { transform: scale(1); opacity: 1; filter: blur(0); }
+  }
+
+  @keyframes achievePulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(0,166,81,0.5); }
+    50%       { box-shadow: 0 0 0 8px rgba(0,166,81,0); }
+  }
+
+  @media (max-width: 768px) {
+    #stats-rail, #altitude-rail, #drift-indicator { display: none; }
+    .hero-title { font-size: 36px; }
+    .zone-btn { min-width: 70px; padding: 8px 12px; }
+    .zone-desc { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 3D Canvas -->
+<canvas id="kazi-canvas"></canvas>
+
+<!-- Atmosphere depth layer -->
+<div id="atmosphere"></div>
+
+<!-- Cinematic scanlines -->
+<div id="scanlines"></div>
+
+<!-- UI Layer -->
+<div id="ui-layer">
+
+  <!-- Top Navigation -->
+  <nav id="top-nav">
+    <div class="kazi-logo">
+      <div class="kazi-logo-orb"></div>
+      <span class="kazi-logo-text">Kazi<span>AI</span></span>
+    </div>
+    <div class="nav-status">
+      <div class="status-dot"></div>
+      <span>Nairobi City · Live</span>
+    </div>
+    <div class="nav-user">
+      <span class="nav-tier-badge">STARTER PLAN</span>
+      <div class="nav-avatar" onclick="showAchievement('city-transformer', '🏙️', 'City Transformer', 'You have unlocked the full skyline view')">JK</div>
+    </div>
+  </nav>
+
+  <!-- Left altitude rail -->
+  <div id="altitude-rail">
+    <span class="altitude-label">Altitude</span>
+    <div class="altitude-track">
+      <div class="altitude-fill" id="alt-fill" style="height: 65%"></div>
+      <div class="altitude-marker" id="alt-marker" style="bottom: 65%"></div>
+    </div>
+    <span class="altitude-value" id="alt-value">FL 120</span>
+  </div>
+
+  <!-- Hero text -->
+  <div id="hero-text">
+    <p class="hero-eyebrow">Nairobi Business Intelligence · Altitude FL 120</p>
+    <h1 class="hero-title">Chat once.<br><em>Build forever.</em></h1>
+    <p class="hero-sub">Your AI marketing studio, living inside a breathing Nairobi skyline. Unaweza.</p>
+    <div class="hero-cta-row">
+      <button class="btn-primary" onclick="triggerDescent()">Enter the City</button>
+      <button class="btn-ghost" onclick="openZone('ADVISOR')">Talk to Advisor</button>
+    </div>
+  </div>
+
+  <!-- Scroll hint -->
+  <div id="scroll-hint">
+    <div class="scroll-line"></div>
+    <span class="scroll-text">Scroll to descend</span>
+  </div>
+
+  <!-- Right stats rail -->
+  <div id="stats-rail">
+    <div class="stat-card">
+      <div class="stat-label">Assets Built</div>
+      <div class="stat-value">12</div>
+      <div class="stat-sub">+3 this week</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Sparks Left</div>
+      <div class="stat-value" style="color: var(--kazi-amber)">3</div>
+      <div class="stat-sub">of 5 free</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">City Floor</div>
+      <div class="stat-value">5</div>
+      <div class="stat-sub">Foundation</div>
+    </div>
+  </div>
+
+  <!-- Drift indicator -->
+  <div id="drift-indicator">
+    <span>Camera</span>
+    <span class="drift-coords" id="cam-coords">0.00°, 120.00m</span>
+  </div>
+
+  <!-- Zone bar -->
+  <div id="zone-bar">
+    <div class="zone-btn" onclick="openZone('GENERATE')">
+      <div class="zone-glow"></div>
+      <span class="zone-icon">⚡</span>
+      <span class="zone-label">Generate</span>
+      <span class="zone-desc">Asset Studio</span>
+    </div>
+    <div class="zone-btn" onclick="openZone('AGENTS')">
+      <div class="zone-glow"></div>
+      <span class="zone-icon">🤖</span>
+      <span class="zone-label">Agents</span>
+      <span class="zone-desc">AI Workers</span>
+    </div>
+    <div class="zone-btn active" onclick="openZone('BRAND')">
+      <div class="zone-glow"></div>
+      <span class="zone-icon">🎨</span>
+      <span class="zone-label">Brand Kit</span>
+      <span class="zone-desc">Your Identity</span>
+    </div>
+    <div class="zone-btn" onclick="openZone('BILLING')">
+      <div class="zone-glow"></div>
+      <span class="zone-icon">🏢</span>
+      <span class="zone-label">Billing</span>
+      <span class="zone-desc">Upgrade Floor</span>
+    </div>
+    <div class="zone-btn" onclick="openZone('ADVISOR')">
+      <div class="zone-glow"></div>
+      <span class="zone-icon">💡</span>
+      <span class="zone-label">Advisor</span>
+      <span class="zone-desc">Business AI</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- Inward Draw Overlay -->
+<div id="inward-overlay">
+  <div class="inward-panel" id="inward-panel">
+    <button class="inward-close" onclick="closeInward()">✕</button>
+    <p class="inward-eyebrow" id="inward-zone">— GENERATE —</p>
+    <h2 class="inward-title" id="inward-title">Asset Generation Studio</h2>
+    <p class="inward-desc" id="inward-desc">Create websites, social posts, flyers, blog articles, and presentations with a single prompt. KaziAI builds it live while you watch.</p>
+    <div class="inward-feature-grid" id="inward-features"></div>
+    <div class="inward-actions">
+      <button class="btn-primary" id="inward-cta">Open Studio</button>
+      <button class="btn-ghost" onclick="closeInward()">Back to City</button>
+    </div>
+  </div>
+</div>
+
+<!-- Achievement Toast -->
+<div id="achievement-toast">
+  <div class="achievement-icon" id="achievement-icon">🏆</div>
+  <div>
+    <div class="achievement-label">Achievement Unlocked</div>
+    <div class="achievement-name" id="achievement-name">First Landing</div>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────────────────
+// ZONE DATA
+// ─────────────────────────────────────────────────────────────────────
+const ZONES = {
+  GENERATE: {
+    title: 'Asset Generation Studio',
+    desc: 'Create websites, social posts, flyers, blog articles, and presentations with a single prompt. KaziAI builds it live while you watch.',
+    features: ['Website Builder', 'Social Media', 'Blog Articles', 'Flyers & Posters', 'Pitch Decks', 'Logo Concepts'],
+    cta: 'Open Studio',
+  },
+  AGENTS: {
+    title: 'AI Agents Quarter',
+    desc: 'Deploy autonomous AI workers that run 24/7. Your coding agent, writing agent, WhatsApp bot, and business advisor — all working while you sleep.',
+    features: ['Coding Agent', 'Writing Agent', 'WhatsApp Bot', 'Research Agent', 'SEO Optimizer', 'Custom Agents'],
+    cta: 'Deploy Agent',
+  },
+  BRAND: {
+    title: 'Brand Kit Studio',
+    desc: "Your visual identity, stored and applied across every asset. Upload your logo, pick your colors, set your voice — KaziAI makes sure everything you build feels unmistakably yours.",
+    features: ['Logo Upload', 'Color System', 'Brand Voice', 'Font Pairing', 'Asset Templates', 'Tone Settings'],
+    cta: 'Edit Brand Kit',
+  },
+  BILLING: {
+    title: 'Billing Tower — Floor 5',
+    desc: 'Choose your floor. The higher you go, the more the city opens up below you. Pay by M-Pesa, card, or Bitcoin.',
+    features: ['M-Pesa Payments', 'Bitcoin / Crypto', 'Card Checkout', 'Annual Discount', 'Usage Dashboard', 'Invoice History'],
+    cta: 'View Plans',
+  },
+  ADVISOR: {
+    title: 'KaziAI Business Advisor',
+    desc: 'A wise, energetic Kenyan AI friend who knows your market. Ask anything — pricing strategy, competitor analysis, launch plan, investor pitch. Unaweza.',
+    features: ['Market Analysis', 'Pricing Strategy', 'Launch Planning', 'Competitor Intel', 'M-Pesa Integration', 'Growth Roadmap'],
+    cta: 'Start Conversation',
+  },
+};
+
+// ─────────────────────────────────────────────────────────────────────
+// THREE.JS SCENE
+// ─────────────────────────────────────────────────────────────────────
+const canvas = document.getElementById('kazi-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = false;
+renderer.setClearColor(0x070F1E, 1);
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x070F1E, 0.0012);
+
+// Camera
+const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 1, 2000);
+const CAM_SKY    = new THREE.Vector3(0, 120, 300);
+const CAM_STREET = new THREE.Vector3(0, 22, 90);
+let camTarget    = new THREE.Vector3(0, 60, 0);
+let camTargetStreet = new THREE.Vector3(0, 18, 0);
+let currentCamTarget = new THREE.Vector3(0, 60, 0);
+camera.position.copy(CAM_SKY);
+camera.lookAt(camTarget);
+
+// Clock for animations
+const clock = new THREE.Clock();
+
+// ── Sky gradient background plane ──
+const SKY_SHADER = {
+  vertexShader: `
+    varying vec2 vUv;
+    void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }
+  `,
+  fragmentShader: `
+    varying vec2 vUv;
+    uniform float uTime;
+    void main() {
+      vec3 top    = vec3(0.027, 0.059, 0.118);
+      vec3 mid    = vec3(0.039, 0.078, 0.157);
+      vec3 horiz  = vec3(0.22, 0.133, 0.02);
+      vec3 glow   = vec3(1.0, 0.384, 0.0);
+      float h = vUv.y;
+      vec3 col;
+      if (h > 0.5) col = mix(mid, top, (h - 0.5) * 2.0);
+      else         col = mix(glow, mid, h * 2.0);
+      float sun = pow(max(0.0, 1.0 - abs(vUv.x - 0.5) * 3.0 - h * 2.5), 3.0) * 0.35;
+      col += vec3(1.0, 0.5, 0.1) * sun;
+      float star = step(0.998, sin(vUv.x * 1500.0 + uTime * 0.1) * sin(vUv.y * 900.0));
+      col += star * 0.4 * smoothstep(0.5, 1.0, h);
+      gl_FragColor = vec4(col, 1.0);
+    }
+  `,
+};
+
+const skyGeo = new THREE.PlaneGeometry(2400, 1600);
+const skyMat = new THREE.ShaderMaterial({
+  uniforms: { uTime: { value: 0 } },
+  vertexShader: SKY_SHADER.vertexShader,
+  fragmentShader: SKY_SHADER.fragmentShader,
+  side: THREE.DoubleSide,
+  depthWrite: false,
+});
+const skyMesh = new THREE.Mesh(skyGeo, skyMat);
+skyMesh.position.z = -600;
+skyMesh.position.y = 200;
+scene.add(skyMesh);
+
+// ── Building silhouettes ──
+const BUILDINGS = [
+  // [x, y_base, z, w, h, d, isLandmark, greenPulse]
+  [-260, 0, -120, 38, 180, 38, false, false],  // Left cluster
+  [-220, 0, -100, 28, 120, 28, false, false],
+  [-175, 0, -90,  22, 95,  22, false, false],
+  [-140, 0, -80,  45, 260, 45, false, true],   // KICC-inspired
+  [-100, 0, -100, 32, 145, 32, false, false],
+  [ -60, 0, -110, 50, 380, 50, true,  true],   // Tallest landmark
+  [  -5, 0, -95,  38, 290, 38, false, true],
+  [  40, 0, -105, 55, 220, 55, true,  false],
+  [  95, 0, -90,  30, 160, 30, false, true],
+  [ 140, 0, -100, 42, 300, 42, false, false],  // UAP Tower inspired
+  [ 185, 0, -115, 28, 110, 28, false, false],
+  [ 220, 0, -95,  35, 195, 35, true,  true],
+  [ 265, 0, -110, 25, 88,  25, false, false],
+  // Background layer
+  [-180, 0, -200, 60, 140, 60, false, false],
+  [  50, 0, -210, 70, 170, 70, false, false],
+  [ 200, 0, -190, 55, 130, 55, false, false],
+];
+
+const buildingGroup = new THREE.Group();
+const buildingMat   = new THREE.MeshBasicMaterial({ color: 0x0F1A2E });
+const landmarkMat   = new THREE.MeshBasicMaterial({ color: 0x142038 });
+
+// Track green-pulse buildings
+const greenBuildings = [];
+
+BUILDINGS.forEach(([x, , z, w, h, d, isLandmark, greenPulse]) => {
+  const geo  = new THREE.BoxGeometry(w, h, d);
+  const mat  = isLandmark ? landmarkMat : buildingMat;
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.set(x, h / 2, z);
+  buildingGroup.add(mesh);
+
+  if (greenPulse) greenBuildings.push(mesh);
+
+  // Window lights — rows of small planes on the front face
+  const lightMat = new THREE.MeshBasicMaterial({ color: 0xFFF8E0 });
+  const cols = Math.floor(w / 7);
+  const rows = Math.floor(h / 9);
+  for (let c = 0; c < cols; c++) {
+    for (let r = 0; r < rows; r++) {
+      if (Math.random() > 0.38) {
+        const wGeo  = new THREE.PlaneGeometry(3, 2);
+        const lit   = Math.random() > 0.15;
+        const wMat  = new THREE.MeshBasicMaterial({
+          color: lit ? (Math.random() > 0.9 ? 0x00A651 : 0xFFF8E0) : 0x1A2840,
+          transparent: true,
+          opacity: lit ? 0.75 + Math.random() * 0.25 : 0.15,
+        });
+        const wMesh = new THREE.Mesh(wGeo, wMat);
+        wMesh.position.set(
+          x - w / 2 + 5 + c * 7,
+          r * 9 + 6,
+          z + d / 2 + 0.2
+        );
+        buildingGroup.add(wMesh);
+      }
+    }
+  }
+});
+
+scene.add(buildingGroup);
+
+// ── Ground plane ──
+const groundGeo = new THREE.PlaneGeometry(1200, 400);
+const groundMat = new THREE.MeshBasicMaterial({ color: 0x060E1A });
+const groundMesh = new THREE.Mesh(groundGeo, groundMat);
+groundMesh.rotation.x = -Math.PI / 2;
+groundMesh.position.set(0, 0, 50);
+scene.add(groundMesh);
+
+// ── Road lines ──
+const roadMat = new THREE.LineBasicMaterial({ color: 0x1A3040, linewidth: 1 });
+for (let i = -5; i <= 5; i++) {
+  const pts  = [new THREE.Vector3(-500, 0.5, i * 22), new THREE.Vector3(500, 0.5, i * 22)];
+  const geo  = new THREE.BufferGeometry().setFromPoints(pts);
+  scene.add(new THREE.Line(geo, roadMat));
+}
+
+// ── Matatu light trails ──
+const trailGroup = new THREE.Group();
+const TRAIL_COUNT = 14;
+const trails = [];
+
+for (let i = 0; i < TRAIL_COUNT; i++) {
+  const isOrange = Math.random() > 0.45;
+  const mat  = new THREE.LineBasicMaterial({
+    color: isOrange ? 0xFF6200 : 0xFFFFEE,
+    transparent: true,
+    opacity: 0.65 + Math.random() * 0.35,
+  });
+  const zPos = (Math.random() - 0.5) * 80 + 30;
+  const xOff = (Math.random() - 0.5) * 600;
+  const pts  = [
+    new THREE.Vector3(xOff, 1.5 + Math.random() * 2, zPos),
+    new THREE.Vector3(xOff + 60 + Math.random() * 80, 1.5 + Math.random() * 2, zPos),
+  ];
+  const geo  = new THREE.BufferGeometry().setFromPoints(pts);
+  const line = new THREE.Line(geo, mat);
+  trailGroup.add(line);
+  const speed = 0.6 + Math.random() * 1.4;
+  const dir   = Math.random() > 0.5 ? 1 : -1;
+  trails.push({ line, speed, dir, xOff, zPos, pts });
+}
+
+scene.add(trailGroup);
+
+// ── Green neon accent strips on landmark buildings ──
+const neonMat = new THREE.LineBasicMaterial({ color: 0x00A651, transparent: true, opacity: 0.85 });
+const neonAccents = [];
+[[- 60, 380, -110], [-5, 290, -95], [95, 160, -90], [220, 195, -95]].forEach(([bx, bh, bz]) => {
+  [[0.3, 1], [0.6, 1], [0.85, 1]].forEach(([frac]) => {
+    const y = bh * frac;
+    const pts = [new THREE.Vector3(bx - 28, y, bz + 27), new THREE.Vector3(bx + 28, y, bz + 27)];
+    const geo = new THREE.BufferGeometry().setFromPoints(pts);
+    const line = new THREE.Line(geo, neonMat.clone());
+    scene.add(line);
+    neonAccents.push(line);
+  });
+});
+
+// ── Camera animation state ──
+let isDescending  = false;
+let descentT      = 0;
+let isAtStreet    = false;
+let camDriftAngle = 0;
+let camDriftAmp   = 0.0025;
+
+// Smooth lerp helper
+function lerpV3(a, b, t) {
+  return new THREE.Vector3(
+    a.x + (b.x - a.x) * t,
+    a.y + (b.y - a.y) * t,
+    a.z + (b.z - a.z) * t,
+  );
+}
+
+// Ease in-out cubic
+function easeInOutCubic(t) {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
+// ── RAF loop ──
+let frameId;
+function animate() {
+  frameId = requestAnimationFrame(animate);
+  const t  = clock.getElapsedTime();
+  const dt = clock.getDelta ? 0.016 : 0.016;
+
+  // Sky shader time
+  skyMat.uniforms.uTime.value = t;
+
+  // Matatu trails scroll
+  trails.forEach(({ line, speed, dir, zPos, pts }) => {
+    const pos  = line.geometry.attributes.position;
+    const newX0 = pts[0].x + dir * speed;
+    const newX1 = pts[1].x + dir * speed;
+    pts[0].x = newX0;
+    pts[1].x = newX1;
+    if (dir === 1 && pts[0].x > 700) { pts[0].x = -700; pts[1].x = -640; }
+    if (dir === -1 && pts[1].x < -700) { pts[0].x = 640; pts[1].x = 700; }
+    pos.setXYZ(0, pts[0].x, pts[0].y, zPos);
+    pos.setXYZ(1, pts[1].x, pts[1].y, zPos);
+    pos.needsUpdate = true;
+  });
+
+  // Neon pulse
+  neonAccents.forEach((line, i) => {
+    line.material.opacity = 0.5 + 0.5 * Math.sin(t * 1.8 + i * 0.7);
+  });
+
+  // Green building pulse
+  greenBuildings.forEach((mesh, i) => {
+    const c = 0.4 + 0.25 * Math.sin(t * 0.9 + i * 1.3);
+    mesh.material.color.setRGB(0, c * 0.65, c * 0.31);
+  });
+
+  // Camera descent animation
+  if (isDescending && descentT < 1) {
+    descentT = Math.min(1, descentT + 0.008);
+    const e = easeInOutCubic(descentT);
+    camera.position.lerpVectors(CAM_SKY, CAM_STREET, e);
+    currentCamTarget.lerpVectors(camTarget, camTargetStreet, e);
+
+    if (descentT >= 1) {
+      isDescending = false;
+      isAtStreet   = true;
+      updateAltitudeRail(1);
+      showAchievement('street-explorer', '🏙️', 'Street Explorer', 'You descended into Nairobi CBD');
+    } else {
+      updateAltitudeRail(e);
+    }
+  }
+
+  // Gentle idle camera drift
+  if (!isDescending) {
+    camDriftAngle += 0.0015;
+    const driftX = Math.sin(camDriftAngle) * camDriftAmp * (isAtStreet ? 4 : 12);
+    const driftY = Math.cos(camDriftAngle * 0.7) * camDriftAmp * (isAtStreet ? 2 : 6);
+    camera.position.x += driftX;
+    camera.position.y += driftY;
+
+    // Update coords display
+    const el = document.getElementById('cam-coords');
+    if (el) el.textContent = `${(camDriftAngle * 2.3).toFixed(2)}°, ${camera.position.y.toFixed(1)}m`;
+  }
+
+  camera.lookAt(currentCamTarget);
+  renderer.render(scene, camera);
+}
+
+animate();
+
+// ── Resize ──
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// ─────────────────────────────────────────────────────────────────────
+// ALTITUDE RAIL
+// ─────────────────────────────────────────────────────────────────────
+function updateAltitudeRail(t) {
+  const pct = (1 - t) * 100;
+  const fill   = document.getElementById('alt-fill');
+  const marker = document.getElementById('alt-marker');
+  const value  = document.getElementById('alt-value');
+  if (fill)   fill.style.height   = pct + '%';
+  if (marker) marker.style.bottom = pct + '%';
+  if (value)  value.textContent   = `FL ${Math.round(120 - t * 100)}`;
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// DESCENT
+// ─────────────────────────────────────────────────────────────────────
+function triggerDescent() {
+  if (isDescending || isAtStreet) return;
+  isDescending = true;
+  descentT     = 0;
+  document.getElementById('scroll-hint').style.display = 'none';
+}
+
+// Scroll also triggers descent
+let lastScroll = 0;
+window.addEventListener('wheel', (e) => {
+  if (!isAtStreet && !isDescending && e.deltaY > 0) {
+    lastScroll += Math.abs(e.deltaY);
+    if (lastScroll > 80) triggerDescent();
+  }
+}, { passive: true });
+
+// ─────────────────────────────────────────────────────────────────────
+// ZONE / INWARD DRAW
+// ─────────────────────────────────────────────────────────────────────
+function openZone(key) {
+  const z = ZONES[key];
+  if (!z) return;
+
+  document.getElementById('inward-zone').textContent  = `— ${key} —`;
+  document.getElementById('inward-title').textContent = z.title;
+  document.getElementById('inward-desc').textContent  = z.desc;
+  document.getElementById('inward-cta').textContent   = z.cta;
+
+  const grid = document.getElementById('inward-features');
+  grid.innerHTML = z.features.map(f => `
+    <div class="inward-feature">
+      <div class="inward-feature-dot"></div>
+      <span>${f}</span>
+    </div>
+  `).join('');
+
+  const overlay = document.getElementById('inward-overlay');
+  overlay.classList.add('active');
+
+  // Pause camera drift while panel open
+  camDriftAmp = 0;
+  setTimeout(() => { camDriftAmp = 0.0025; }, 100);
+}
+
+function closeInward() {
+  document.getElementById('inward-overlay').classList.remove('active');
+}
+
+// Close on backdrop click
+document.getElementById('inward-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeInward();
+});
+
+// Escape key
+window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeInward(); });
+
+// ─────────────────────────────────────────────────────────────────────
+// ACHIEVEMENT TOAST
+// ─────────────────────────────────────────────────────────────────────
+let toastTimeout;
+const shownAchievements = new Set();
+
+function showAchievement(id, icon, name) {
+  if (shownAchievements.has(id)) return;
+  shownAchievements.add(id);
+
+  document.getElementById('achievement-icon').textContent = icon;
+  document.getElementById('achievement-name').textContent = name;
+
+  const toast = document.getElementById('achievement-toast');
+  toast.classList.add('show');
+  spawnParticles();
+
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => toast.classList.remove('show'), 4500);
+}
+
+// First landing achievement on load
+setTimeout(() => showAchievement('first-landing', '🌆', 'First Landing'), 3000);
+
+// ─────────────────────────────────────────────────────────────────────
+// PARTICLE BURST
+// ─────────────────────────────────────────────────────────────────────
+function spawnParticles() {
+  const originX = window.innerWidth - 120;
+  const originY = window.innerHeight - 60;
+
+  for (let i = 0; i < 16; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+
+    const angle = (i / 16) * Math.PI * 2;
+    const dist  = 40 + Math.random() * 80;
+    const tx    = Math.cos(angle) * dist;
+    const ty    = Math.sin(angle) * dist - 20;
+    const size  = 4 + Math.random() * 6;
+
+    p.style.cssText = `
+      left: ${originX}px; top: ${originY}px;
+      width: ${size}px; height: ${size}px;
+      background: ${Math.random() > 0.4 ? '#00A651' : '#FF6200'};
+      transition: transform ${0.6 + Math.random() * 0.5}s cubic-bezier(0.16,1,0.3,1),
+                  opacity   ${0.6 + Math.random() * 0.5}s ease-out;
+    `;
+    document.body.appendChild(p);
+
+    requestAnimationFrame(() => {
+      p.style.transform = `translate(${tx}px, ${ty}px) scale(0)`;
+      p.style.opacity   = '0';
+    });
+
+    setTimeout(() => p.remove(), 1200);
+  }
+}
+</script>
+<div id="gs-proto-banner" style="position:fixed;left:0;right:0;bottom:0;z-index:2147483647;background:#1a1030;color:#fff;font:13px/1.4 system-ui,sans-serif;padding:7px 12px;text-align:center;opacity:.94">Working prototype by <b>Emmanuel Muteti</b> &middot; names and numbers are demo data &middot; <a href="../../work/" style="color:#c9a7ff">See all work</a> &middot; <a href="https://wa.me/254740562812" style="color:#7dffb0">WhatsApp</a></div>
+</body>
+</html>

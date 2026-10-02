@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SecureOps — Security Management System</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#ffffff;--bg2:#f7f7f5;--bg3:#f0efe9;
+  --text:#1a1a1a;--text2:#666660;--text3:#999990;
+  --border:rgba(0,0,0,0.11);--border2:rgba(0,0,0,0.2);
+  --green:#1D9E75;--green-dark:#0F6E56;--green-light:#E1F5EE;--green-text:#085041;
+  --amber:#EF9F27;--amber-light:#FAEEDA;--amber-text:#633806;
+  --blue:#378ADD;--blue-light:#E6F1FB;--blue-text:#0C447C;
+  --red:#E24B4A;--red-light:#FCEBEB;--red-text:#501313;
+  --gray-light:#F1EFE8;--gray-text:#444441;
+  --dark:#0f1923;--dark2:#1a2535;--dark3:#243040;
+  --radius:8px;--radius-lg:12px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);font-size:15px;line-height:1.5;}
+.page{display:none;min-height:100vh;}
+.page.active{display:block;}
+
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--dark);padding:1rem;}
+.login-box{background:var(--dark2);border:0.5px solid rgba(255,255,255,0.08);border-radius:var(--radius-lg);padding:2rem;width:100%;max-width:380px;}
+.login-logo{text-align:center;margin-bottom:2rem;}
+.login-logo .shield{font-size:36px;margin-bottom:8px;}
+.login-logo h1{font-size:20px;font-weight:600;color:white;letter-spacing:0.05em;}
+.login-logo p{font-size:12px;color:rgba(255,255,255,0.4);margin-top:4px;}
+.login-box .fg label{color:rgba(255,255,255,0.5);}
+.login-box .fg input,.login-box .fg select{background:var(--dark3);border-color:rgba(255,255,255,0.1);color:white;}
+.login-box .fg input::placeholder{color:rgba(255,255,255,0.25);}
+.login-hint{margin-top:1rem;font-size:11px;color:rgba(255,255,255,0.25);text-align:center;line-height:1.9;}
+
+/* TOPBAR */
+.topbar{background:var(--dark);padding:0.75rem 1rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+.topbar-brand{font-size:14px;font-weight:600;color:white;display:flex;align-items:center;gap:8px;}
+.topbar-brand .dot{width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.role-badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;}
+.role-badge.owner{background:rgba(29,158,117,0.2);color:#5DCAA5;}
+.role-badge.supervisor{background:rgba(55,138,221,0.2);color:#85B7EB;}
+.role-badge.guard{background:rgba(239,159,39,0.2);color:#FAC775;}
+
+/* ALERT BANNER */
+.alert-banner{background:var(--red);color:white;padding:8px 1rem;font-size:13px;display:flex;justify-content:space-between;align-items:center;}
+.alert-banner.amber{background:var(--amber);}
+.alert-banner.green{background:var(--green);}
+
+/* CONTAINER */
+.container{max-width:920px;margin:0 auto;padding:1.5rem 1rem;}
+
+/* METRICS */
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:1.5rem;}
+.metric{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;}
+.metric-label{font-size:11px;color:var(--text2);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.04em;}
+.metric-value{font-size:26px;font-weight:600;color:var(--text);}
+.metric-value.green{color:var(--green-dark);}
+.metric-value.red{color:var(--red);}
+.metric-value.amber{color:#BA7517;}
+.metric-sub{font-size:11px;color:var(--text3);margin-top:2px;}
+
+/* TABS */
+.tabs{display:flex;border-bottom:0.5px solid var(--border);margin-bottom:1.25rem;overflow-x:auto;}
+.tab{padding:8px 16px;font-size:13px;cursor:pointer;border:none;background:none;color:var(--text2);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;}
+.tab.active{color:var(--text);border-bottom-color:var(--green);font-weight:500;}
+
+/* CARDS */
+.card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:12px;}
+.card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;}
+.card-title{font-size:15px;font-weight:600;color:var(--text);}
+.card-sub{font-size:12px;color:var(--text2);margin-top:2px;}
+
+/* STATUS DOTS */
+.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;}
+.status-dot.on-post{background:var(--green);}
+.status-dot.late{background:var(--red);}
+.status-dot.off-duty{background:#B4B2A9;}
+.status-dot.incident{background:var(--amber);}
+
+/* TAGS */
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0;}
+.tag{font-size:11px;padding:3px 8px;border-radius:20px;background:var(--bg2);color:var(--text2);}
+.tag.active{background:var(--green-light);color:var(--green-text);}
+.tag.alert{background:var(--red-light);color:var(--red-text);}
+.tag.pending{background:var(--amber-light);color:var(--amber-text);}
+
+/* FORMS */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.fg{margin-bottom:0;}
+.fg label{display:block;font-size:12px;color:var(--text2);margin-bottom:4px;}
+.fg input,.fg select,.fg textarea{width:100%;padding:9px 12px;font-size:14px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);outline:none;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--green);}
+.fg textarea{min-height:70px;resize:vertical;}
+.full{grid-column:1/-1;}
+
+/* BUTTONS */
+.btn{padding:8px 16px;border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;border:0.5px solid var(--border2);background:var(--bg);color:var(--text);}
+.btn:hover{background:var(--bg2);}
+.btn.primary{background:var(--green);color:white;border-color:var(--green);}
+.btn.primary:hover{background:var(--green-dark);}
+.btn.danger{background:var(--red-light);color:var(--red-text);border-color:var(--red);}
+.btn.block{width:100%;display:block;text-align:center;margin-top:12px;}
+.btn.sm{padding:5px 12px;font-size:12px;}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+
+/* SITE CARDS */
+.site-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:10px;border-left:3px solid var(--green);}
+.site-card.alert{border-left-color:var(--red);}
+.site-card.warning{border-left-color:var(--amber);}
+.site-top{display:flex;justify-content:space-between;align-items:flex-start;}
+.site-name{font-size:15px;font-weight:600;}
+.site-sub{font-size:12px;color:var(--text2);margin-top:2px;}
+.site-guards{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+.guard-chip{font-size:12px;padding:4px 10px;border-radius:20px;display:flex;align-items:center;gap:4px;}
+.guard-chip.on{background:var(--green-light);color:var(--green-text);}
+.guard-chip.late{background:var(--red-light);color:var(--red-text);}
+.guard-chip.off{background:var(--gray-light);color:var(--gray-text);}
+
+/* INCIDENT CARDS */
+.incident-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:10px;border-left:3px solid var(--amber);}
+.incident-card.critical{border-left-color:var(--red);}
+.incident-card.resolved{border-left-color:var(--green);opacity:0.7;}
+.incident-meta{font-size:12px;color:var(--text2);margin-bottom:6px;}
+.incident-desc{font-size:14px;color:var(--text);margin-bottom:10px;}
+
+/* CLIENT REPORT */
+.report-box{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;}
+.report-header{border-bottom:0.5px solid var(--border);padding-bottom:1rem;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:flex-start;}
+.report-logo{font-size:16px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px;}
+.report-table{width:100%;border-collapse:collapse;font-size:13px;}
+.report-table th{text-align:left;padding:8px 12px;font-size:11px;color:var(--text2);background:var(--bg2);border-bottom:0.5px solid var(--border);}
+.report-table td{padding:10px 12px;border-bottom:0.5px solid var(--border);}
+.report-table tr:last-child td{border-bottom:none;}
+
+/* LEAD PIPELINE */
+.lead-item{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:10px;border-left:3px solid var(--blue);}
+.lead-item.hot{border-left-color:var(--green);}
+.lead-item.warm{border-left-color:var(--amber);}
+
+/* GUARD CHECK-IN */
+.checkin-form{background:var(--dark);border-radius:var(--radius-lg);padding:1.5rem;color:white;}
+.checkin-form .fg label{color:rgba(255,255,255,0.5);}
+.checkin-form .fg input,.checkin-form .fg select{background:var(--dark2);border-color:rgba(255,255,255,0.1);color:white;}
+.checkin-status{text-align:center;padding:2rem;font-size:15px;color:rgba(255,255,255,0.7);}
+.checkin-status .big{font-size:48px;margin-bottom:8px;}
+.checkin-status h2{font-size:20px;font-weight:600;color:white;margin-bottom:4px;}
+
+/* SECTION NOTE */
+.note{font-size:12px;color:var(--text2);background:var(--bg2);border-radius:var(--radius);padding:8px 12px;margin-bottom:1rem;}
+
+/* EMPTY */
+.empty{text-align:center;padding:3rem 1rem;color:var(--text2);font-size:14px;}
+
+/* EXPAND */
+.expand-box{display:none;margin-top:10px;}
+.expand-box.open{display:block;}
+
+/* COPY OK */
+.copy-ok{font-size:11px;color:var(--green);display:none;margin-left:8px;}
+
+@media(max-width:600px){
+  .metrics{grid-template-columns:repeat(2,1fr);}
+  .form-grid{grid-template-columns:1fr;}
+  .full{grid-column:1;}
+}
+</style>
+</head>
+<body>
+
+<!-- ====== LOGIN ====== -->
+<div class="page active" id="page-login">
+<div class="login-wrap">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="shield">🛡</div>
+      <h1>SECUREOPS</h1>
+      <p>Security Operations Management</p>
+    </div>
+    <div class="fg" style="margin-bottom:12px;">
+      <label>Select role</label>
+      <select id="login-user">
+        <option value="">Choose account...</option>
+        <option value="owner">Owner — Donn</option>
+        <option value="supervisor">Supervisor — Operations</option>
+        <option value="guard">Guard — Check-in</option>
+      </select>
+    </div>
+    <div class="fg" style="margin-bottom:16px;">
+      <label>PIN</label>
+      <input type="password" id="login-pin" placeholder="Enter PIN" maxlength="4" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <button class="btn primary block" onclick="doLogin()">Sign in</button>
+    <div class="login-hint">Owner: 0000 &nbsp;·&nbsp; Supervisor: 1111 &nbsp;·&nbsp; Guard: 2222</div>
+  </div>
+</div>
+</div>
+
+<!-- ====== OWNER DASHBOARD ====== -->
+<div class="page" id="page-owner">
+  <div class="topbar">
+    <div class="topbar-brand"><span class="dot"></span>SecureOps</div>
+    <div class="topbar-right">
+      <span class="role-badge owner">Owner</span>
+      <button class="btn sm" style="background:rgba(255,255,255,0.08);color:white;border-color:rgba(255,255,255,0.15);" onclick="logout()">Sign out</button>
+    </div>
+  </div>
+  <div id="owner-alerts"></div>
+  <div class="container">
+    <div class="metrics" id="owner-metrics"></div>
+    <div class="tabs">
+      <button class="tab active" onclick="ownerTab('sites',this)">Sites</button>
+      <button class="tab" onclick="ownerTab('guards',this)">Guards</button>
+      <button class="tab" onclick="ownerTab('incidents',this)">Incidents</button>
+      <button class="tab" onclick="ownerTab('report',this)">Client report</button>
+      <button class="tab" onclick="ownerTab('leads',this)">New clients</button>
+      <button class="tab" onclick="ownerTab('settings',this)">Settings</button>
+    </div>
+    <div id="owner-panel-sites"></div>
+    <div id="owner-panel-guards" style="display:none;"></div>
+    <div id="owner-panel-incidents" style="display:none;"></div>
+    <div id="owner-panel-report" style="display:none;"></div>
+    <div id="owner-panel-leads" style="display:none;"></div>
+    <div id="owner-panel-settings" style="display:none;"></div>
+  </div>
+</div>
+
+<!-- ====== SUPERVISOR DASHBOARD ====== -->
+<div class="page" id="page-supervisor">
+  <div class="topbar">
+    <div class="topbar-brand"><span class="dot"></span>SecureOps — Supervisor</div>
+    <div class="topbar-right">
+      <span class="role-badge supervisor">Supervisor</span>
+      <button class="btn sm" style="background:rgba(255,255,255,0.08);color:white;border-color:rgba(255,255,255,0.15);" onclick="logout()">Sign out</button>
+    </div>
+  </div>
+  <div class="container">
+    <div class="metrics" id="sup-metrics"></div>
+    <div class="tabs">
+      <button class="tab active" onclick="supTab('attendance',this)">Today's attendance</button>
+      <button class="tab" onclick="supTab('incidents',this)">Log incident</button>
+      <button class="tab" onclick="supTab('deployment',this)">Deployment</button>
+    </div>
+    <div id="sup-panel-attendance"></div>
+    <div id="sup-panel-incidents" style="display:none;"></div>
+    <div id="sup-panel-deployment" style="display:none;"></div>
+  </div>
+</div>
+
+<!-- ====== GUARD CHECK-IN ====== -->
+<div class="page" id="page-guard">
+  <div class="topbar">
+    <div class="topbar-brand"><span class="dot"></span>SecureOps — Guard</div>
+    <div class="topbar-right">
+      <span class="role-badge guard">Guard</span>
+      <button class="btn sm" style="background:rgba(255,255,255,0.08);color:white;border-color:rgba(255,255,255,0.15);" onclick="logout()">Sign out</button>
+    </div>
+  </div>
+  <div class="container">
+    <div id="guard-content"></div>
+  </div>
+</div>
+
+<script>
+/* ===== STATE ===== */
+const PINS={owner:'0000',supervisor:'1111',guard:'2222'};
+let currentRole=null;
+let checkedIn=false;
+
+function getGuards(){return JSON.parse(localStorage.getItem('sop_guards')||'[]');}
+function saveGuards(d){localStorage.setItem('sop_guards',JSON.stringify(d));}
+function getSites(){return JSON.parse(localStorage.getItem('sop_sites')||'[]');}
+function saveSites(d){localStorage.setItem('sop_sites',JSON.stringify(d));}
+function getIncidents(){return JSON.parse(localStorage.getItem('sop_incidents')||'[]');}
+function saveIncidents(d){localStorage.setItem('sop_incidents',JSON.stringify(d));}
+function getAttendance(){return JSON.parse(localStorage.getItem('sop_attendance')||'[]');}
+function saveAttendance(d){localStorage.setItem('sop_attendance',JSON.stringify(d));}
+function getLeads(){return JSON.parse(localStorage.getItem('sop_leads')||'[]');}
+function saveLeads(d){localStorage.setItem('sop_leads',JSON.stringify(d));}
+
+function today(){return new Date().toISOString().slice(0,10);}
+function now(){return new Date().toLocaleTimeString('en-KE',{hour:'2-digit',minute:'2-digit'});}
+function fmtTime(ts){return new Date(ts).toLocaleTimeString('en-KE',{hour:'2-digit',minute:'2-digit'});}
+function fmtDate(ts){return new Date(ts).toLocaleDateString('en-KE',{day:'numeric',month:'short',year:'numeric'});}
+
+/* ===== SEED ===== */
+function seedIfEmpty(){
+  if(getSites().length>0) return;
+  const guards=[
+    {id:'G001',name:'John Otieno',phone:'+254711000001',sites:['S001','S002'],status:'on-post',shift:'Day'},
+    {id:'G002',name:'Peter Kamau',phone:'+254711000002',sites:['S001'],status:'on-post',shift:'Night'},
+    {id:'G003',name:'Mary Wanjiku',phone:'+254711000003',sites:['S003'],status:'on-post',shift:'Day'},
+    {id:'G004',name:'James Maina',phone:'+254711000004',sites:['S002','S004'],status:'late',shift:'Day'},
+    {id:'G005',name:'Susan Achieng',phone:'+254711000005',sites:['S003','S004'],status:'off-duty',shift:'Night'},
+    {id:'G006',name:'Brian Kipchoge',phone:'+254711000006',sites:['S005'],status:'on-post',shift:'Day'},
+  ];
+  const sites=[
+    {id:'S001',name:'Westlands Plaza',client:'Westlands Properties Ltd',contact:'+254720100001',location:'Westlands, Nairobi',guards:['G001','G002'],contract:'Monthly',value:45000,status:'active'},
+    {id:'S002',name:'Karen Heights Residence',client:'Karen Heights HOA',contact:'+254720100002',location:'Karen, Nairobi',guards:['G001','G004'],contract:'Monthly',value:38000,status:'active'},
+    {id:'S003',name:'Parklands Clinic',client:'Dr. Mwangi Medical Centre',contact:'+254720100003',location:'Parklands, Nairobi',guards:['G003','G005'],contract:'Monthly',value:28000,status:'active'},
+    {id:'S004',name:'Industrial Area Warehouse',client:'Nairobi Logistics Co.',contact:'+254720100004',location:'Industrial Area, Nairobi',guards:['G004','G005'],contract:'Monthly',value:55000,status:'active'},
+    {id:'S005',name:'Kilimani Office Block',client:'Kilimani Business Park',contact:'+254720100005',location:'Kilimani, Nairobi',guards:['G006'],contract:'Monthly',value:32000,status:'active'},
+  ];
+  const incidents=[
+    {id:'I001',siteId:'S002',guardId:'G001',type:'Unauthorized Entry',severity:'high',description:'Unknown vehicle attempted to access residential parking without authorization. Guard denied entry and took note of plate number KBZ 123X.',timestamp:Date.now()-3*3600000,status:'open',reportedBy:'John Otieno'},
+    {id:'I002',siteId:'S003',guardId:'G003',type:'Suspicious Person',severity:'medium',description:'Individual loitering near clinic entrance for over 30 minutes. Approached and asked to move on. Left the area peacefully.',timestamp:Date.now()-26*3600000,status:'resolved',reportedBy:'Mary Wanjiku'},
+    {id:'I003',siteId:'S001',guardId:'G002',type:'Guard Late',severity:'low',description:'Night shift guard arrived 25 minutes late for handover.',timestamp:Date.now()-50*3600000,status:'resolved',reportedBy:'Peter Kamau'},
+  ];
+  const att=[
+    {id:1,guardId:'G001',siteId:'S001',date:today(),checkIn:Date.now()-6*3600000,checkOut:null,status:'on-post'},
+    {id:2,guardId:'G002',siteId:'S001',date:today(),checkIn:Date.now()-7*3600000,checkOut:null,status:'on-post'},
+    {id:3,guardId:'G003',siteId:'S003',date:today(),checkIn:Date.now()-5*3600000,checkOut:null,status:'on-post'},
+    {id:4,guardId:'G004',siteId:'S002',date:today(),checkIn:null,checkOut:null,status:'late'},
+    {id:5,guardId:'G006',siteId:'S005',date:today(),checkIn:Date.now()-4*3600000,checkOut:null,status:'on-post'},
+  ];
+  const leads=[
+    {id:'L001',name:'Summit Mall Security',contact:'0722 000 100',source:'Referral',sites:2,value:90000,status:'warm',notes:'Referred by Karen Heights HOA. Needs 2 guards per site.',loggedAt:Date.now()-2*24*3600000},
+    {id:'L002',name:'Lavington School',contact:'0733 000 200',source:'Google',sites:1,value:35000,status:'hot',notes:'Principal called directly. Wants armed guard for school gate.',loggedAt:Date.now()-5*3600000},
+  ];
+  saveGuards(guards);saveSites(sites);saveIncidents(incidents);saveAttendance(att);saveLeads(leads);
+}
+
+/* ===== AUTH ===== */
+function doLogin(){
+  const role=document.getElementById('login-user').value;
+  const pin=document.getElementById('login-pin').value;
+  if(!role){alert('Please select a role.');return;}
+  if(pin!==PINS[role]){alert('Incorrect PIN.');return;}
+  currentRole=role;
+  seedIfEmpty();
+  if(role==='owner'){showPage('owner');renderOwner();}
+  else if(role==='supervisor'){showPage('supervisor');renderSupervisor();}
+  else{showPage('guard');renderGuard();}
+}
+function logout(){
+  currentRole=null;checkedIn=false;
+  document.getElementById('login-user').value='';
+  document.getElementById('login-pin').value='';
+  showPage('login');
+}
+function showPage(p){
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+}
+
+/* ===== OWNER ===== */
+function renderOwner(){
+  renderOwnerMetrics();
+  renderOwnerAlerts();
+  renderOwnerSites();
+}
+
+function renderOwnerMetrics(){
+  const sites=getSites();
+  const guards=getGuards();
+  const incidents=getIncidents().filter(i=>i.status==='open');
+  const att=getAttendance().filter(a=>a.date===today());
+  const late=guards.filter(g=>g.status==='late').length;
+  const revenue=sites.reduce((s,x)=>s+x.value,0);
+  document.getElementById('owner-metrics').innerHTML=`
+    <div class="metric"><div class="metric-label">Active sites</div><div class="metric-value green">${sites.length}</div><div class="metric-sub">All operational</div></div>
+    <div class="metric"><div class="metric-label">Guards deployed</div><div class="metric-value">${guards.filter(g=>g.status==='on-post').length}<span style="font-size:14px;color:var(--text2);">/${guards.length}</span></div><div class="metric-sub">${late>0?`<span style="color:var(--red)">${late} late</span>`:'All on post'}</div></div>
+    <div class="metric"><div class="metric-label">Open incidents</div><div class="metric-value ${incidents.length>0?'red':'green'}">${incidents.length}</div><div class="metric-sub">${incidents.length>0?'Needs attention':'All clear'}</div></div>
+    <div class="metric"><div class="metric-label">Monthly revenue</div><div class="metric-value amber">KSH ${revenue.toLocaleString()}</div><div class="metric-sub">${sites.length} contracts</div></div>
+  `;
+}
+
+function renderOwnerAlerts(){
+  const guards=getGuards();
+  const late=guards.filter(g=>g.status==='late');
+  const incidents=getIncidents().filter(i=>i.status==='open'&&i.severity==='high');
+  let html='';
+  if(incidents.length) html+=`<div class="alert-banner">${incidents.length} high severity incident${incidents.length>1?'s':''} need your attention — check Incidents tab</div>`;
+  if(late.length) html+=`<div class="alert-banner amber">${late.map(g=>g.name).join(', ')} ${late.length>1?'are':'is'} late for shift</div>`;
+  document.getElementById('owner-alerts').innerHTML=html;
+}
+
+function ownerTab(tab,el){
+  document.querySelectorAll('#page-owner .tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  ['sites','guards','incidents','report','leads','settings'].forEach(p=>{
+    document.getElementById('owner-panel-'+p).style.display=p===tab?'block':'none';
+  });
+  const renders={sites:renderOwnerSites,guards:renderOwnerGuards,incidents:renderOwnerIncidents,report:renderOwnerReport,leads:renderOwnerLeads,settings:renderOwnerSettings};
+  if(renders[tab]) renders[tab]();
+}
+
+function renderOwnerSites(){
+  const sites=getSites();
+  const guards=getGuards();
+  const att=getAttendance().filter(a=>a.date===today());
+  const c=document.getElementById('owner-panel-sites');
+  c.innerHTML=`<div class="note">Live site status — updated as guards check in. ${sites.length} active client sites.</div>`+
+  sites.map(s=>{
+    const sGuards=guards.filter(g=>g.sites.includes(s.id));
+    const hasLate=sGuards.some(g=>g.status==='late');
+    const hasIncident=getIncidents().some(i=>i.siteId===s.id&&i.status==='open'&&i.severity==='high');
+    return`<div class="site-card ${hasIncident?'alert':hasLate?'warning':''}">
+      <div class="site-top">
+        <div>
+          <div class="site-name">${s.name}</div>
+          <div class="site-sub">${s.client} &nbsp;·&nbsp; ${s.location}</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:13px;font-weight:600;color:var(--green-dark);">KSH ${s.value.toLocaleString()}/mo</div>
+          <div style="font-size:11px;color:var(--text2);">${s.contract}</div>
+        </div>
+      </div>
+      <div class="site-guards">
+        ${sGuards.map(g=>`<span class="guard-chip ${g.status==='on-post'?'on':g.status==='late'?'late':'off'}">
+          <span class="status-dot ${g.status}"></span>${g.name} · ${g.shift}
+        </span>`).join('')}
+      </div>
+      ${hasIncident?'<div style="font-size:12px;color:var(--red-text);margin-top:8px;background:var(--red-light);padding:6px 10px;border-radius:6px;">Open incident at this site — review required</div>':''}
+      <div class="btn-row">
+        <button class="btn sm primary" onclick="showSiteReport('${s.id}')">Client report</button>
+        <button class="btn sm" onclick="window.location.href='tel:${s.contact}'">Call client</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderOwnerGuards(){
+  const guards=getGuards();
+  const sites=getSites();
+  const c=document.getElementById('owner-panel-guards');
+  c.innerHTML=`<div class="note">${guards.length} guards registered. ${guards.filter(g=>g.status==='on-post').length} currently on post.</div>`+
+  `<table style="width:100%;border-collapse:collapse;font-size:13px;background:var(--bg);border-radius:var(--radius-lg);overflow:hidden;border:0.5px solid var(--border);">
+    <thead><tr style="background:var(--bg2);">
+      <th style="padding:10px 14px;text-align:left;font-size:11px;color:var(--text2);border-bottom:0.5px solid var(--border);">Guard</th>
+      <th style="padding:10px 14px;text-align:left;font-size:11px;color:var(--text2);border-bottom:0.5px solid var(--border);">Status</th>
+      <th style="padding:10px 14px;text-align:left;font-size:11px;color:var(--text2);border-bottom:0.5px solid var(--border);">Assigned sites</th>
+      <th style="padding:10px 14px;text-align:left;font-size:11px;color:var(--text2);border-bottom:0.5px solid var(--border);">Shift</th>
+      <th style="padding:10px 14px;text-align:left;font-size:11px;color:var(--text2);border-bottom:0.5px solid var(--border);">Contact</th>
+    </tr></thead>
+    <tbody>${guards.map(g=>{
+      const gSites=sites.filter(s=>g.sites.includes(s.id)).map(s=>s.name).join(', ');
+      const sc=g.status==='on-post'?'green':g.status==='late'?'red':'text2';
+      return`<tr style="border-bottom:0.5px solid var(--border);">
+        <td style="padding:12px 14px;font-weight:500;">${g.name}</td>
+        <td style="padding:12px 14px;"><span class="status-dot ${g.status}"></span><span style="color:var(--${sc});font-size:12px;">${g.status.replace('-',' ')}</span></td>
+        <td style="padding:12px 14px;color:var(--text2);font-size:12px;">${gSites||'Unassigned'}</td>
+        <td style="padding:12px 14px;font-size:12px;">${g.shift}</td>
+        <td style="padding:12px 14px;"><a href="tel:${g.phone}" style="color:var(--blue);font-size:12px;">${g.phone}</a></td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>
+  <button class="btn primary" style="margin-top:12px;" onclick="toggle('add-guard-form')">+ Add guard</button>
+  <div class="expand-box" id="add-guard-form" style="background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;margin-top:10px;">
+    <div class="form-grid">
+      <div class="fg"><label>Full name</label><input id="ng-name" placeholder="Guard name"/></div>
+      <div class="fg"><label>Phone</label><input id="ng-phone" placeholder="+254 7XX..."/></div>
+      <div class="fg"><label>Shift</label><select id="ng-shift"><option>Day</option><option>Night</option><option>Both</option></select></div>
+    </div>
+    <button class="btn primary" style="margin-top:10px;" onclick="addGuard()">Add guard</button>
+  </div>`;
+}
+
+function addGuard(){
+  const name=document.getElementById('ng-name').value.trim();
+  const phone=document.getElementById('ng-phone').value.trim();
+  if(!name||!phone){alert('Name and phone required.');return;}
+  const guards=getGuards();
+  guards.push({id:'G'+Date.now(),name,phone,sites:[],status:'off-duty',shift:document.getElementById('ng-shift').value});
+  saveGuards(guards);
+  renderOwnerGuards();
+}
+
+function renderOwnerIncidents(){
+  const incidents=getIncidents().sort((a,b)=>b.timestamp-a.timestamp);
+  const guards=getGuards();
+  const sites=getSites();
+  const c=document.getElementById('owner-panel-incidents');
+  const open=incidents.filter(i=>i.status==='open');
+  c.innerHTML=`<div class="note">${open.length} open incident${open.length!==1?'s':''} — timestamped and documented. Send to client on request.</div>`+
+  incidents.map(i=>{
+    const site=sites.find(s=>s.id===i.siteId)||{};
+    const guard=guards.find(g=>g.id===i.guardId)||{};
+    const sc=i.severity==='high'?'critical':i.status==='resolved'?'resolved':'';
+    return`<div class="incident-card ${sc}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+        <div>
+          <span style="font-size:13px;font-weight:600;">${i.type}</span>
+          <span class="tag ${i.severity==='high'?'alert':i.severity==='medium'?'pending':''}" style="margin-left:8px;">${i.severity}</span>
+          <span class="tag ${i.status==='resolved'?'active':''}" style="margin-left:4px;">${i.status}</span>
+        </div>
+        ${i.status==='open'?`<button class="btn sm primary" onclick="resolveIncident('${i.id}')">Mark resolved</button>`:''}
+      </div>
+      <div class="incident-meta">${site.name||'Unknown site'} &nbsp;·&nbsp; Reported by ${guard.name||i.reportedBy} &nbsp;·&nbsp; ${fmtDate(i.timestamp)} ${fmtTime(i.timestamp)}</div>
+      <div class="incident-desc">${i.description}</div>
+    </div>`;
+  }).join('')+
+  `<button class="btn primary" style="margin-top:4px;" onclick="toggle('add-incident-form')">+ Log incident</button>
+  <div class="expand-box" id="add-incident-form" style="background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;margin-top:10px;">
+    ${incidentFormHTML()}
+    <button class="btn primary" style="margin-top:10px;" onclick="logIncident('owner')">Log incident</button>
+  </div>`;
+}
+
+function incidentFormHTML(){
+  const sites=getSites();
+  const guards=getGuards();
+  return`<div class="form-grid">
+    <div class="fg"><label>Site</label><select id="inc-site"><option value="">Select site</option>${sites.map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}</select></div>
+    <div class="fg"><label>Reported by (guard)</label><select id="inc-guard"><option value="">Select guard</option>${guards.map(g=>`<option value="${g.id}">${g.name}</option>`).join('')}</select></div>
+    <div class="fg"><label>Incident type</label><select id="inc-type"><option>Unauthorized Entry</option><option>Theft/Attempted Theft</option><option>Suspicious Person</option><option>Vandalism</option><option>Guard Late</option><option>Medical Emergency</option><option>Other</option></select></div>
+    <div class="fg"><label>Severity</label><select id="inc-severity"><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></div>
+    <div class="fg full"><label>Description</label><textarea id="inc-desc" placeholder="Describe what happened in detail..."></textarea></div>
+  </div>`;
+}
+
+function logIncident(from){
+  const site=document.getElementById('inc-site')?.value;
+  const desc=document.getElementById('inc-desc')?.value.trim();
+  if(!site||!desc){alert('Site and description required.');return;}
+  const incidents=getIncidents();
+  incidents.unshift({
+    id:'I'+Date.now(),
+    siteId:site,
+    guardId:document.getElementById('inc-guard')?.value||'',
+    type:document.getElementById('inc-type')?.value||'Other',
+    severity:document.getElementById('inc-severity')?.value||'medium',
+    description:desc,
+    timestamp:Date.now(),
+    status:'open',
+    reportedBy:'Manual entry'
+  });
+  saveIncidents(incidents);
+  renderOwnerIncidents();
+  renderOwnerMetrics();
+  renderOwnerAlerts();
+}
+
+function resolveIncident(id){
+  const incidents=getIncidents();
+  const i=incidents.find(x=>x.id===id);
+  if(i) i.status='resolved';
+  saveIncidents(incidents);
+  renderOwnerIncidents();
+  renderOwnerMetrics();
+  renderOwnerAlerts();
+}
+
+function renderOwnerReport(){
+  const sites=getSites();
+  const c=document.getElementById('owner-panel-report');
+  c.innerHTML=`<div class="note">Generate a professional report for any client. Share via WhatsApp or email. No more informal call updates.</div>
+  <div class="card" style="margin-bottom:12px;">
+    <div class="fg"><label>Select client site</label>
+      <select id="report-site" onchange="generateReport()">
+        <option value="">Select site...</option>
+        ${sites.map(s=>`<option value="${s.id}">${s.name} — ${s.client}</option>`).join('')}
+      </select>
+    </div>
+  </div>
+  <div id="report-output"></div>`;
+}
+
+function showSiteReport(siteId){
+  ownerTab('report',document.querySelectorAll('#page-owner .tab')[3]);
+  setTimeout(()=>{
+    document.getElementById('report-site').value=siteId;
+    generateReport();
+  },100);
+}
+
+function generateReport(){
+  const siteId=document.getElementById('report-site').value;
+  if(!siteId){document.getElementById('report-output').innerHTML='';return;}
+  const site=getSites().find(s=>s.id===siteId);
+  const guards=getGuards().filter(g=>g.sites.includes(siteId));
+  const att=getAttendance().filter(a=>a.siteId===siteId);
+  const incidents=getIncidents().filter(i=>i.siteId===siteId);
+  const openInc=incidents.filter(i=>i.status==='open');
+  const dateStr=new Date().toLocaleDateString('en-KE',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+  const reportText=`SECURITY REPORT — ${site.name}\nClient: ${site.client}\nDate: ${dateStr}\n\nGUARDS ON SITE:\n${guards.map(g=>`- ${g.name} (${g.shift} shift) — ${g.status.replace('-',' ')}`).join('\n')}\n\nATTENDANCE TODAY:\n${att.length?att.map(a=>{const g=getGuards().find(x=>x.id===a.guardId);return`- ${g?g.name:'Guard'}: Checked in ${a.checkIn?fmtTime(a.checkIn):'Not yet'}`}).join('\n'):'No check-ins recorded yet'}\n\nINCIDENTS THIS PERIOD:\n${incidents.length?incidents.map(i=>`- [${i.severity.toUpperCase()}] ${i.type}: ${i.description} (${fmtDate(i.timestamp)})`).join('\n'):'No incidents to report'}\n\nReport generated by SecureOps System\nFor queries: Contact Operations`;
+
+  document.getElementById('report-output').innerHTML=`
+    <div class="report-box">
+      <div class="report-header">
+        <div>
+          <div class="report-logo">🛡 SecureOps</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:4px;">Security Operations Report</div>
+        </div>
+        <div style="text-align:right;font-size:12px;color:var(--text2);">${dateStr}</div>
+      </div>
+      <div style="margin-bottom:1rem;">
+        <div style="font-size:16px;font-weight:600;">${site.name}</div>
+        <div style="font-size:13px;color:var(--text2);">${site.client} &nbsp;·&nbsp; ${site.location}</div>
+      </div>
+      <table class="report-table" style="margin-bottom:1.25rem;">
+        <thead><tr><th>Guard</th><th>Shift</th><th>Status</th><th>Check-in time</th></tr></thead>
+        <tbody>${guards.map(g=>{
+          const a=att.find(x=>x.guardId===g.id&&x.date===today());
+          return`<tr><td>${g.name}</td><td>${g.shift}</td>
+            <td><span class="status-dot ${g.status}"></span>${g.status.replace('-',' ')}</td>
+            <td>${a&&a.checkIn?fmtTime(a.checkIn):'—'}</td></tr>`;
+        }).join('')}</tbody>
+      </table>
+      <div style="font-size:13px;font-weight:500;margin-bottom:8px;">Incidents this period</div>
+      ${incidents.length?incidents.map(i=>`
+        <div style="padding:8px 12px;background:${i.severity==='high'?'var(--red-light)':i.severity==='medium'?'var(--amber-light)':'var(--bg2)'};border-radius:var(--radius);margin-bottom:6px;font-size:13px;">
+          <strong>${i.type}</strong> <span style="font-size:11px;color:var(--text2);">— ${fmtDate(i.timestamp)} ${fmtTime(i.timestamp)}</span><br/>${i.description}
+          <span style="font-size:11px;margin-left:8px;color:${i.status==='resolved'?'var(--green-dark)':'var(--red-text)'};">${i.status}</span>
+        </div>`).join(''):`<div style="font-size:13px;color:var(--green-dark);padding:8px 12px;background:var(--green-light);border-radius:var(--radius);">No incidents to report for this period.</div>`}
+      <div class="btn-row" style="margin-top:1.25rem;">
+        <button class="btn primary" onclick="copyReport(\`${reportText.replace(/`/g,"'")}\`)">Copy report text</button>
+        <span class="copy-ok" id="report-copy-ok">Copied! Send via WhatsApp</span>
+      </div>
+    </div>`;
+}
+
+function copyReport(text){
+  navigator.clipboard.writeText(text).then(()=>{
+    const ok=document.getElementById('report-copy-ok');
+    if(ok){ok.style.display='inline';setTimeout(()=>ok.style.display='none',3000);}
+  });
+}
+
+function renderOwnerLeads(){
+  const leads=getLeads();
+  const c=document.getElementById('owner-panel-leads');
+  c.innerHTML=`<div class="note">Track potential new clients. Every new contract is recurring monthly revenue.</div>`+
+  leads.map(l=>`
+    <div class="lead-item ${l.status}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+        <div><div style="font-size:15px;font-weight:600;">${l.name}</div>
+          <div style="font-size:12px;color:var(--text2);">${l.contact} &nbsp;·&nbsp; ${l.source} &nbsp;·&nbsp; ${fmtDate(l.loggedAt)}</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:13px;font-weight:600;color:var(--green-dark);">KSH ${l.value.toLocaleString()}/mo</div>
+          <div style="font-size:11px;color:var(--text2);">${l.sites} site${l.sites>1?'s':''}</div>
+        </div>
+      </div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:10px;">${l.notes}</div>
+      <div class="btn-row">
+        <button class="btn sm primary" onclick="window.location.href='tel:${l.contact}'">Call</button>
+        <select class="btn sm" style="cursor:pointer;" onchange="updateLeadStatus('${l.id}',this.value)">
+          <option value="warm"${l.status==='warm'?' selected':''}>Warm</option>
+          <option value="hot"${l.status==='hot'?' selected':''}>Hot</option>
+          <option value="closed"${l.status==='closed'?' selected':''}>Closed — won</option>
+          <option value="lost"${l.status==='lost'?' selected':''}>Lost</option>
+        </select>
+      </div>
+    </div>`).join('')+
+  `<button class="btn primary" style="margin-top:4px;" onclick="toggle('add-lead-form')">+ Add lead</button>
+  <div class="expand-box" id="add-lead-form" style="background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;margin-top:10px;">
+    <div class="form-grid">
+      <div class="fg"><label>Business name</label><input id="nl-name" placeholder="e.g. Westgate Mall"/></div>
+      <div class="fg"><label>Contact</label><input id="nl-contact" placeholder="+254 7XX..."/></div>
+      <div class="fg"><label>Source</label><select id="nl-source"><option>Referral</option><option>Cold call</option><option>Google</option><option>Walk-in</option><option>Other</option></select></div>
+      <div class="fg"><label>No. of sites</label><input id="nl-sites" type="number" min="1" value="1"/></div>
+      <div class="fg"><label>Est. monthly value (KSH)</label><input id="nl-value" type="number" placeholder="30000"/></div>
+      <div class="fg full"><label>Notes</label><input id="nl-notes" placeholder="Key details from the conversation"/></div>
+    </div>
+    <button class="btn primary" style="margin-top:10px;" onclick="addLead()">Add to pipeline</button>
+  </div>`;
+}
+
+function addLead(){
+  const name=document.getElementById('nl-name').value.trim();
+  const contact=document.getElementById('nl-contact').value.trim();
+  if(!name||!contact){alert('Name and contact required.');return;}
+  const leads=getLeads();
+  leads.unshift({id:'L'+Date.now(),name,contact,source:document.getElementById('nl-source').value,sites:parseInt(document.getElementById('nl-sites').value)||1,value:parseInt(document.getElementById('nl-value').value)||0,notes:document.getElementById('nl-notes').value,status:'warm',loggedAt:Date.now()});
+  saveLeads(leads);renderOwnerLeads();
+}
+
+function updateLeadStatus(id,status){
+  const leads=getLeads();
+  const l=leads.find(x=>x.id===id);
+  if(l) l.status=status;
+  saveLeads(leads);
+}
+
+function renderOwnerSettings(){
+  document.getElementById('owner-panel-settings').innerHTML=`
+    <div class="card">
+      <div class="card-title" style="margin-bottom:1rem;">Add new site / client</div>
+      <div class="form-grid">
+        <div class="fg"><label>Site name</label><input id="ns-name" placeholder="e.g. Westlands Office"/></div>
+        <div class="fg"><label>Client name</label><input id="ns-client" placeholder="Company name"/></div>
+        <div class="fg"><label>Client contact</label><input id="ns-contact" placeholder="+254 7XX..."/></div>
+        <div class="fg"><label>Location</label><input id="ns-location" placeholder="Area, Nairobi"/></div>
+        <div class="fg"><label>Monthly value (KSH)</label><input id="ns-value" type="number" placeholder="30000"/></div>
+        <div class="fg"><label>Contract type</label><select id="ns-contract"><option>Monthly</option><option>Annual</option><option>Ad-hoc</option></select></div>
+      </div>
+      <button class="btn primary" style="margin-top:12px;" onclick="addSite()">Add site</button>
+    </div>`;
+}
+
+function addSite(){
+  const name=document.getElementById('ns-name').value.trim();
+  const client=document.getElementById('ns-client').value.trim();
+  if(!name||!client){alert('Site name and client required.');return;}
+  const sites=getSites();
+  sites.push({id:'S'+Date.now(),name,client,contact:document.getElementById('ns-contact').value,location:document.getElementById('ns-location').value,guards:[],contract:document.getElementById('ns-contract').value,value:parseInt(document.getElementById('ns-value').value)||0,status:'active'});
+  saveSites(sites);
+  renderOwnerSettings();
+  renderOwnerMetrics();
+}
+
+/* ===== SUPERVISOR ===== */
+function renderSupervisor(){
+  const guards=getGuards();
+  const onPost=guards.filter(g=>g.status==='on-post').length;
+  const late=guards.filter(g=>g.status==='late').length;
+  const incidents=getIncidents().filter(i=>i.status==='open').length;
+  document.getElementById('sup-metrics').innerHTML=`
+    <div class="metric"><div class="metric-label">On post</div><div class="metric-value green">${onPost}</div></div>
+    <div class="metric"><div class="metric-label">Late / absent</div><div class="metric-value ${late>0?'red':'green'}">${late}</div></div>
+    <div class="metric"><div class="metric-label">Open incidents</div><div class="metric-value ${incidents>0?'amber':'green'}">${incidents}</div></div>
+    <div class="metric"><div class="metric-label">Total guards</div><div class="metric-value">${guards.length}</div></div>
+  `;
+  renderSupAttendance();
+}
+
+function supTab(tab,el){
+  document.querySelectorAll('#page-supervisor .tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  ['attendance','incidents','deployment'].forEach(p=>{
+    document.getElementById('sup-panel-'+p).style.display=p===tab?'block':'none';
+  });
+  if(tab==='attendance') renderSupAttendance();
+  if(tab==='incidents') renderSupIncidents();
+  if(tab==='deployment') renderSupDeployment();
+}
+
+function renderSupAttendance(){
+  const guards=getGuards();
+  const att=getAttendance().filter(a=>a.date===today());
+  const sites=getSites();
+  const c=document.getElementById('sup-panel-attendance');
+  c.innerHTML=`<div class="note">Today's attendance — ${today()}. Mark guards as present or flag latecomers.</div>`+
+  `<table style="width:100%;border-collapse:collapse;font-size:13px;background:var(--bg);border-radius:var(--radius-lg);overflow:hidden;border:0.5px solid var(--border);">
+    <thead><tr style="background:var(--bg2);">
+      <th style="padding:10px 14px;text-align:left;font-size:11px;color:var(--text2);border-bottom:0.5px solid var(--border);">Guard</th>
+      <th style="padding:10px 14px;text-align:left;font-size:11px;color:var(--text2);border-bottom:0.5px solid var(--border);">Site</th>
+      <th style="padding:10px 14px;text-align:left;font-size:11px;color:var(--text2);border-bottom:0.5px solid var(--border);">Check-in</th>
+      <th style="padding:10px 14px;text-align:left;font-size:11px;color:var(--text2);border-bottom:0.5px solid var(--border);">Status</th>
+      <th style="padding:10px 14px;text-align:left;font-size:11px;color:var(--text2);border-bottom:0.5px solid var(--border);">Action</th>
+    </tr></thead>
+    <tbody>${guards.map(g=>{
+      const a=att.find(x=>x.guardId===g.id);
+      const gSite=sites.find(s=>g.sites.includes(s.id));
+      const sc=g.status==='on-post'?'green':g.status==='late'?'red':'text2';
+      return`<tr style="border-bottom:0.5px solid var(--border);">
+        <td style="padding:12px 14px;font-weight:500;">${g.name}</td>
+        <td style="padding:12px 14px;color:var(--text2);font-size:12px;">${gSite?gSite.name:'—'}</td>
+        <td style="padding:12px 14px;font-size:12px;">${a&&a.checkIn?fmtTime(a.checkIn):'—'}</td>
+        <td style="padding:12px 14px;"><span class="status-dot ${g.status}"></span><span style="color:var(--${sc});font-size:12px;">${g.status.replace('-',' ')}</span></td>
+        <td style="padding:12px 14px;">
+          ${g.status==='late'?`<button class="btn sm danger" onclick="markLate('${g.id}')">Flag late</button>`:''}
+          ${g.status==='off-duty'?`<button class="btn sm primary" onclick="manualCheckin('${g.id}')">Check in</button>`:''}
+          ${g.status==='on-post'?`<span style="font-size:12px;color:var(--green-dark);">On post</span>`:''}
+        </td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>`;
+}
+
+function markLate(guardId){
+  const guards=getGuards();
+  const g=guards.find(x=>x.id===guardId);
+  if(g) g.status='late';
+  saveGuards(guards);
+  renderSupAttendance();
+}
+
+function manualCheckin(guardId){
+  const guards=getGuards();
+  const g=guards.find(x=>x.id===guardId);
+  if(g) g.status='on-post';
+  saveGuards(guards);
+  const att=getAttendance();
+  const siteId=g&&g.sites.length?g.sites[0]:'';
+  att.push({id:Date.now(),guardId,siteId,date:today(),checkIn:Date.now(),checkOut:null,status:'on-post'});
+  saveAttendance(att);
+  renderSupAttendance();
+}
+
+function renderSupIncidents(){
+  const sites=getSites();
+  const guards=getGuards();
+  document.getElementById('sup-panel-incidents').innerHTML=`
+    <div class="note">Log incidents as they happen. All reports are timestamped and visible to the owner.</div>
+    <div class="card">
+      ${incidentFormHTML()}
+      <button class="btn primary block" onclick="logIncidentSup()">Submit incident report</button>
+    </div>`;
+}
+
+function logIncidentSup(){
+  const site=document.getElementById('inc-site')?.value;
+  const desc=document.getElementById('inc-desc')?.value.trim();
+  if(!site||!desc){alert('Site and description required.');return;}
+  const incidents=getIncidents();
+  incidents.unshift({id:'I'+Date.now(),siteId:site,guardId:document.getElementById('inc-guard')?.value||'',type:document.getElementById('inc-type')?.value||'Other',severity:document.getElementById('inc-severity')?.value||'medium',description:desc,timestamp:Date.now(),status:'open',reportedBy:'Supervisor'});
+  saveIncidents(incidents);
+  alert('Incident logged. Owner has been notified.');
+  supTab('attendance',document.querySelectorAll('#page-supervisor .tab')[0]);
+}
+
+function renderSupDeployment(){
+  const sites=getSites();
+  const guards=getGuards();
+  document.getElementById('sup-panel-deployment').innerHTML=`
+    <div class="note">Assign guards to sites. Changes reflect immediately in the owner dashboard.</div>`+
+  sites.map(s=>{
+    const assigned=guards.filter(g=>g.sites.includes(s.id));
+    const unassigned=guards.filter(g=>!g.sites.includes(s.id));
+    return`<div class="card">
+      <div class="card-title">${s.name}</div>
+      <div class="card-sub" style="margin-bottom:10px;">${s.client}</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:6px;">Assigned guards:</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">
+        ${assigned.map(g=>`<span class="guard-chip on" style="cursor:pointer;" onclick="removeGuardFromSite('${g.id}','${s.id}')">${g.name} ×</span>`).join('')}
+        ${!assigned.length?'<span style="font-size:12px;color:var(--text3);">No guards assigned</span>':''}
+      </div>
+      ${unassigned.length?`<select class="btn sm" onchange="addGuardToSite(this.value,'${s.id}',this)"><option value="">+ Assign guard</option>${unassigned.map(g=>`<option value="${g.id}">${g.name}</option>`).join('')}</select>`:''}
+    </div>`;
+  }).join('');
+}
+
+function addGuardToSite(guardId,siteId,sel){
+  if(!guardId) return;
+  const guards=getGuards();
+  const g=guards.find(x=>x.id===guardId);
+  if(g&&!g.sites.includes(siteId)) g.sites.push(siteId);
+  saveGuards(guards);
+  sel.value='';
+  renderSupDeployment();
+}
+
+function removeGuardFromSite(guardId,siteId){
+  const guards=getGuards();
+  const g=guards.find(x=>x.id===guardId);
+  if(g) g.sites=g.sites.filter(s=>s!==siteId);
+  saveGuards(guards);
+  renderSupDeployment();
+}
+
+/* ===== GUARD CHECK-IN ===== */
+function renderGuard(){
+  const guards=getGuards();
+  const sites=getSites();
+  const c=document.getElementById('guard-content');
+  if(checkedIn){
+    c.innerHTML=`<div class="checkin-form"><div class="checkin-status"><div class="big">✅</div><h2>You are checked in</h2><p>Check-in recorded at ${now()}</p></div></div>`;
+    return;
+  }
+  c.innerHTML=`<div class="checkin-form">
+    <div style="text-align:center;margin-bottom:1.5rem;">
+      <div style="font-size:28px;margin-bottom:8px;">🛡</div>
+      <div style="font-size:18px;font-weight:600;color:white;">Guard Check-In</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-top:4px;">${new Date().toLocaleDateString('en-KE',{weekday:'long',day:'numeric',month:'long'})}</div>
+    </div>
+    <div class="form-grid">
+      <div class="fg"><label>Your name</label>
+        <select id="guard-select"><option value="">Select your name</option>${guards.map(g=>`<option value="${g.id}">${g.name}</option>`).join('')}</select>
+      </div>
+      <div class="fg"><label>Site you are at</label>
+        <select id="guard-site"><option value="">Select site</option>${sites.map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}</select>
+      </div>
+    </div>
+    <div class="fg" style="margin-top:8px;"><label>Any handover notes?</label><textarea id="guard-notes" placeholder="Optional — e.g. nothing to report, quiet shift..."></textarea></div>
+    <button class="btn primary block" style="margin-top:16px;padding:14px;" onclick="guardCheckIn()">Check in now — ${now()}</button>
+  </div>
+  <div style="margin-top:1.25rem;">
+    <div style="font-size:13px;font-weight:500;color:var(--text2);margin-bottom:10px;">Report an incident</div>
+    <div class="card">
+      ${incidentFormHTML()}
+      <button class="btn primary block" onclick="logIncidentGuard()">Submit report</button>
+    </div>
+  </div>`;
+}
+
+function guardCheckIn(){
+  const guardId=document.getElementById('guard-select').value;
+  const siteId=document.getElementById('guard-site').value;
+  if(!guardId||!siteId){alert('Please select your name and site.');return;}
+  const guards=getGuards();
+  const g=guards.find(x=>x.id===guardId);
+  if(g) g.status='on-post';
+  saveGuards(guards);
+  const att=getAttendance();
+  att.push({id:Date.now(),guardId,siteId,date:today(),checkIn:Date.now(),checkOut:null,status:'on-post'});
+  saveAttendance(att);
+  checkedIn=true;
+  renderGuard();
+}
+
+function logIncidentGuard(){
+  const site=document.getElementById('inc-site')?.value;
+  const desc=document.getElementById('inc-desc')?.value.trim();
+  if(!site||!desc){alert('Site and description required.');return;}
+  const incidents=getIncidents();
+  incidents.unshift({id:'I'+Date.now(),siteId:site,guardId:document.getElementById('inc-guard')?.value||'',type:document.getElementById('inc-type')?.value||'Other',severity:document.getElementById('inc-severity')?.value||'medium',description:desc,timestamp:Date.now(),status:'open',reportedBy:'Guard (mobile)'});
+  saveIncidents(incidents);
+  alert('Incident reported. Supervisor and owner notified.');
+}
+
+/* ===== UTILS ===== */
+function toggle(id){const el=document.getElementById(id);if(el)el.classList.toggle('open');}
+</script>
+<div id="gs-proto-banner" style="position:fixed;left:0;right:0;bottom:0;z-index:2147483647;background:#1a1030;color:#fff;font:13px/1.4 system-ui,sans-serif;padding:7px 12px;text-align:center;opacity:.94">Working prototype by <b>Emmanuel Muteti</b> &middot; names and numbers are demo data &middot; <a href="../../work/" style="color:#c9a7ff">See all work</a> &middot; <a href="https://wa.me/254740562812" style="color:#7dffb0">WhatsApp</a></div>
+</body>
+</html>

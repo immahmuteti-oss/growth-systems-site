@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Demo College — Lead System</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#ffffff;--bg2:#f7f7f5;--bg3:#f0efe9;
+  --text:#1a1a1a;--text2:#666660;--text3:#999990;
+  --border:rgba(0,0,0,0.12);--border2:rgba(0,0,0,0.22);
+  --green:#1D9E75;--green-dark:#0F6E56;--green-light:#E1F5EE;--green-text:#085041;
+  --amber:#EF9F27;--amber-light:#FAEEDA;--amber-text:#633806;
+  --blue:#378ADD;--blue-light:#E6F1FB;--blue-text:#0C447C;
+  --red:#E24B4A;--red-light:#FCEBEB;--red-text:#501313;
+  --gray-light:#F1EFE8;--gray-text:#444441;
+  --radius:8px;--radius-lg:12px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);font-size:15px;line-height:1.5;}
+
+/* LAYOUT */
+.page{display:none;min-height:100vh;}
+.page.active{display:block;}
+.container{max-width:900px;margin:0 auto;padding:1.5rem 1rem;}
+
+/* TOPBAR */
+.topbar{background:var(--bg);border-bottom:0.5px solid var(--border);padding:0.75rem 1rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+.topbar-brand{font-size:14px;font-weight:600;color:var(--text);}
+.topbar-brand span{color:var(--green);}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.role-badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;}
+.role-badge.director{background:var(--green-light);color:var(--green-text);}
+.role-badge.admin{background:var(--blue-light);color:var(--blue-text);}
+
+/* INTAKE COUNTDOWN */
+.intake-banner{background:var(--green);color:white;padding:8px 1rem;text-align:center;font-size:13px;display:flex;justify-content:center;align-items:center;gap:12px;}
+.intake-banner strong{font-weight:600;}
+.intake-days{background:rgba(255,255,255,0.25);padding:2px 10px;border-radius:20px;font-weight:600;font-size:14px;}
+
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg3);padding:1rem;}
+.login-box{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:2rem;width:100%;max-width:380px;}
+.login-logo{text-align:center;margin-bottom:1.75rem;}
+.login-logo h1{font-size:20px;font-weight:600;color:var(--text);}
+.login-logo p{font-size:13px;color:var(--text2);margin-top:4px;}
+.login-logo .dot{display:inline-block;width:8px;height:8px;background:var(--green);border-radius:50%;margin-right:6px;}
+.login-hint{margin-top:1rem;font-size:11px;color:var(--text3);text-align:center;line-height:1.9;}
+
+/* FORMS */
+.fg{margin-bottom:12px;}
+.fg label{display:block;font-size:12px;color:var(--text2);margin-bottom:4px;}
+.fg input,.fg select,.fg textarea{width:100%;padding:9px 12px;font-size:14px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);outline:none;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--green);}
+.fg textarea{min-height:60px;resize:vertical;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.full{grid-column:1/-1;}
+
+/* BUTTONS */
+.btn{padding:9px 16px;border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;border:0.5px solid var(--border2);background:var(--bg);color:var(--text);transition:background 0.15s;}
+.btn:hover{background:var(--bg2);}
+.btn.primary{background:var(--green);color:white;border-color:var(--green);}
+.btn.primary:hover{background:var(--green-dark);}
+.btn.block{width:100%;display:block;text-align:center;margin-top:8px;}
+.btn.sm{padding:5px 12px;font-size:12px;}
+.btn.danger{border-color:var(--red);color:var(--red);}
+
+/* METRICS */
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:1.5rem;}
+.metric{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);padding:12px;}
+.metric-label{font-size:11px;color:var(--text2);margin-bottom:4px;}
+.metric-value{font-size:24px;font-weight:600;color:var(--text);}
+.metric-value.green{color:var(--green-dark);}
+.metric-value.amber{color:#BA7517;}
+.metric-value.red{color:var(--red);}
+
+/* TABS */
+.tabs{display:flex;border-bottom:0.5px solid var(--border);margin-bottom:1.25rem;}
+.tab{padding:8px 16px;font-size:13px;cursor:pointer;border:none;background:none;color:var(--text2);border-bottom:2px solid transparent;margin-bottom:-1px;}
+.tab.active{color:var(--text);border-bottom-color:var(--green);font-weight:500;}
+
+/* LEAD CARDS */
+.leads-list{display:flex;flex-direction:column;gap:10px;}
+.lead-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1rem 1.25rem;border-left-width:3px;}
+.lead-card.hot{border-left-color:var(--green);}
+.lead-card.warm{border-left-color:var(--amber);}
+.lead-card.cold{border-left-color:#B4B2A9;}
+.lead-card.nurture{border-left-color:var(--blue);}
+.lead-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+.lead-name{font-size:15px;font-weight:600;color:var(--text);}
+.lead-sub{font-size:12px;color:var(--text2);margin-top:2px;}
+.score-badge{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;white-space:nowrap;}
+.score-badge.hot{background:var(--green-light);color:var(--green-text);}
+.score-badge.warm{background:var(--amber-light);color:var(--amber-text);}
+.score-badge.cold{background:var(--gray-light);color:var(--gray-text);}
+.score-badge.nurture{background:var(--blue-light);color:var(--blue-text);}
+
+/* TIMER BADGE */
+.timer-badge{font-size:11px;padding:3px 8px;border-radius:20px;font-weight:500;margin-left:6px;}
+.timer-badge.urgent{background:var(--red-light);color:var(--red-text);}
+.timer-badge.warning{background:var(--amber-light);color:var(--amber-text);}
+.timer-badge.ok{background:var(--green-light);color:var(--green-text);}
+
+/* TAGS */
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
+.tag{font-size:11px;padding:3px 8px;border-radius:20px;background:var(--bg2);color:var(--text2);}
+.tag.enrolled{background:var(--green-light);color:var(--green-text);}
+.tag.registered{background:var(--amber-light);color:var(--amber-text);}
+
+/* CARD ACTIONS */
+.card-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.status-select{font-size:12px;padding:5px 8px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);}
+
+/* EXPANDABLE SECTIONS */
+.expand-box{background:var(--bg2);border-radius:var(--radius);padding:10px;margin-top:10px;display:none;}
+.expand-box.open{display:block;}
+.expand-box textarea{width:100%;font-size:13px;padding:8px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);min-height:70px;margin-bottom:8px;resize:vertical;}
+.copy-ok{font-size:11px;color:var(--green);display:none;margin-left:8px;}
+
+/* FOLLOW-UP SEQUENCE */
+.sequence{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
+.seq-step{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);}
+.seq-dot{width:10px;height:10px;border-radius:50%;border:2px solid var(--border2);flex-shrink:0;}
+.seq-dot.done{background:var(--green);border-color:var(--green);}
+.seq-dot.due{background:var(--amber);border-color:var(--amber);}
+.seq-dot.pending{background:transparent;}
+
+/* CALLBACK */
+.callback-banner{background:var(--amber-light);border:0.5px solid var(--amber);border-radius:var(--radius);padding:8px 12px;font-size:12px;color:var(--amber-text);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
+
+/* QUICK LOG */
+.quick-log{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1rem;margin-bottom:1.25rem;}
+.quick-log h3{font-size:13px;font-weight:500;color:var(--text2);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.05em;}
+.quick-btns{display:flex;gap:8px;flex-wrap:wrap;}
+
+/* ADMIN TABLE */
+.admin-table{width:100%;border-collapse:collapse;font-size:13px;background:var(--bg);border-radius:var(--radius-lg);overflow:hidden;border:0.5px solid var(--border);}
+.admin-table th{text-align:left;padding:10px 14px;font-size:11px;color:var(--text2);font-weight:500;background:var(--bg2);border-bottom:0.5px solid var(--border);}
+.admin-table td{padding:12px 14px;border-bottom:0.5px solid var(--border);vertical-align:middle;}
+.admin-table tr:last-child td{border-bottom:none;}
+.admin-table tr:hover td{background:var(--bg2);}
+.perf-wrap{display:flex;align-items:center;gap:6px;}
+.perf-bar-bg{width:70px;height:5px;background:var(--bg3);border-radius:3px;}
+.perf-bar-fill{height:5px;border-radius:3px;background:var(--green);}
+.perf-bar-fill.amber{background:var(--amber);}
+.perf-bar-fill.red-bar{background:var(--red);}
+
+/* FILTER BAR */
+.filter-bar{display:flex;gap:6px;margin-bottom:1rem;flex-wrap:wrap;}
+.chip{font-size:12px;padding:5px 12px;border:0.5px solid var(--border2);border-radius:20px;cursor:pointer;background:none;color:var(--text2);}
+.chip.active{background:var(--green);color:white;border-color:var(--green);}
+
+/* STARS */
+.stars{display:flex;gap:4px;}
+.star{font-size:22px;cursor:pointer;color:#ccc;line-height:1;}
+.star.lit{color:var(--amber);}
+
+/* NOTES */
+.section-note{font-size:12px;color:var(--text2);background:var(--bg2);border-radius:var(--radius);padding:8px 12px;margin-bottom:1rem;}
+
+/* CALLBACK MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--bg);border-radius:var(--radius-lg);padding:1.5rem;width:100%;max-width:380px;border:0.5px solid var(--border);}
+.modal h3{font-size:16px;font-weight:600;margin-bottom:1rem;}
+.modal-actions{display:flex;gap:8px;margin-top:1rem;}
+
+/* CALLBACKS LIST */
+.callback-item{background:var(--amber-light);border:0.5px solid var(--amber);border-radius:var(--radius);padding:10px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;font-size:13px;}
+.callback-name{font-weight:500;color:var(--text);}
+.callback-time{font-size:12px;color:var(--amber-text);margin-top:2px;}
+
+.empty{text-align:center;padding:3rem 1rem;color:var(--text2);font-size:14px;}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .metrics{grid-template-columns:repeat(2,1fr);}
+  .form-grid{grid-template-columns:1fr;}
+  .full{grid-column:1;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div class="page active" id="page-login">
+<div class="login-wrap">
+  <div class="login-box">
+    <div class="login-logo">
+      <h1><span class="dot"></span>Demo College</h1>
+      <p>Lead Management System</p>
+    </div>
+    <div class="fg">
+      <label>Select account</label>
+      <select id="login-user">
+        <option value="">Choose account...</option>
+        <option value="director">Director — Dr. Kamau</option>
+        <option value="admin1">Admin — Wanjiru</option>
+        <option value="admin2">Admin — Fatuma</option>
+        <option value="admin3">Admin — Brian</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label>PIN</label>
+      <input type="password" id="login-pin" placeholder="Enter 4-digit PIN" maxlength="4" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <button class="btn primary block" onclick="doLogin()">Sign in</button>
+    <div class="login-hint">
+      Demo PINs &nbsp;·&nbsp; Director: <strong>0000</strong> &nbsp;·&nbsp; Admins: <strong>1111</strong>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ============ DIRECTOR ============ -->
+<div class="page" id="page-director">
+  <div class="intake-banner">
+    <span>Next intake closes in</span>
+    <span class="intake-days" id="dir-intake-days">--</span>
+    <span>days &nbsp;·&nbsp; <strong id="dir-intake-date"></strong></span>
+  </div>
+  <div class="topbar">
+    <div class="topbar-brand"><span>Spring</span> International — Director View</div>
+    <div class="topbar-right">
+      <span class="role-badge director">Director</span>
+      <button class="btn sm" onclick="logout()">Sign out</button>
+    </div>
+  </div>
+  <div class="container">
+    <div class="metrics" id="dir-metrics"></div>
+    <div class="tabs">
+      <button class="tab active" onclick="dirTab('overview',this)">Admin performance</button>
+      <button class="tab" onclick="dirTab('leads',this)">All leads</button>
+      <button class="tab" onclick="dirTab('callbacks',this)">Callbacks due</button>
+      <button class="tab" onclick="dirTab('nurture',this)">Future intake</button>
+    </div>
+    <div id="dir-panel-overview">
+      <p class="section-note">Live performance — updates as admins log and convert leads. No phone call needed.</p>
+      <table class="admin-table" id="dir-admin-table"></table>
+    </div>
+    <div id="dir-panel-leads" style="display:none;">
+      <div class="filter-bar" id="dir-filter-bar">
+        <button class="chip active" onclick="dirSetFilter('all',this)">All</button>
+        <button class="chip" onclick="dirSetFilter('hot',this)">Hot</button>
+        <button class="chip" onclick="dirSetFilter('warm',this)">Warm</button>
+        <button class="chip" onclick="dirSetFilter('admin1',this)">Wanjiru</button>
+        <button class="chip" onclick="dirSetFilter('admin2',this)">Fatuma</button>
+        <button class="chip" onclick="dirSetFilter('admin3',this)">Brian</button>
+      </div>
+      <div class="leads-list" id="dir-leads-list"></div>
+    </div>
+    <div id="dir-panel-callbacks" style="display:none;">
+      <p class="section-note">Leads that requested a callback. Admins are notified in their dashboard.</p>
+      <div id="dir-callbacks-list"></div>
+    </div>
+    <div id="dir-panel-nurture" style="display:none;">
+      <p class="section-note">These leads are interested but targeting a future intake. Auto follow-up messages are available.</p>
+      <div class="leads-list" id="dir-nurture-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ADMIN ============ -->
+<div class="page" id="page-admin">
+  <div class="intake-banner">
+    <span>Next intake closes in</span>
+    <span class="intake-days" id="admin-intake-days">--</span>
+    <span>days &nbsp;·&nbsp; <strong id="admin-intake-date"></strong></span>
+  </div>
+  <div class="topbar">
+    <div class="topbar-brand"><span>Spring</span> International</div>
+    <div class="topbar-right">
+      <span class="role-badge admin" id="admin-role-name">Admin</span>
+      <button class="btn sm" onclick="logout()">Sign out</button>
+    </div>
+  </div>
+  <div class="container">
+    <div id="admin-callback-alerts"></div>
+    <div class="metrics" id="admin-metrics"></div>
+    <div class="tabs">
+      <button class="tab active" onclick="adminTab('pipeline',this)">My pipeline</button>
+      <button class="tab" onclick="adminTab('log',this)">Log lead</button>
+      <button class="tab" onclick="adminTab('callbacks',this)">Callbacks <span id="callback-count-badge"></span></button>
+      <button class="tab" onclick="adminTab('nurture',this)">Future intake</button>
+    </div>
+
+    <!-- PIPELINE -->
+    <div id="admin-panel-pipeline">
+      <div class="filter-bar">
+        <button class="chip active" onclick="adminSetFilter('all',this)">All</button>
+        <button class="chip" onclick="adminSetFilter('hot',this)">Hot</button>
+        <button class="chip" onclick="adminSetFilter('warm',this)">Warm</button>
+        <button class="chip" onclick="adminSetFilter('cold',this)">Cold</button>
+        <button class="chip" onclick="adminSetFilter('urgent',this)">Needs follow-up</button>
+      </div>
+      <div class="leads-list" id="admin-leads-list"></div>
+    </div>
+
+    <!-- LOG -->
+    <div id="admin-panel-log" style="display:none;">
+      <!-- QUICK LOG -->
+      <div class="quick-log">
+        <h3>Quick call log</h3>
+        <p style="font-size:12px;color:var(--text2);margin-bottom:10px;">Just got off a call? Log the outcome fast — fill full details later.</p>
+        <div class="form-grid">
+          <div class="fg"><label>Name</label><input id="q-name" placeholder="Lead name"/></div>
+          <div class="fg"><label>Phone</label><input id="q-phone" placeholder="+254 7XX..."/></div>
+        </div>
+        <div class="quick-btns">
+          <button class="btn sm primary" onclick="quickLog('hot')">Hot lead</button>
+          <button class="btn sm" onclick="quickLog('warm')" style="border-color:var(--amber);color:#BA7517;">Warm lead</button>
+          <button class="btn sm" onclick="quickLog('callback')">Needs callback</button>
+          <button class="btn sm" onclick="quickLog('nurture')">Future intake</button>
+          <button class="btn sm danger" onclick="quickLog('cold')">Not interested</button>
+        </div>
+      </div>
+      <!-- FULL LOG -->
+      <div style="background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;">
+        <h3 style="font-size:14px;font-weight:500;margin-bottom:1rem;">Full lead form</h3>
+        <div class="form-grid">
+          <div class="fg"><label>Full name</label><input id="f-name" placeholder="e.g. Amina Wanjiku"/></div>
+          <div class="fg"><label>Phone</label><input id="f-phone" placeholder="+254 7XX XXX XXX"/></div>
+          <div class="fg"><label>Source</label>
+            <select id="f-source">
+              <option value="">Select source</option>
+              <option value="google">Google</option>
+              <option value="facebook">Facebook</option>
+              <option value="linkedin">LinkedIn</option>
+              <option value="instagram">Instagram</option>
+              <option value="tiktok">TikTok</option>
+              <option value="referral">Referral</option>
+              <option value="walk-in">Walk-in</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="fg"><label>Program of interest</label><input id="f-program" placeholder="e.g. Business Management"/></div>
+          <div class="fg"><label>Enrollment timing</label>
+            <select id="f-timing">
+              <option value="">Select</option>
+              <option value="now">This intake — enrolling now</option>
+              <option value="next">Next intake</option>
+              <option value="future">Later (3+ months)</option>
+              <option value="unsure">Unsure</option>
+            </select>
+          </div>
+          <div class="fg"><label>Budget</label>
+            <select id="f-budget">
+              <option value="">Select</option>
+              <option value="ready">Ready</option>
+              <option value="partial">Partial — needs options</option>
+              <option value="no">Cannot afford</option>
+              <option value="unknown">Not discussed</option>
+            </select>
+          </div>
+          <div class="fg"><label>KSH 2,000 reg fee?</label>
+            <select id="f-regfee">
+              <option value="">Select</option>
+              <option value="yes">Yes — confirmed</option>
+              <option value="maybe">Maybe</option>
+              <option value="no">No</option>
+              <option value="nd">Not discussed</option>
+            </select>
+          </div>
+          <div class="fg"><label>Callback time (if requested)</label>
+            <input type="datetime-local" id="f-callback"/>
+          </div>
+          <div class="fg"><label>Admin gut feel</label>
+            <div class="stars">
+              <span class="star" id="s1" onclick="setStars(1)">★</span>
+              <span class="star" id="s2" onclick="setStars(2)">★</span>
+              <span class="star" id="s3" onclick="setStars(3)">★</span>
+            </div>
+          </div>
+          <div class="fg full"><label>Call notes</label><textarea id="f-notes" placeholder="Key points — interest level, concerns, what they said about budget, timing..."></textarea></div>
+        </div>
+        <button class="btn primary block" onclick="logLead()">Score and add to pipeline</button>
+      </div>
+    </div>
+
+    <!-- CALLBACKS -->
+    <div id="admin-panel-callbacks" style="display:none;">
+      <p class="section-note">Leads that asked to be called back. Mark done when you complete the call.</p>
+      <div id="admin-callbacks-list"></div>
+    </div>
+
+    <!-- NURTURE -->
+    <div id="admin-panel-nurture" style="display:none;">
+      <p class="section-note">Future intake leads — keep warm. Reach out before each intake opens.</p>
+      <div class="leads-list" id="admin-nurture-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CALLBACK MODAL -->
+<div class="modal-overlay" id="callback-modal">
+  <div class="modal">
+    <h3>Schedule callback</h3>
+    <div class="fg"><label>Callback date and time</label><input type="datetime-local" id="modal-callback-time"/></div>
+    <div class="fg"><label>Note (optional)</label><input id="modal-callback-note" placeholder="e.g. Call after 3pm, ask about fee payment"/></div>
+    <div class="modal-actions">
+      <button class="btn primary" onclick="saveCallback()">Save callback</button>
+      <button class="btn" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== DATA ===== */
+const ACCOUNTS={
+  director:{pin:'0000',role:'director',name:'Dr. Kamau'},
+  admin1:{pin:'1111',role:'admin',name:'Wanjiru'},
+  admin2:{pin:'1111',role:'admin',name:'Fatuma'},
+  admin3:{pin:'1111',role:'admin',name:'Brian'}
+};
+const ADMIN_NAMES={admin1:'Wanjiru',admin2:'Fatuma',admin3:'Brian'};
+const SOURCE_SCORES={google:30,linkedin:15,referral:20,'walk-in':25,instagram:5,tiktok:3,facebook:-10,other:5};
+const SOURCE_LABELS={google:'Google',facebook:'Facebook',linkedin:'LinkedIn',instagram:'Instagram',tiktok:'TikTok',referral:'Referral','walk-in':'Walk-in',other:'Other'};
+const TIMING_LABELS={now:'This intake',next:'Next intake',future:'Future (3+ mo)',unsure:'Unsure'};
+
+const INTAKE_DATE=new Date('2025-04-25');
+
+let currentUser=null;
+let currentAdmin=null;
+let gutFeel=0;
+let adminFilter='all';
+let dirFilter='all';
+let callbackLeadId=null;
+
+function getLeads(){return JSON.parse(localStorage.getItem('sic_v3_leads')||'[]');}
+function saveLeads(l){localStorage.setItem('sic_v3_leads',JSON.stringify(l));}
+function getCallbacks(){return JSON.parse(localStorage.getItem('sic_v3_callbacks')||'[]');}
+function saveCallbacks(c){localStorage.setItem('sic_v3_callbacks',JSON.stringify(c));}
+
+/* ===== SCORING ===== */
+function scoreLead(l){
+  let s=0;
+  s+=SOURCE_SCORES[l.source]||0;
+  s+={now:30,next:10,future:-10,unsure:0}[l.timing]||0;
+  s+={ready:20,partial:5,no:-15,unknown:0}[l.budget]||0;
+  s+={yes:25,maybe:10,no:-10,nd:0}[l.regfee]||0;
+  s+=(l.gutFeel||0)*5;
+  return Math.max(0,Math.min(100,s));
+}
+function getTier(score,timing){
+  if(timing==='next'||timing==='future') return 'nurture';
+  if(score>=60) return 'hot';
+  if(score>=30) return 'warm';
+  return 'cold';
+}
+function timeSince(ts){
+  const m=Math.floor((Date.now()-ts)/60000);
+  if(m<60) return m+'m ago';
+  const h=Math.floor(m/60);
+  if(h<24) return h+'h ago';
+  return Math.floor(h/24)+'d ago';
+}
+function urgencyLevel(ts,tier){
+  if(tier==='cold'||tier==='nurture') return null;
+  const h=(Date.now()-ts)/3600000;
+  if(h>24) return 'urgent';
+  if(h>2) return 'warning';
+  return 'ok';
+}
+function intakeDays(){
+  const d=Math.ceil((INTAKE_DATE-new Date())/(1000*60*60*24));
+  return Math.max(0,d);
+}
+
+/* ===== SEED DATA ===== */
+function seedIfEmpty(){
+  if(getLeads().length>0) return;
+  const now=Date.now();
+  const hr=3600000;
+  const seed=[
+    {id:1001,adminId:'admin1',name:'James Mwangi',phone:'+254712345678',source:'google',program:'Business Management',timing:'now',budget:'ready',regfee:'yes',gutFeel:3,notes:'Very keen, asked about payment plan',status:'registered',loggedAt:now-2*hr},
+    {id:1002,adminId:'admin1',name:'Sharon Akinyi',phone:'+254723456789',source:'facebook',program:'ICT',timing:'unsure',budget:'partial',regfee:'maybe',gutFeel:1,notes:'Not sure about timing, following up',status:'lead',loggedAt:now-5*hr},
+    {id:1003,adminId:'admin2',name:'Peter Otieno',phone:'+254734567890',source:'google',program:'Catering',timing:'now',budget:'ready',regfee:'yes',gutFeel:3,notes:'Ready to enroll this week',status:'enrolled',loggedAt:now-26*hr},
+    {id:1004,adminId:'admin2',name:'Grace Njeri',phone:'+254745678901',source:'instagram',program:'Fashion Design',timing:'next',budget:'unknown',regfee:'nd',gutFeel:2,notes:'Following up next month',status:'lead',loggedAt:now-3*hr},
+    {id:1005,adminId:'admin3',name:'David Kamau',phone:'+254756789012',source:'linkedin',program:'HR Management',timing:'now',budget:'ready',regfee:'yes',gutFeel:3,notes:'Corporate referral, very serious',status:'registered',loggedAt:now-1*hr},
+    {id:1006,adminId:'admin3',name:'Lucy Wambui',phone:'+254767890123',source:'tiktok',program:'Beauty Therapy',timing:'future',budget:'no',regfee:'no',gutFeel:1,notes:'Budget constraints, maybe in 3 months',status:'lead',loggedAt:now-48*hr},
+    {id:1007,adminId:'admin1',name:'Kevin Odhiambo',phone:'+254778901234',source:'google',program:'Business Management',timing:'now',budget:'ready',regfee:'maybe',gutFeel:2,notes:'Interested, asked for fee structure',status:'lead',loggedAt:now-30*60000},
+    {id:1008,adminId:'admin2',name:'Mercy Wangari',phone:'+254789012345',source:'linkedin',program:'Accounting',timing:'now',budget:'ready',regfee:'yes',gutFeel:3,notes:'Saw LinkedIn ad, wants to start ASAP',status:'lead',loggedAt:now-45*60000},
+  ];
+  seed.forEach(l=>{l.score=scoreLead(l);l.tier=getTier(l.score,l.timing);});
+  saveLeads(seed);
+}
+
+/* ===== AUTH ===== */
+function doLogin(){
+  const uid=document.getElementById('login-user').value;
+  const pin=document.getElementById('login-pin').value;
+  if(!uid){alert('Please select an account.');return;}
+  const acc=ACCOUNTS[uid];
+  if(!acc||pin!==acc.pin){alert('Incorrect PIN. Please try again.');return;}
+  currentUser=uid;currentAdmin=acc;
+  seedIfEmpty();
+  if(acc.role==='director') showDirector();
+  else showAdmin();
+}
+function logout(){
+  currentUser=null;currentAdmin=null;gutFeel=0;
+  document.getElementById('login-user').value='';
+  document.getElementById('login-pin').value='';
+  showPage('login');
+}
+function showPage(p){
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+}
+
+/* ===== INTAKE COUNTDOWN ===== */
+function setIntakeCountdowns(){
+  const d=intakeDays();
+  const dateStr=INTAKE_DATE.toLocaleDateString('en-KE',{day:'numeric',month:'long',year:'numeric'});
+  ['dir','admin'].forEach(prefix=>{
+    const el=document.getElementById(prefix+'-intake-days');
+    const el2=document.getElementById(prefix+'-intake-date');
+    if(el) el.textContent=d;
+    if(el2) el2.textContent=dateStr;
+    if(el && d<=7) el.style.background='rgba(255,80,80,0.3)';
+  });
+}
+
+/* ===== DIRECTOR ===== */
+function showDirector(){
+  showPage('director');
+  setIntakeCountdowns();
+  renderDirMetrics();
+  renderAdminOverview();
+}
+
+function renderDirMetrics(){
+  const all=getLeads();
+  const hot=all.filter(l=>l.tier==='hot').length;
+  const reg=all.filter(l=>l.status==='registered'||l.status==='enrolled').length;
+  const enrolled=all.filter(l=>l.status==='enrolled').length;
+  const urgent=all.filter(l=>l.tier!=='nurture'&&urgencyLevel(l.loggedAt,l.tier)==='urgent').length;
+  document.getElementById('dir-metrics').innerHTML=`
+    <div class="metric"><div class="metric-label">Total leads</div><div class="metric-value">${all.length}</div></div>
+    <div class="metric"><div class="metric-label">Hot leads</div><div class="metric-value green">${hot}</div></div>
+    <div class="metric"><div class="metric-label">Registered</div><div class="metric-value amber">${reg}</div></div>
+    <div class="metric"><div class="metric-label">Enrolled</div><div class="metric-value green">${enrolled}</div></div>
+  `;
+}
+
+function adminStats(adminId){
+  const ls=getLeads().filter(l=>l.adminId===adminId);
+  return{
+    calls:ls.length,
+    registered:ls.filter(l=>l.status==='registered'||l.status==='enrolled').length,
+    enrolled:ls.filter(l=>l.status==='enrolled').length,
+    nurture:ls.filter(l=>l.tier==='nurture').length
+  };
+}
+
+function renderAdminOverview(){
+  const admins=[{id:'admin1',name:'Wanjiru'},{id:'admin2',name:'Fatuma'},{id:'admin3',name:'Brian'}];
+  const rows=admins.map(a=>{
+    const s=adminStats(a.id);
+    const rate=s.calls===0?0:Math.round((s.registered/s.calls)*100);
+    const bc=rate>=60?'':rate>=30?'amber':'red-bar';
+    return`<tr>
+      <td><strong>${a.name}</strong></td>
+      <td>${s.calls}</td>
+      <td>${s.registered}</td>
+      <td>${s.enrolled}</td>
+      <td>${s.nurture}</td>
+      <td>
+        <div class="perf-wrap">
+          <div class="perf-bar-bg"><div class="perf-bar-fill ${bc}" style="width:${rate}%"></div></div>
+          <span style="font-size:12px;color:var(--text2);">${rate}%</span>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+  document.getElementById('dir-admin-table').innerHTML=`
+    <thead><tr>
+      <th>Admin</th><th>Calls received</th><th>Registered</th><th>Enrolled</th><th>Future intake</th><th>Conversion rate</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  `;
+}
+
+let dirActivePanel='overview';
+function dirTab(tab,el){
+  dirActivePanel=tab;
+  document.querySelectorAll('#page-director .tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  ['overview','leads','callbacks','nurture'].forEach(p=>{
+    document.getElementById('dir-panel-'+p).style.display=p===tab?'block':'none';
+  });
+  if(tab==='leads') renderDirLeads();
+  if(tab==='callbacks') renderDirCallbacks();
+  if(tab==='nurture') renderDirNurture();
+}
+
+function dirSetFilter(f,el){
+  dirFilter=f;
+  document.querySelectorAll('#dir-filter-bar .chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderDirLeads();
+}
+
+function renderDirLeads(){
+  let ls=getLeads().filter(l=>l.tier!=='nurture');
+  if(dirFilter==='hot') ls=ls.filter(l=>l.tier==='hot');
+  else if(dirFilter==='warm') ls=ls.filter(l=>l.tier==='warm');
+  else if(['admin1','admin2','admin3'].includes(dirFilter)) ls=ls.filter(l=>l.adminId===dirFilter);
+  renderCards(ls,'dir-leads-list',true,false);
+}
+function renderDirCallbacks(){
+  const cbs=getCallbacks();
+  const c=document.getElementById('dir-callbacks-list');
+  if(!cbs.length){c.innerHTML='<div class="empty">No callbacks scheduled.</div>';return;}
+  const leads=getLeads();
+  c.innerHTML=cbs.map(cb=>{
+    const l=leads.find(x=>x.id===cb.leadId)||{};
+    const admin=ADMIN_NAMES[cb.adminId]||'Unknown';
+    const t=new Date(cb.time).toLocaleString('en-KE',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+    return`<div class="callback-item">
+      <div>
+        <div class="callback-name">${l.name||'Unknown'} — ${l.phone||''}</div>
+        <div class="callback-time">${t} &nbsp;·&nbsp; Admin: ${admin}${cb.note?' &nbsp;·&nbsp; '+cb.note:''}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function renderDirNurture(){
+  const ls=getLeads().filter(l=>l.tier==='nurture');
+  renderCards(ls,'dir-nurture-list',true,false);
+}
+
+/* ===== ADMIN ===== */
+function showAdmin(){
+  showPage('admin');
+  setIntakeCountdowns();
+  document.getElementById('admin-role-name').textContent=currentAdmin.name;
+  renderAdminMetrics();
+  renderAdminLeads();
+  renderCallbackAlerts();
+  updateCallbackBadge();
+}
+
+function renderAdminMetrics(){
+  const s=adminStats(currentUser);
+  document.getElementById('admin-metrics').innerHTML=`
+    <div class="metric"><div class="metric-label">Calls received</div><div class="metric-value">${s.calls}</div></div>
+    <div class="metric"><div class="metric-label">Registered</div><div class="metric-value amber">${s.registered}</div></div>
+    <div class="metric"><div class="metric-label">Enrolled</div><div class="metric-value green">${s.enrolled}</div></div>
+    <div class="metric"><div class="metric-label">Future intake</div><div class="metric-value">${s.nurture}</div></div>
+  `;
+}
+
+function renderCallbackAlerts(){
+  const cbs=getCallbacks().filter(cb=>cb.adminId===currentUser&&!cb.done);
+  const now=Date.now();
+  const due=cbs.filter(cb=>new Date(cb.time).getTime()<=now+3600000);
+  const leads=getLeads();
+  const c=document.getElementById('admin-callback-alerts');
+  if(!due.length){c.innerHTML='';return;}
+  c.innerHTML=due.map(cb=>{
+    const l=leads.find(x=>x.id===cb.leadId)||{};
+    const t=new Date(cb.time).toLocaleString('en-KE',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+    return`<div class="callback-banner">
+      <span>Callback due: <strong>${l.name||'Lead'}</strong> (${l.phone||''}) at ${t}${cb.note?' — '+cb.note:''}</span>
+      <button class="btn sm" onclick="markCallbackDone(${cb.id})">Done</button>
+    </div>`;
+  }).join('');
+}
+
+function updateCallbackBadge(){
+  const cbs=getCallbacks().filter(cb=>cb.adminId===currentUser&&!cb.done);
+  const badge=document.getElementById('callback-count-badge');
+  if(badge) badge.textContent=cbs.length?`(${cbs.length})`:'';
+}
+
+let adminActivePanel='pipeline';
+function adminTab(tab,el){
+  adminActivePanel=tab;
+  document.querySelectorAll('#page-admin .tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  ['pipeline','log','callbacks','nurture'].forEach(p=>{
+    document.getElementById('admin-panel-'+p).style.display=p===tab?'block':'none';
+  });
+  if(tab==='pipeline') renderAdminLeads();
+  if(tab==='callbacks') renderAdminCallbacks();
+  if(tab==='nurture') renderAdminNurture();
+}
+
+function adminSetFilter(f,el){
+  adminFilter=f;
+  document.querySelectorAll('#admin-panel-pipeline .chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderAdminLeads();
+}
+
+function renderAdminLeads(){
+  let ls=getLeads().filter(l=>l.adminId===currentUser&&l.tier!=='nurture');
+  if(adminFilter==='hot') ls=ls.filter(l=>l.tier==='hot');
+  else if(adminFilter==='warm') ls=ls.filter(l=>l.tier==='warm');
+  else if(adminFilter==='cold') ls=ls.filter(l=>l.tier==='cold');
+  else if(adminFilter==='urgent') ls=ls.filter(l=>urgencyLevel(l.loggedAt,l.tier)==='urgent');
+  renderCards(ls,'admin-leads-list',false,true);
+  renderAdminMetrics();
+}
+
+function renderAdminCallbacks(){
+  const cbs=getCallbacks().filter(cb=>cb.adminId===currentUser&&!cb.done);
+  const c=document.getElementById('admin-callbacks-list');
+  if(!cbs.length){c.innerHTML='<div class="empty">No callbacks scheduled.</div>';return;}
+  const leads=getLeads();
+  c.innerHTML=cbs.map(cb=>{
+    const l=leads.find(x=>x.id===cb.leadId)||{};
+    const t=new Date(cb.time).toLocaleString('en-KE',{weekday:'long',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+    return`<div class="callback-item">
+      <div>
+        <div class="callback-name">${l.name||'Unknown'} — ${l.phone||''}</div>
+        <div class="callback-time">${t}${cb.note?' &nbsp;·&nbsp; '+cb.note:''}</div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn sm primary" onclick="window.location.href='tel:${l.phone||''}'">Call</button>
+        <button class="btn sm" onclick="markCallbackDone(${cb.id})">Done</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderAdminNurture(){
+  const ls=getLeads().filter(l=>l.adminId===currentUser&&l.tier==='nurture');
+  renderCards(ls,'admin-nurture-list',false,false);
+}
+
+/* ===== SHARED CARD RENDERER ===== */
+function getWAMsg(l){
+  const first=l.name?l.name.split(' ')[0]:'there';
+  const prog=l.program||'our programs';
+  const days=intakeDays();
+  if(l.tier==='hot') return `Hi ${first}! Thank you for your interest in Demo College. We would love to help you enroll in ${prog} — our intake closes in just ${days} days. The registration fee is only KSH 2,000 to secure your spot. Can we get you started today?`;
+  if(l.tier==='nurture') return `Hi ${first}, thank you for your interest in Demo College! We have noted your interest in ${prog} for the upcoming intake. We will send you all the details before enrollment opens. Feel free to reach out anytime with questions!`;
+  return `Hi ${first}, thanks for reaching out to Demo College! We have some great options for ${prog}. Would you like to learn more about fees and how to enroll?`;
+}
+
+function getFollowUpMsg(l,day){
+  const first=l.name?l.name.split(' ')[0]:'there';
+  const days=intakeDays();
+  if(day===3) return `Hi ${first}, just following up on your interest in Demo College. We would love to have you join us this intake — only ${days} days left to register. Any questions I can answer for you?`;
+  if(day===7) return `Hi ${first}, this is a final reminder that Demo College intake closes in ${days} days. Secure your spot with a KSH 2,000 registration fee. Would not want you to miss out!`;
+  return getWAMsg(l);
+}
+
+function renderCards(ls,containerId,showAdminName,showStatus){
+  const c=document.getElementById(containerId);
+  if(!c) return;
+  if(!ls.length){c.innerHTML='<div class="empty">No leads here yet.</div>';return;}
+  c.innerHTML=ls.map(l=>{
+    const urgency=urgencyLevel(l.loggedAt,l.tier);
+    const timerHtml=urgency?`<span class="timer-badge ${urgency}">${urgency==='urgent'?'Follow up now!':urgency==='warning'?'Follow up soon':'Active'}</span>`:'';
+    const adminLabel=showAdminName&&l.adminId?` &nbsp;·&nbsp; ${ADMIN_NAMES[l.adminId]||l.adminId}`:'';
+    const statusTag=l.status==='enrolled'?'enrolled':l.status==='registered'?'registered':'';
+    return`<div class="lead-card ${l.tier}" id="card-${l.id}">
+      <div class="lead-top">
+        <div>
+          <div class="lead-name">${l.name||'—'}${timerHtml}</div>
+          <div class="lead-sub">${l.phone||'—'} &nbsp;·&nbsp; ${timeSince(l.loggedAt)}${adminLabel}</div>
+        </div>
+        <span class="score-badge ${l.tier}">${l.tier.toUpperCase()} · ${l.score||0}pts</span>
+      </div>
+      <div class="tags">
+        ${l.source?`<span class="tag">${SOURCE_LABELS[l.source]||l.source}</span>`:''}
+        ${l.program?`<span class="tag">${l.program}</span>`:''}
+        ${l.timing?`<span class="tag">${TIMING_LABELS[l.timing]||l.timing}</span>`:''}
+        ${l.regfee==='yes'?'<span class="tag">Reg fee ✓</span>':''}
+        ${l.gutFeel?`<span class="tag">${'★'.repeat(l.gutFeel)}</span>`:''}
+        ${statusTag?`<span class="tag ${statusTag}">${l.status}</span>`:''}
+      </div>
+      ${l.notes?`<div style="font-size:12px;color:var(--text2);margin-bottom:10px;">${l.notes}</div>`:''}
+      <div class="card-actions">
+        ${showStatus?`<select class="status-select" onchange="updateStatus(${l.id},this.value)">
+          <option value="lead"${l.status==='lead'?' selected':''}>Lead</option>
+          <option value="registered"${l.status==='registered'?' selected':''}>Registered</option>
+          <option value="enrolled"${l.status==='enrolled'?' selected':''}>Enrolled</option>
+        </select>`:''}
+        <button class="btn sm primary" onclick="toggle('wa-${l.id}')">WhatsApp</button>
+        <button class="btn sm" onclick="window.location.href='tel:${l.phone||''}'">Call</button>
+        ${showStatus?`<button class="btn sm" onclick="openCallbackModal(${l.id})">Callback</button>`:''}
+        <button class="btn sm" onclick="toggle('seq-${l.id}')">Follow-up</button>
+      </div>
+      <div class="expand-box" id="wa-${l.id}">
+        <textarea id="wamsg-${l.id}">${getWAMsg(l)}</textarea>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <button class="btn sm primary" onclick="copyText('wamsg-${l.id}','ok-${l.id}')">Copy message</button>
+          <span class="copy-ok" id="ok-${l.id}">Copied!</span>
+        </div>
+      </div>
+      <div class="expand-box" id="seq-${l.id}">
+        <div style="font-size:12px;color:var(--text2);margin-bottom:10px;">Follow-up sequence — copy message for each day</div>
+        <div class="sequence">
+          <div class="seq-step"><div class="seq-dot done"></div><span>Day 1 — First WhatsApp (sent on log)</span></div>
+          <div class="seq-step"><div class="seq-dot ${followUpStatus(l,3)}"></div>
+            <span>Day 3 follow-up</span>
+            <button class="btn sm" style="margin-left:auto;" onclick="toggle('seq3-${l.id}')">Draft</button>
+          </div>
+          <div class="expand-box" id="seq3-${l.id}" style="margin:4px 0 0 18px;">
+            <textarea id="seq3msg-${l.id}">${getFollowUpMsg(l,3)}</textarea>
+            <button class="btn sm primary" onclick="copyText('seq3msg-${l.id}','ok3-${l.id}')">Copy</button>
+            <span class="copy-ok" id="ok3-${l.id}">Copied!</span>
+          </div>
+          <div class="seq-step"><div class="seq-dot pending"></div>
+            <span>Day 7 final nudge</span>
+            <button class="btn sm" style="margin-left:auto;" onclick="toggle('seq7-${l.id}')">Draft</button>
+          </div>
+          <div class="expand-box" id="seq7-${l.id}" style="margin:4px 0 0 18px;">
+            <textarea id="seq7msg-${l.id}">${getFollowUpMsg(l,7)}</textarea>
+            <button class="btn sm primary" onclick="copyText('seq7msg-${l.id}','ok7-${l.id}')">Copy</button>
+            <span class="copy-ok" id="ok7-${l.id}">Copied!</span>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function followUpStatus(l,day){
+  const h=(Date.now()-l.loggedAt)/3600000;
+  if(day===3&&h>=72) return 'due';
+  if(day===3&&h>=48) return 'due';
+  return 'pending';
+}
+
+function toggle(id){
+  const el=document.getElementById(id);
+  if(el) el.classList.toggle('open');
+}
+
+function copyText(inputId,okId){
+  const t=document.getElementById(inputId);
+  if(t) navigator.clipboard.writeText(t.value).then(()=>{
+    const ok=document.getElementById(okId);
+    if(ok){ok.style.display='inline';setTimeout(()=>ok.style.display='none',2000);}
+  });
+}
+
+function updateStatus(id,status){
+  const ls=getLeads();
+  const l=ls.find(x=>x.id===id);
+  if(l){l.status=status;saveLeads(ls);}
+  renderAdminMetrics();
+  if(dirActivePanel==='overview') renderAdminOverview();
+}
+
+/* ===== LOG LEAD ===== */
+function setStars(n){
+  gutFeel=n;
+  for(let i=1;i<=3;i++) document.getElementById('s'+i).classList.toggle('lit',i<=n);
+}
+
+function logLead(){
+  const name=document.getElementById('f-name').value.trim();
+  const phone=document.getElementById('f-phone').value.trim();
+  if(!name||!phone){alert('Name and phone are required.');return;}
+  const l={
+    id:Date.now(),adminId:currentUser,
+    name,phone,
+    source:document.getElementById('f-source').value,
+    program:document.getElementById('f-program').value,
+    timing:document.getElementById('f-timing').value,
+    budget:document.getElementById('f-budget').value,
+    regfee:document.getElementById('f-regfee').value,
+    gutFeel,
+    notes:document.getElementById('f-notes').value,
+    status:'lead',
+    loggedAt:Date.now()
+  };
+  l.score=scoreLead(l);
+  l.tier=getTier(l.score,l.timing);
+  const cbTime=document.getElementById('f-callback').value;
+  if(cbTime){
+    const cbs=getCallbacks();
+    cbs.push({id:Date.now()+1,leadId:l.id,adminId:currentUser,time:cbTime,note:'',done:false});
+    saveCallbacks(cbs);
+  }
+  const ls=getLeads();ls.unshift(l);saveLeads(ls);
+  ['f-name','f-phone','f-program','f-notes'].forEach(id=>document.getElementById(id).value='');
+  ['f-source','f-timing','f-budget','f-regfee','f-callback'].forEach(id=>document.getElementById(id).value='');
+  gutFeel=0;setStars(0);
+  adminTab('pipeline',document.querySelectorAll('#page-admin .tab')[0]);
+}
+
+function quickLog(tier){
+  const name=document.getElementById('q-name').value.trim();
+  const phone=document.getElementById('q-phone').value.trim();
+  if(!name||!phone){alert('Name and phone required for quick log.');return;}
+  const timingMap={hot:'now',warm:'now',callback:'now',nurture:'next',cold:'unsure'};
+  const l={
+    id:Date.now(),adminId:currentUser,
+    name,phone,source:'',program:'',
+    timing:timingMap[tier]||'unsure',
+    budget:'unknown',regfee:'nd',gutFeel:0,
+    notes:`Quick log — ${tier}`,
+    status:'lead',loggedAt:Date.now()
+  };
+  if(tier==='hot'){l.source='google';l.budget='ready';l.regfee='maybe';l.gutFeel=2;}
+  l.score=scoreLead(l);
+  l.tier=tier==='nurture'?'nurture':getTier(l.score,l.timing);
+  if(tier==='cold') l.tier='cold';
+  if(tier==='callback'){
+    const cbs=getCallbacks();
+    const soon=new Date(Date.now()+2*3600000).toISOString().slice(0,16);
+    cbs.push({id:Date.now()+1,leadId:l.id,adminId:currentUser,time:soon,note:'Quick callback scheduled',done:false});
+    saveCallbacks(cbs);
+  }
+  const ls=getLeads();ls.unshift(l);saveLeads(ls);
+  document.getElementById('q-name').value='';
+  document.getElementById('q-phone').value='';
+  adminTab('pipeline',document.querySelectorAll('#page-admin .tab')[0]);
+}
+
+/* ===== CALLBACKS ===== */
+function openCallbackModal(leadId){
+  callbackLeadId=leadId;
+  const soon=new Date(Date.now()+24*3600000).toISOString().slice(0,16);
+  document.getElementById('modal-callback-time').value=soon;
+  document.getElementById('modal-callback-note').value='';
+  document.getElementById('callback-modal').classList.add('open');
+}
+function closeModal(){
+  document.getElementById('callback-modal').classList.remove('open');
+  callbackLeadId=null;
+}
+function saveCallback(){
+  const time=document.getElementById('modal-callback-time').value;
+  const note=document.getElementById('modal-callback-note').value;
+  if(!time){alert('Please select a time.');return;}
+  const cbs=getCallbacks();
+  cbs.push({id:Date.now(),leadId:callbackLeadId,adminId:currentUser,time,note,done:false});
+  saveCallbacks(cbs);
+  closeModal();
+  updateCallbackBadge();
+  renderCallbackAlerts();
+}
+function markCallbackDone(cbId){
+  const cbs=getCallbacks();
+  const cb=cbs.find(x=>x.id===cbId);
+  if(cb) cb.done=true;
+  saveCallbacks(cbs);
+  renderCallbackAlerts();
+  updateCallbackBadge();
+  renderAdminCallbacks();
+}
+
+/* ===== INIT ===== */
+document.getElementById('login-pin').addEventListener('keydown',e=>{
+  if(e.key==='Enter') doLogin();
+});
+setIntakeCountdowns();
+setInterval(()=>{
+  if(currentAdmin&&currentAdmin.role==='admin') renderCallbackAlerts();
+},60000);
+</script>
+<div id="gs-proto-banner" style="position:fixed;left:0;right:0;bottom:0;z-index:2147483647;background:#1a1030;color:#fff;font:13px/1.4 system-ui,sans-serif;padding:7px 12px;text-align:center;opacity:.94">Working prototype by <b>Emmanuel Muteti</b> &middot; names and numbers are demo data &middot; <a href="../../work/" style="color:#c9a7ff">See all work</a> &middot; <a href="https://wa.me/254740562812" style="color:#7dffb0">WhatsApp</a></div>
+</body>
+</html>

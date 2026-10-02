@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo Hospital – Digital Patient Concierge & Triage System</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue-50:#EBF4FF;--blue-100:#C3DFFE;--blue-200:#8EC5FD;--blue-400:#3A8EEF;--blue-500:#1A6FC4;--blue-600:#155FAA;--blue-700:#0E4B87;--blue-900:#072A50;
+  --teal-50:#E3F8F4;--teal-200:#7ADECE;--teal-400:#1DB99A;--teal-500:#148F77;--teal-600:#0E7260;
+  --green-50:#EBF9F1;--green-400:#2ECC78;--green-500:#1FA85E;
+  --red-50:#FFF0F0;--red-100:#FFD2D2;--red-200:#FFB0B0;--red-400:#EF4444;--red-500:#DC2626;--red-600:#B91C1C;
+  --amber-50:#FFFBEB;--amber-400:#F59E0B;--amber-500:#D97706;
+  --slate-0:#FFFFFF;--slate-50:#F7F9FC;--slate-100:#EEF2F8;--slate-200:#DDE4EF;--slate-300:#B8C4D8;--slate-400:#8A97AE;--slate-500:#5E6D84;--slate-600:#3D4F68;--slate-700:#2A3650;--slate-800:#1A2438;--slate-900:#0E1520;
+  --wa-green:#25D366;--wa-light:#DCF8C6;--wa-bg:#E5DDD5;--wa-header:#075E54;
+  --radius-sm:6px;--radius-md:10px;--radius-lg:16px;--radius-xl:24px;
+  --shadow-sm:0 1px 3px rgba(14,21,32,0.07),0 1px 2px rgba(14,21,32,0.05);
+  --shadow-md:0 4px 12px rgba(14,21,32,0.1),0 2px 6px rgba(14,21,32,0.06);
+  --shadow-lg:0 12px 32px rgba(14,21,32,0.12),0 4px 12px rgba(14,21,32,0.07);
+  --font-main:'DM Sans',system-ui,sans-serif;
+  --font-display:'DM Serif Display',Georgia,serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--font-main);background:var(--slate-50);color:var(--slate-800);font-size:14px;line-height:1.5}
+
+/* LAYOUT */
+.app{display:grid;grid-template-columns:340px 1fr;grid-template-rows:auto 1fr;height:100vh;max-height:100vh;overflow:hidden}
+.topbar{grid-column:1/-1;display:flex;align-items:center;gap:16px;padding:0 24px;height:56px;background:var(--slate-800);border-bottom:1px solid var(--slate-700);box-shadow:var(--shadow-md)}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-logo{width:32px;height:32px;background:linear-gradient(135deg,var(--blue-400),var(--teal-400));border-radius:8px;display:flex;align-items:center;justify-content:center}
+.brand-logo svg{width:18px;height:18px}
+.brand-name{font-family:var(--font-display);color:white;font-size:17px;letter-spacing:-0.2px}
+.brand-sub{font-size:11px;color:var(--slate-400);font-weight:400;margin-left:4px}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--green-400);box-shadow:0 0 6px var(--green-400);animation:pulse-green 2s infinite}
+.topbar-badge{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:4px 10px;font-size:11px;color:rgba(255,255,255,0.7)}
+.emergency-topbadge{background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4);border-radius:20px;padding:4px 10px;font-size:11px;color:#FCA5A5;display:flex;align-items:center;gap:5px;animation:pulse-red-badge 2s infinite}
+
+/* LEFT: WhatsApp Panel */
+.wa-panel{background:var(--slate-700);border-right:1px solid var(--slate-600);display:flex;flex-direction:column;overflow:hidden}
+.wa-phone-frame{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.wa-header{background:var(--wa-header);padding:10px 14px;display:flex;align-items:center;gap:10px}
+.wa-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--teal-400),var(--blue-500));display:flex;align-items:center;justify-content:center;font-size:14px;color:white;font-weight:600;flex-shrink:0}
+.wa-contact{flex:1}
+.wa-contact-name{font-size:14px;color:white;font-weight:500}
+.wa-contact-status{font-size:11px;color:rgba(255,255,255,0.6)}
+.wa-actions{display:flex;gap:10px}
+.wa-actions svg{width:18px;height:18px;opacity:0.7}
+.wa-body{flex:1;overflow-y:auto;padding:10px 12px;display:flex;flex-direction:column;gap:6px;background:var(--wa-bg)}
+.wa-msg{max-width:88%;border-radius:var(--radius-md);padding:7px 10px;font-size:13px;line-height:1.5;position:relative;animation:slide-in 0.3s ease-out}
+.wa-msg.bot{background:white;align-self:flex-start;border-top-left-radius:3px;box-shadow:var(--shadow-sm)}
+.wa-msg.user{background:var(--wa-light);align-self:flex-end;border-top-right-radius:3px;box-shadow:var(--shadow-sm)}
+.wa-msg.emergency{background:#FFF0F0;border:1.5px solid #FFB0B0;animation:slide-in 0.3s ease-out,glow-red 2s infinite}
+.wa-msg-time{font-size:10px;color:var(--slate-400);text-align:right;margin-top:3px}
+.wa-msg strong{color:var(--blue-600);font-weight:600}
+.wa-msg .price{color:var(--teal-500);font-weight:600}
+.wa-input-bar{background:var(--slate-50);padding:8px 10px;display:flex;align-items:center;gap:8px;border-top:1px solid var(--slate-200)}
+.wa-input{flex:1;background:white;border:1px solid var(--slate-200);border-radius:20px;padding:7px 14px;font-family:var(--font-main);font-size:13px;color:var(--slate-800);outline:none}
+.wa-input:focus{border-color:var(--teal-400)}
+.wa-send{width:36px;height:36px;border-radius:50%;background:var(--wa-green);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform 0.15s}
+.wa-send:hover{transform:scale(1.08)}
+.wa-quick-btns{display:flex;flex-wrap:wrap;gap:5px;padding:6px 12px;background:var(--wa-bg)}
+.wa-qbtn{background:white;border:1px solid var(--slate-300);border-radius:16px;padding:4px 10px;font-size:11.5px;color:var(--blue-500);cursor:pointer;font-family:var(--font-main);font-weight:500;transition:all 0.15s}
+.wa-qbtn:hover{background:var(--blue-50);border-color:var(--blue-400);transform:translateY(-1px)}
+.wa-qbtn.emergency{color:var(--red-500);border-color:var(--red-200)}
+.wa-qbtn.emergency:hover{background:var(--red-50)}
+.panel-label{padding:10px 14px 6px;font-size:10px;font-weight:600;color:var(--slate-400);letter-spacing:1px;text-transform:uppercase;background:var(--slate-700)}
+
+/* RIGHT: Dashboard */
+.dashboard{display:flex;flex-direction:column;overflow:hidden;background:var(--slate-50)}
+.dash-inner{flex:1;overflow-y:auto;padding:20px}
+
+/* METRICS */
+.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.metric-card{background:white;border:1px solid var(--slate-200);border-radius:var(--radius-lg);padding:16px;display:flex;flex-direction:column;gap:6px;box-shadow:var(--shadow-sm);transition:transform 0.2s,box-shadow 0.2s}
+.metric-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.metric-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:4px}
+.metric-icon.blue{background:var(--blue-50)}
+.metric-icon.teal{background:var(--teal-50)}
+.metric-icon.green{background:var(--green-50)}
+.metric-icon.amber{background:var(--amber-50)}
+.metric-val{font-size:26px;font-weight:700;color:var(--slate-800);line-height:1;letter-spacing:-0.5px}
+.metric-val .unit{font-size:14px;font-weight:500;color:var(--slate-500);margin-left:2px}
+.metric-label{font-size:12px;color:var(--slate-500);font-weight:400}
+.metric-trend{font-size:11px;color:var(--green-500);font-weight:500;display:flex;align-items:center;gap:3px}
+
+/* TABS */
+.tabs-bar{display:flex;align-items:center;gap:0;background:white;border:1px solid var(--slate-200);border-radius:var(--radius-lg);padding:4px;box-shadow:var(--shadow-sm);margin-bottom:18px;width:fit-content}
+.tab{padding:7px 18px;border-radius:var(--radius-md);font-size:13px;font-weight:500;color:var(--slate-500);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px;border:none;background:none;font-family:var(--font-main)}
+.tab.active{background:var(--slate-800);color:white;box-shadow:var(--shadow-sm)}
+.tab .badge{background:var(--red-400);color:white;border-radius:10px;padding:1px 6px;font-size:10px;font-weight:600;animation:pulse-red-badge 2s infinite}
+.tab.active .badge{background:rgba(255,255,255,0.25)}
+
+/* MAIN CONTENT AREA */
+.content-grid{display:grid;grid-template-columns:1fr 320px;gap:18px}
+
+/* TRIAGE CARDS */
+.section-title{font-size:12px;font-weight:600;color:var(--slate-500);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.section-title::after{content:'';flex:1;height:1px;background:var(--slate-200)}
+.inbox-list{display:flex;flex-direction:column;gap:10px}
+.triage-card{background:white;border:1px solid var(--slate-200);border-radius:var(--radius-lg);padding:14px 16px;box-shadow:var(--shadow-sm);transition:all 0.25s;cursor:pointer;position:relative;overflow:hidden;animation:slide-in 0.35s ease-out}
+.triage-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:4px 0 0 4px}
+.triage-card.routine::before{background:linear-gradient(180deg,var(--blue-400),var(--teal-400))}
+.triage-card.emergency::before{background:linear-gradient(180deg,var(--red-400),var(--red-600));animation:glow-left 2s infinite}
+.triage-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--slate-300)}
+.triage-card.emergency{border-color:var(--red-200);background:linear-gradient(135deg,white,var(--red-50))}
+.card-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.card-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;color:white}
+.avatar-blue{background:linear-gradient(135deg,var(--blue-400),var(--blue-600))}
+.avatar-teal{background:linear-gradient(135deg,var(--teal-400),var(--teal-600))}
+.avatar-amber{background:linear-gradient(135deg,var(--amber-400),var(--amber-500))}
+.avatar-red{background:linear-gradient(135deg,var(--red-400),var(--red-600));animation:pulse-red-avatar 2s infinite}
+.avatar-green{background:linear-gradient(135deg,var(--green-400),var(--green-500))}
+.card-meta{flex:1;min-width:0}
+.card-name{font-size:13.5px;font-weight:600;color:var(--slate-800)}
+.card-phone{font-size:11px;color:var(--slate-400)}
+.card-time{font-size:11px;color:var(--slate-400);display:flex;align-items:center;gap:4px;white-space:nowrap}
+.card-time.urgent{color:var(--red-500);font-weight:600}
+.card-body{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.card-inquiry{font-size:12.5px;color:var(--slate-600);line-height:1.4;flex:1}
+.tag{display:inline-flex;align-items:center;gap:4px;border-radius:10px;padding:3px 8px;font-size:10.5px;font-weight:600;white-space:nowrap}
+.tag.maternity{background:var(--teal-50);color:var(--teal-600)}
+.tag.insurance{background:var(--blue-50);color:var(--blue-600)}
+.tag.emergency{background:var(--red-50);color:var(--red-600);animation:glow-tag 2s infinite}
+.tag.pediatric{background:#F0F4FF;color:#4A6FA5}
+.tag.dental{background:#FFF7E6;color:#8B5E00}
+.card-actions{display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--slate-100)}
+.action-btn{flex:1;padding:6px 8px;border-radius:var(--radius-sm);font-size:11px;font-weight:600;border:1px solid;cursor:pointer;font-family:var(--font-main);transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:4px}
+.action-btn:hover{transform:translateY(-1px)}
+.btn-confirm{background:var(--teal-50);border-color:var(--teal-200);color:var(--teal-600)}
+.btn-confirm:hover{background:var(--teal-400);color:white;border-color:var(--teal-400)}
+.btn-pdf{background:var(--blue-50);border-color:var(--blue-200);color:var(--blue-600)}
+.btn-pdf:hover{background:var(--blue-400);color:white;border-color:var(--blue-400)}
+.btn-transfer{background:var(--amber-50);border-color:#FDE68A;color:var(--amber-500)}
+.btn-transfer:hover{background:var(--amber-400);color:white;border-color:var(--amber-400)}
+.btn-emergency{background:var(--red-50);border-color:var(--red-200);color:var(--red-500)}
+.btn-emergency:hover{background:var(--red-400);color:white;border-color:var(--red-400)}
+
+/* RIGHT SIDEBAR: Nurture Pipeline */
+.nurture-panel{display:flex;flex-direction:column;gap:14px}
+.nurture-header{font-size:12px;font-weight:600;color:var(--slate-500);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:4px}
+.nurture-list{display:flex;flex-direction:column;gap:8px}
+.nurture-card{background:white;border:1px solid var(--slate-200);border-radius:var(--radius-md);padding:12px 14px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:6px;transition:all 0.2s;cursor:pointer}
+.nurture-card:hover{border-color:var(--teal-200);box-shadow:var(--shadow-md)}
+.nurture-name{font-size:13px;font-weight:600;color:var(--slate-800)}
+.nurture-tag{display:inline-flex;align-items:center;gap:4px;border-radius:8px;padding:3px 8px;font-size:10.5px;font-weight:600}
+.nt-immuno{background:#EDE9FF;color:#5B3FA8}
+.nt-tour{background:var(--teal-50);color:var(--teal-600)}
+.nt-followup{background:var(--blue-50);color:var(--blue-600)}
+.nt-anc{background:#FFF0E6;color:#8B4000}
+.nurture-due{font-size:11px;color:var(--slate-400)}
+.nurture-send{margin-top:4px;width:100%;padding:5px 0;background:var(--slate-50);border:1px solid var(--slate-200);border-radius:var(--radius-sm);font-size:11px;font-weight:600;color:var(--slate-600);cursor:pointer;font-family:var(--font-main);transition:all 0.15s}
+.nurture-send:hover{background:var(--teal-400);color:white;border-color:var(--teal-400)}
+
+/* EMERGENCY TAB VIEW */
+.emerg-panel{display:flex;flex-direction:column;gap:14px}
+.emergency-hero{background:linear-gradient(135deg,var(--red-50),#FFF5F5);border:1.5px solid var(--red-200);border-radius:var(--radius-lg);padding:18px;display:flex;gap:14px;align-items:flex-start;animation:glow-red 2s infinite}
+.emerg-icon{width:44px;height:44px;background:var(--red-400);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:pulse-red-avatar 1.5s infinite}
+.emerg-title{font-size:15px;font-weight:700;color:var(--red-600)}
+.emerg-body{font-size:12.5px;color:var(--slate-600);margin-top:3px}
+.emerg-phone{font-size:13px;font-weight:600;color:var(--slate-700);margin-top:6px;display:flex;align-items:center;gap:6px}
+.nurse-btn{display:flex;gap:8px;margin-top:10px}
+.nbtn{flex:1;padding:8px;border-radius:var(--radius-md);font-size:12px;font-weight:600;border:1.5px solid;cursor:pointer;font-family:var(--font-main);transition:all 0.15s}
+.nbtn-dispatch{background:var(--red-400);border-color:var(--red-500);color:white}
+.nbtn-dispatch:hover{background:var(--red-600)}
+.nbtn-call{background:white;border-color:var(--red-200);color:var(--red-500)}
+.nbtn-call:hover{background:var(--red-50)}
+
+/* TOAST */
+.toast-container{position:fixed;bottom:24px;right:24px;display:flex;flex-direction:column;gap:8px;z-index:9999;pointer-events:none}
+.toast{background:var(--slate-800);color:white;padding:10px 16px;border-radius:var(--radius-md);font-size:12.5px;font-weight:500;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:8px;animation:toast-in 0.3s ease-out;min-width:220px}
+.toast.success{background:var(--teal-500)}
+.toast.warning{background:var(--amber-500)}
+.toast.error{background:var(--red-500)}
+.toast-out{animation:toast-out 0.3s ease-in forwards}
+
+/* ANIMATIONS */
+@keyframes slide-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse-green{0%,100%{box-shadow:0 0 6px var(--green-400)}50%{box-shadow:0 0 14px var(--green-400)}}
+@keyframes pulse-red-avatar{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.4)}50%{box-shadow:0 0 0 6px rgba(239,68,68,0)}}
+@keyframes pulse-red-badge{0%,100%{opacity:1}50%{opacity:0.7}}
+@keyframes glow-red{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.1)}50%{box-shadow:0 0 12px 2px rgba(239,68,68,0.15)}}
+@keyframes glow-left{0%,100%{box-shadow:inset 2px 0 8px rgba(239,68,68,0.3)}50%{box-shadow:inset 2px 0 16px rgba(239,68,68,0.6)}}
+@keyframes glow-tag{0%,100%{box-shadow:none}50%{box-shadow:0 0 8px rgba(239,68,68,0.3)}}
+@keyframes toast-in{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes toast-out{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(20px)}}
+.wa-body::-webkit-scrollbar{width:3px}
+.wa-body::-webkit-scrollbar-track{background:transparent}
+.wa-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15);border-radius:3px}
+.dash-inner::-webkit-scrollbar{width:4px}
+.dash-inner::-webkit-scrollbar-track{background:transparent}
+.dash-inner::-webkit-scrollbar-thumb{background:var(--slate-300);border-radius:4px}
+
+/* TYPING INDICATOR */
+.typing-indicator{display:flex;align-items:center;gap:4px;padding:10px 12px;background:white;border-radius:var(--radius-md);border-top-left-radius:3px;box-shadow:var(--shadow-sm);width:fit-content;animation:slide-in 0.3s ease-out}
+.typing-dot{width:7px;height:7px;border-radius:50%;background:var(--slate-400);animation:typing-bounce 1.4s infinite}
+.typing-dot:nth-child(2){animation-delay:0.2s}
+.typing-dot:nth-child(3){animation-delay:0.4s}
+@keyframes typing-bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+      </div>
+      <div>
+        <span class="brand-name">Demo Hospital</span>
+        <span class="brand-sub">Ruiru Branch · Level 4</span>
+      </div>
+    </div>
+    <div class="topbar-badge">Digital Concierge v2.1</div>
+    <div class="emergency-topbadge" id="emergency-topbadge">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      1 EMERGENCY OVERRIDE
+    </div>
+    <div class="topbar-right">
+      <div class="status-dot"></div>
+      <span style="font-size:11px;color:var(--slate-400)">WhatsApp Bot Live</span>
+      <div class="topbar-badge">Receptionist: Grace M.</div>
+    </div>
+  </div>
+
+  <!-- LEFT: WA PANEL -->
+  <div class="wa-panel">
+    <div class="panel-label">Patient WhatsApp Simulator</div>
+    <div class="wa-phone-frame">
+      <div class="wa-header">
+        <div class="wa-avatar">DH</div>
+        <div class="wa-contact">
+          <div class="wa-contact-name">Demo Hospital Ruiru</div>
+          <div class="wa-contact-status" id="wa-status">Online – Automated Concierge</div>
+        </div>
+        <div class="wa-actions">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        </div>
+      </div>
+      <div class="wa-body" id="wa-body"></div>
+      <div class="wa-quick-btns" id="wa-quick-btns"></div>
+      <div class="wa-input-bar">
+        <input class="wa-input" id="wa-input" placeholder="Type a message…" autocomplete="off">
+        <button class="wa-send" id="wa-send-btn" onclick="sendWaMessage()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: DASHBOARD -->
+  <div class="dashboard">
+    <div class="dash-inner">
+      <!-- METRICS -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-icon blue">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3A8EEF" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="metric-val" id="hours-saved">4.7<span class="unit">hrs</span></div>
+          <div class="metric-label">Staff Hours Saved Today</div>
+          <div class="metric-trend">↑ +1.2 from yesterday</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon teal">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1DB99A" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+          </div>
+          <div class="metric-val" id="tours-booked">3</div>
+          <div class="metric-label">Maternity Tours Booked</div>
+          <div class="metric-trend">↑ Target: 5/day</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon green">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ECC78" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div class="metric-val" id="reminders-sent">12</div>
+          <div class="metric-label">Immunization Reminders</div>
+          <div class="metric-trend">↑ 3 responses received</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon amber">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          </div>
+          <div class="metric-val" id="chats-handled">28</div>
+          <div class="metric-label">Chats Handled by Bot</div>
+          <div class="metric-trend">↑ 0 dropped to hold</div>
+        </div>
+      </div>
+
+      <!-- TABS -->
+      <div class="tabs-bar">
+        <button class="tab active" id="tab-routine" onclick="switchTab('routine')">Routine Inquiries <span style="background:var(--blue-50);color:var(--blue-500);border-radius:10px;padding:1px 6px;font-size:10px;margin-left:2px;">5</span></button>
+        <button class="tab" id="tab-emergency" onclick="switchTab('emergency')">
+          🚨 Emergency Overrides <span class="badge">1</span>
+        </button>
+        <button class="tab" id="tab-nurture" onclick="switchTab('nurture')">Nurture Pipeline <span style="background:var(--teal-50);color:var(--teal-500);border-radius:10px;padding:1px 6px;font-size:10px;margin-left:2px;">6</span></button>
+      </div>
+
+      <!-- ROUTINE TAB -->
+      <div id="view-routine">
+        <div class="content-grid">
+          <div>
+            <div class="section-title">Active Inquiries — Today</div>
+            <div class="inbox-list" id="routine-list"></div>
+          </div>
+          <div>
+            <div class="section-title">Quick Stats</div>
+            <div style="background:white;border:1px solid var(--slate-200);border-radius:var(--radius-lg);padding:16px;box-shadow:var(--shadow-sm);margin-bottom:14px">
+              <div style="font-size:12px;color:var(--slate-500);margin-bottom:12px;font-weight:500">Inquiry Breakdown</div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <div>
+                  <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--slate-600)">Maternity</span><span style="font-weight:600;color:var(--teal-500)">42%</span></div>
+                  <div style="background:var(--slate-100);border-radius:4px;height:6px"><div style="width:42%;background:linear-gradient(90deg,var(--teal-400),var(--teal-200));border-radius:4px;height:100%"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--slate-600)">Insurance/NHIF</span><span style="font-weight:600;color:var(--blue-500)">31%</span></div>
+                  <div style="background:var(--slate-100);border-radius:4px;height:6px"><div style="width:31%;background:linear-gradient(90deg,var(--blue-400),var(--blue-200));border-radius:4px;height:100%"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--slate-600)">Clinic Schedules</span><span style="font-weight:600;color:var(--slate-500)">18%</span></div>
+                  <div style="background:var(--slate-100);border-radius:4px;height:6px"><div style="width:18%;background:linear-gradient(90deg,var(--slate-400),var(--slate-300));border-radius:4px;height:100%"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--slate-600)">Other</span><span style="font-weight:600;color:var(--slate-400)">9%</span></div>
+                  <div style="background:var(--slate-100);border-radius:4px;height:6px"><div style="width:9%;background:var(--slate-300);border-radius:4px;height:100%"></div></div>
+                </div>
+              </div>
+            </div>
+            <div style="background:linear-gradient(135deg,var(--blue-700),var(--teal-600));border-radius:var(--radius-lg);padding:18px;color:white">
+              <div style="font-size:11px;font-weight:600;opacity:0.7;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:6px">Bot Efficiency</div>
+              <div style="font-size:30px;font-weight:700;letter-spacing:-1px">89%</div>
+              <div style="font-size:12px;opacity:0.75;margin-top:2px">of inquiries resolved without staff</div>
+              <div style="margin-top:14px;font-size:11.5px;opacity:0.8;line-height:1.6">
+                🏥 Only <strong>11%</strong> escalated to nurses<br>
+                📋 Zero wait for NHIF questions<br>
+                ⏱ Avg bot response: <strong>1.2s</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EMERGENCY TAB -->
+      <div id="view-emergency" class="hidden">
+        <div class="section-title" style="color:var(--red-500)">Active Emergency Overrides</div>
+        <div class="emerg-panel">
+          <div class="emergency-hero">
+            <div class="emerg-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12.01" y2="17" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <div style="flex:1">
+              <div class="emerg-title">EMERGENCY — Unknown Caller</div>
+              <div class="emerg-body">Patient selected "Medical Emergency" via WhatsApp bot at 09:14 AM. Location unconfirmed. Routed immediately — no further bot interaction.</div>
+              <div class="emerg-phone">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                +254 7** ***712 · Waiting 6 min
+              </div>
+              <div class="nurse-btn">
+                <button class="nbtn nbtn-dispatch" onclick="showToast('Triage nurse dispatched to casualty!','success')">⚡ Dispatch Nurse</button>
+                <button class="nbtn nbtn-call" onclick="showToast('Calling patient now…','warning')">📞 Call Back</button>
+              </div>
+            </div>
+          </div>
+          <div style="background:white;border:1px solid var(--slate-200);border-radius:var(--radius-lg);padding:16px;box-shadow:var(--shadow-sm)">
+            <div style="font-size:12px;font-weight:600;color:var(--slate-500);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">Why This Works</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;gap:10px;align-items:flex-start">
+                <div style="width:24px;height:24px;border-radius:50%;background:var(--red-50);border:1.5px solid var(--red-200);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;">🚨</div>
+                <div style="font-size:12.5px;color:var(--slate-600)">Emergency trigger <strong>bypasses all bot flows</strong> — no wait, no menu, instant escalation to triage nurse</div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start">
+                <div style="width:24px;height:24px;border-radius:50%;background:var(--green-50);border:1.5px solid #A7F3D0;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;">✓</div>
+                <div style="font-size:12.5px;color:var(--slate-600)">Routine inquiries are <strong>100% filtered</strong> — reception handles zero NHIF calls manually</div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start">
+                <div style="width:24px;height:24px;border-radius:50%;background:var(--blue-50);border:1.5px solid var(--blue-200);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;">📊</div>
+                <div style="font-size:12.5px;color:var(--slate-600)">Every interaction is logged and timestamped for <strong>accountability & audit</strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NURTURE TAB -->
+      <div id="view-nurture" class="hidden">
+        <div class="content-grid">
+          <div>
+            <div class="section-title">Automated Reminder Pipeline</div>
+            <div class="nurture-list" id="nurture-list"></div>
+          </div>
+          <div>
+            <div style="background:linear-gradient(135deg,var(--teal-500),var(--blue-600));border-radius:var(--radius-lg);padding:20px;color:white;margin-bottom:14px">
+              <div style="font-size:11px;font-weight:600;opacity:0.7;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:8px">Recurring Revenue Engine</div>
+              <div style="font-size:28px;font-weight:700;letter-spacing:-0.5px">KES 84,200</div>
+              <div style="font-size:12px;opacity:0.75;margin-top:2px">Projected this month from reminders</div>
+              <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;justify-content:space-between;font-size:12px;opacity:0.85"><span>6-week immunizations</span><span>KES 32,000</span></div>
+                <div style="height:0.5px;background:rgba(255,255,255,0.2)"></div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;opacity:0.85"><span>Maternity follow-ups</span><span>KES 28,400</span></div>
+                <div style="height:0.5px;background:rgba(255,255,255,0.2)"></div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;opacity:0.85"><span>ANC revisits</span><span>KES 23,800</span></div>
+              </div>
+            </div>
+            <div style="background:white;border:1px solid var(--slate-200);border-radius:var(--radius-lg);padding:16px;box-shadow:var(--shadow-sm)">
+              <div style="font-size:12px;font-weight:600;color:var(--slate-500);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px">Reminder Performance</div>
+              <div style="display:flex;flex-direction:column;gap:8px;font-size:12.5px;color:var(--slate-600)">
+                <div style="display:flex;justify-content:space-between"><span>Open rate</span><strong style="color:var(--teal-500)">94%</strong></div>
+                <div style="display:flex;justify-content:space-between"><span>Appointment conversion</span><strong style="color:var(--blue-500)">67%</strong></div>
+                <div style="display:flex;justify-content:space-between"><span>Avg response time</span><strong>2.3 hrs</strong></div>
+                <div style="display:flex;justify-content:space-between"><span>Reminders sent today</span><strong>12</strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+let waState = 'start';
+let waUserName = '';
+let waUserDue = '';
+let waitingForName = false;
+let waitingForDue = false;
+
+const routineCards = [
+  {id:1,name:'Amina Wanjiku',phone:'+254 712 345 678',avatar:'AW',avatarClass:'avatar-blue',inquiry:'Asking about NHIF coverage for dental procedures and whether Dr. Kibet is available this week.',type:'insurance',typeLabel:'Insurance/NHIF',waitTime:'3 min'},
+  {id:2,name:'Njeri Kamau',phone:'+254 722 987 654',avatar:'NK',avatarClass:'avatar-teal',inquiry:'Booked maternity tour for tomorrow at 10 AM. Expecting in 6 weeks. Wants confirmation + prep guide.',type:'maternity',typeLabel:'Maternity Tour',waitTime:'7 min'},
+  {id:3,name:'Sandra Ochieng',phone:'+254 733 456 789',avatar:'SO',avatarClass:'avatar-green',inquiry:'Requesting pediatrician schedule — wants Dr. Muthoni for her 8-month-old\'s checkup.',type:'pediatric',typeLabel:'Pediatric',waitTime:'12 min'},
+  {id:4,name:'Kevin Mwangi',phone:'+254 743 321 654',avatar:'KM',avatarClass:'avatar-amber',inquiry:'Inquiring about Normal Delivery package. Wife is 36 weeks. Asked to compare Normal vs CS options.',type:'maternity',typeLabel:'Maternity',waitTime:'18 min'},
+  {id:5,name:'Faith Atieno',phone:'+254 701 234 567',avatar:'FA',avatarClass:'avatar-blue',inquiry:'NHIF registration process for outpatient. Wants to know which clinics are covered under SHA.',type:'insurance',typeLabel:'NHIF/SHA',waitTime:'24 min'},
+];
+
+const nurtureCards = [
+  {name:'Baby Njeri (Kamau)',tag:'nt-immuno',tagLabel:'Due: 6-Week Immunization',due:'Scheduled: Tomorrow 9 AM'},
+  {name:'Diana Akinyi',tag:'nt-tour',tagLabel:'Maternity Tour Tomorrow',due:'10:00 AM — Tour booked'},
+  {name:'Grace Wambui',tag:'nt-immuno',tagLabel:'Due: 10-Week Immunization',due:'Due in 3 days'},
+  {name:'Peter & Rose Njoroge',tag:'nt-anc',tagLabel:'ANC Revisit Reminder',due:'Week 28 check — Due Friday'},
+  {name:'Baby Chebet',tag:'nt-immuno',tagLabel:'Due: 14-Week Immunization',due:'Due next Monday'},
+  {name:'Mercy Wanjiku',tag:'nt-followup',tagLabel:'Post-CS Follow-up',due:'6-week post-op review'},
+];
+
+function renderRoutineCards() {
+  const list = document.getElementById('routine-list');
+  list.innerHTML = routineCards.map(c => `
+    <div class="triage-card routine" id="card-${c.id}">
+      <div class="card-top">
+        <div class="card-avatar ${c.avatarClass}">${c.avatar}</div>
+        <div class="card-meta">
+          <div class="card-name">${c.name}</div>
+          <div class="card-phone">${c.phone}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+          <span class="tag ${c.type}">${c.typeLabel}</span>
+          <span class="card-time">⏱ ${c.waitTime}</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-inquiry">${c.inquiry}</div>
+      </div>
+      <div class="card-actions">
+        <button class="action-btn btn-confirm" onclick="confirmAppt(${c.id})">✓ Confirm Appt.</button>
+        <button class="action-btn btn-pdf" onclick="sendPdf(${c.id})">📄 Send PDF</button>
+        <button class="action-btn btn-transfer" onclick="transferDoc(${c.id})">→ To Doctor</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderNurtureCards() {
+  const list = document.getElementById('nurture-list');
+  list.innerHTML = nurtureCards.map((c,i) => `
+    <div class="nurture-card" style="animation-delay:${i*60}ms">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="nurture-name">${c.name}</div>
+        <span class="nurture-tag ${c.tag}">${c.tagLabel}</span>
+      </div>
+      <div class="nurture-due">${c.due}</div>
+      <button class="nurture-send" onclick="sendReminder('${c.name}')">Send Reminder via WhatsApp</button>
+    </div>
+  `).join('');
+}
+
+function switchTab(tab) {
+  ['routine','emergency','nurture'].forEach(t => {
+    document.getElementById('view-'+t).classList.toggle('hidden', t!==tab);
+    document.getElementById('tab-'+t).classList.toggle('active', t===tab);
+  });
+}
+
+function confirmAppt(id) {
+  const c = routineCards.find(x=>x.id===id);
+  showToast('✓ Appointment confirmed for '+c.name+' via WhatsApp','success');
+  const card = document.getElementById('card-'+id);
+  card.style.opacity='0.5';
+  setTimeout(()=>card.style.opacity='1',2000);
+  updateMetric('hours-saved',0.3);
+}
+function sendPdf(id) {
+  const c = routineCards.find(x=>x.id===id);
+  showToast('📄 Insurance PDF sent to '+c.name,'success');
+  updateMetric('chats-handled',1);
+}
+function transferDoc(id) {
+  const c = routineCards.find(x=>x.id===id);
+  showToast('→ '+c.name+' transferred to doctor\'s queue','warning');
+}
+function sendReminder(name) {
+  showToast('💬 Reminder sent to '+name+' via WhatsApp!','success');
+  updateMetric('reminders-sent',1);
+}
+
+function updateMetric(id, delta) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const text = el.textContent.replace(/[^\d.]/g,'');
+  const val = parseFloat(text) + delta;
+  if (id==='hours-saved') {
+    el.innerHTML = val.toFixed(1)+'<span class="unit">hrs</span>';
+  } else {
+    el.textContent = Math.round(val);
+  }
+}
+
+function showToast(msg, type='success') {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = 'toast '+type;
+  toast.innerHTML = '<span>'+msg+'</span>';
+  container.appendChild(toast);
+  setTimeout(()=>{
+    toast.classList.add('toast-out');
+    setTimeout(()=>toast.remove(),300);
+  },3200);
+}
+
+const waBody = document.getElementById('wa-body');
+const waInput = document.getElementById('wa-input');
+const waQuickBtns = document.getElementById('wa-quick-btns');
+
+function addMsg(text, type) {
+  return new Promise(resolve => {
+    setTimeout(()=>{
+      const div = document.createElement('div');
+      div.className = 'wa-msg '+type;
+      div.innerHTML = text+'<div class="wa-msg-time">'+getTime()+'</div>';
+      waBody.appendChild(div);
+      waBody.scrollTop = waBody.scrollHeight;
+      resolve();
+    }, 0);
+  });
+}
+
+function addTyping() {
+  const div = document.createElement('div');
+  div.className = 'typing-indicator';
+  div.id = 'typing-indicator';
+  div.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+  waBody.appendChild(div);
+  waBody.scrollTop = waBody.scrollHeight;
+}
+
+function removeTyping() {
+  const t = document.getElementById('typing-indicator');
+  if (t) t.remove();
+}
+
+function setQuickBtns(btns) {
+  waQuickBtns.innerHTML = btns.map(b=>
+    '<button class="wa-qbtn'+(b.cls?' '+b.cls:'')+'" onclick="handleQuickBtn(\''+b.val+'\')">'+b.label+'</button>'
+  ).join('');
+}
+
+async function botReply(text, extraClass, delay) {
+  delay = delay||1000;
+  addTyping();
+  document.getElementById('wa-status').textContent = 'typing…';
+  await new Promise(r=>setTimeout(r,delay));
+  removeTyping();
+  document.getElementById('wa-status').textContent = 'Online – Automated Concierge';
+  await addMsg(text, 'bot '+(extraClass||''));
+}
+
+function getTime() {
+  const now = new Date();
+  return now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+}
+
+async function handleInput(text) {
+  if (!text.trim()) return;
+  await addMsg(text, 'user');
+  waInput.value = '';
+  setQuickBtns([]);
+
+  if (waitingForName) {
+    waitingForName = false;
+    waUserName = text;
+    waState = 'awaiting_due';
+    waitingForDue = true;
+    await botReply('Lovely name, <strong>'+waUserName+'</strong>! 🌸 And what is your estimated due date?','',900);
+    return;
+  }
+  if (waitingForDue) {
+    waitingForDue = false;
+    waUserDue = text;
+    waState = 'booked';
+    await botReply(
+      '✅ <strong>Booked!</strong> Your free maternity tour has been scheduled.<br><br>'+
+      '<strong>Name:</strong> '+waUserName+'<br>'+
+      '<strong>Due date:</strong> '+waUserDue+'<br>'+
+      '<strong>Tour date:</strong> Tomorrow, 10:00 AM<br><br>'+
+      '📍 <em>Demo Hospital, Ruiru Branch – Main Entrance</em><br><br>'+
+      'Our team will WhatsApp you a reminder tonight. See you soon, '+waUserName+'! 💙',
+      '', 1200
+    );
+    updateMetric('tours-booked',1);
+    showToast('🏥 New maternity tour booked: '+waUserName,'success');
+    nurtureCards.unshift({name:waUserName,tag:'nt-tour',tagLabel:'Maternity Tour Tomorrow',due:'Due date: '+waUserDue});
+    renderNurtureCards();
+    setQuickBtns([{label:'Ask another question',val:'hello'}]);
+    return;
+  }
+
+  const t = text.toLowerCase().trim();
+  if (t==='hello'||t==='hi'||t==='hey'||t==='start'||(t==='1'&&waState==='start')) {
+    waState = 'main_menu';
+    await botReply(
+      '👋 Welcome to <strong>Demo Hospital Ruiru</strong> — your trusted Level 4 hospital.<br><br>'+
+      'How can we help you today?<br><br>'+
+      '<strong>1.</strong> 🚨 Medical Emergency<br>'+
+      '<strong>2.</strong> 🏥 Clinic Schedules & Doctors<br>'+
+      '<strong>3.</strong> 👶 Maternity Packages<br>'+
+      '<strong>4.</strong> 🩺 Insurance & NHIF',
+      '', 900
+    );
+    setQuickBtns([
+      {label:'1. Emergency',val:'1',cls:'emergency'},
+      {label:'2. Clinic Schedules',val:'2'},
+      {label:'3. Maternity',val:'3'},
+      {label:'4. Insurance & NHIF',val:'4'},
+    ]);
+    return;
+  }
+  if ((t==='1'||t.includes('emergency')||t.includes('urgent'))&&waState==='main_menu') {
+    waState = 'emergency';
+    await botReply(
+      '<strong>🚨 EMERGENCY ALERT</strong><br><br>'+
+      'If this is a <strong>life-threatening emergency</strong>, please proceed directly to the <strong>Casualty Wing</strong> immediately.<br><br>'+
+      '🔴 <em>Routing your chat to the triage nurse — you will receive a call within 2 minutes.</em><br><br>'+
+      'Alternatively, call our emergency line:<br><strong>📞 0800 724 000 (Toll Free)</strong>',
+      'emergency', 700
+    );
+    showToast('🚨 Emergency override triggered! Notifying triage nurse…','error');
+    setQuickBtns([{label:'← Back to menu',val:'hello'}]);
+    return;
+  }
+  if ((t==='2'||t.includes('clinic')||t.includes('doctor')||t.includes('schedule'))&&waState==='main_menu') {
+    waState = 'clinics';
+    await botReply(
+      '🏥 <strong>Demo Hospital Ruiru — Clinic Schedule</strong><br><br>'+
+      '📋 <strong>General Outpatient</strong> — Mon–Sat, 7AM–8PM<br>'+
+      '👶 <strong>Pediatric Clinic</strong> — Mon, Wed, Fri: 8AM–4PM<br>'+
+      '💊 <strong>Antenatal (ANC)</strong> — Tue & Thu: 8AM–12PM<br>'+
+      '🦷 <strong>Dental Clinic</strong> — Mon–Fri: 9AM–5PM<br>'+
+      '🩸 <strong>Laboratory</strong> — Mon–Sat: 6AM–9PM, Sun: 7AM–2PM<br><br>'+
+      'Would you like to <strong>book an appointment</strong>?',
+      '', 1200
+    );
+    setQuickBtns([{label:'Book Appointment',val:'book'},{label:'← Main Menu',val:'hello'}]);
+    return;
+  }
+  if ((t==='3'||t.includes('maternity')||t.includes('baby')||t.includes('delivery'))&&waState==='main_menu') {
+    waState = 'maternity';
+    await botReply(
+      '👶 <strong>Maternity Packages</strong><br><br>'+
+      '🌸 <span class="price">Normal Delivery</span> — KES <strong>40,000</strong><br><em style="font-size:11px;color:#666">Includes 24hr admission, meals, baby kit</em><br><br>'+
+      '⚕️ <span class="price">Caesarean Section (CS)</span> — KES <strong>120,000</strong><br><em style="font-size:11px;color:#666">Includes anesthesia, surgical team, 3-day stay</em><br><br>'+
+      '🌙 <span class="price">Private Ward Upgrade</span> — <strong>+KES 8,000/night</strong><br><em style="font-size:11px;color:#666">En-suite, TV, partner stays</em><br><br>'+
+      'All packages include ANC visits, postnatal care & baby immunization schedule.<br><br>'+
+      'Would you like to <strong>book a free hospital tour?</strong> 🏥',
+      '', 1300
+    );
+    setQuickBtns([{label:'Yes, book a tour! 🌸',val:'yes'},{label:'Ask more questions',val:'more'},{label:'← Main Menu',val:'hello'}]);
+    return;
+  }
+  if ((t==='4'||t.includes('nhif')||t.includes('insurance')||t.includes('sha'))&&waState==='main_menu') {
+    waState = 'insurance';
+    await botReply(
+      '🩺 <strong>Insurance & NHIF at Demo Hospital Ruiru</strong><br><br>'+
+      'We accept the following:<br>'+
+      '✅ <strong>SHA (Social Health Authority)</strong><br>'+
+      '✅ <strong>NHIF – Inpatient & Outpatient</strong><br>'+
+      '✅ <strong>AAR, Jubilee, CIC, Britam</strong><br>'+
+      '✅ <strong>UAP, Madison, Resolution Health</strong><br><br>'+
+      '📄 For a full benefits PDF including pre-authorization steps, tap the button below.<br><br>'+
+      'Or call billing: <strong>0722 123 456</strong>',
+      '', 1200
+    );
+    setQuickBtns([{label:'📄 Send me the PDF',val:'pdf'},{label:'← Main Menu',val:'hello'}]);
+    return;
+  }
+  if (t==='yes'||t.includes('book')||t.includes('tour')) {
+    waState = 'collect_name';
+    waitingForName = true;
+    await botReply('Wonderful! 🌸 Let\'s get you set up.<br><br>What is your <strong>full name</strong>?','',800);
+    return;
+  }
+  if (t==='pdf') {
+    await botReply('📄 <strong>Insurance PDF sent!</strong><br><br>Check your WhatsApp files — you should receive the document within 30 seconds. If not, reply <strong>PDF</strong> again or call <strong>0722 123 456</strong>.','',900);
+    updateMetric('chats-handled',1);
+    setQuickBtns([{label:'← Main Menu',val:'hello'}]);
+    return;
+  }
+  waState = 'main_menu';
+  await botReply(
+    'I didn\'t quite catch that! 😊 Please choose an option:<br><br>'+
+    '<strong>1.</strong> 🚨 Emergency &nbsp;<strong>2.</strong> Clinics &nbsp;<strong>3.</strong> Maternity &nbsp;<strong>4.</strong> Insurance',
+    '', 800
+  );
+  setQuickBtns([
+    {label:'1. Emergency',val:'1',cls:'emergency'},
+    {label:'2. Clinics',val:'2'},
+    {label:'3. Maternity',val:'3'},
+    {label:'4. NHIF',val:'4'},
+  ]);
+}
+
+function handleQuickBtn(val) { handleInput(val); }
+
+function sendWaMessage() {
+  const txt = waInput.value.trim();
+  if (txt) handleInput(txt);
+}
+
+waInput.addEventListener('keydown', e=>{
+  if(e.key==='Enter') sendWaMessage();
+});
+
+(async function init() {
+  renderRoutineCards();
+  renderNurtureCards();
+  await new Promise(r=>setTimeout(r,400));
+  await addMsg('Hello 👋','user');
+  await botReply(
+    '👋 Welcome to <strong>Demo Hospital Ruiru</strong> — your trusted Level 4 hospital.<br><br>'+
+    'How can we help you today?<br><br>'+
+    '<strong>1.</strong> 🚨 Medical Emergency<br>'+
+    '<strong>2.</strong> 🏥 Clinic Schedules & Doctors<br>'+
+    '<strong>3.</strong> 👶 Maternity Packages<br>'+
+    '<strong>4.</strong> 🩺 Insurance & NHIF',
+    '', 1000
+  );
+  waState = 'main_menu';
+  setQuickBtns([
+    {label:'1. Emergency',val:'1',cls:'emergency'},
+    {label:'2. Clinic Schedules',val:'2'},
+    {label:'3. Maternity',val:'3'},
+    {label:'4. Insurance & NHIF',val:'4'},
+  ]);
+  setInterval(()=>{
+    if(Math.random()<0.15) updateMetric('chats-handled',1);
+    if(Math.random()<0.05) updateMetric('hours-saved',0.1);
+  }, 3000);
+})();
+</script>
+<div id="gs-proto-banner" style="position:fixed;left:0;right:0;bottom:0;z-index:2147483647;background:#1a1030;color:#fff;font:13px/1.4 system-ui,sans-serif;padding:7px 12px;text-align:center;opacity:.94">Working prototype by <b>Emmanuel Muteti</b> &middot; names and numbers are demo data &middot; <a href="../../work/" style="color:#c9a7ff">See all work</a> &middot; <a href="https://wa.me/254740562812" style="color:#7dffb0">WhatsApp</a></div>
+</body>
+</html>

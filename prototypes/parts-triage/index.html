@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Demo Parts — Instant Catalog & Triage System</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --orange:#F97316;--orange-dark:#EA580C;--orange-light:#FED7AA;
+  --orange-glow:rgba(249,115,22,0.25);--orange-border:rgba(249,115,22,0.3);
+  --slate:#0F172A;--slate2:#1E293B;--slate3:#334155;--slate4:#475569;
+  --text:#F8FAFC;--text2:#CBD5E1;--text3:#64748B;
+  --green:#22C55E;--green-bg:rgba(34,197,94,0.1);--green-border:rgba(34,197,94,0.3);
+  --amber:#F59E0B;--amber-bg:rgba(245,158,11,0.12);--amber-border:rgba(245,158,11,0.35);
+  --red:#EF4444;--red-bg:rgba(239,68,68,0.1);--red-border:rgba(239,68,68,0.35);
+  --blue:#3B82F6;--blue-bg:rgba(59,130,246,0.1);--blue-border:rgba(59,130,246,0.3);
+  --glass:rgba(30,41,59,0.7);--glass-border:rgba(255,255,255,0.06);
+  --radius:10px;--radius-lg:16px;--radius-xl:20px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--slate);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+/* BG TEXTURE */
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 0%, rgba(249,115,22,0.08) 0%, transparent 50%), radial-gradient(ellipse at 80% 100%, rgba(59,130,246,0.05) 0%, transparent 50%);pointer-events:none;z-index:0;}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:50;background:rgba(15,23,42,0.92);backdrop-filter:blur(20px);border-bottom:0.5px solid var(--glass-border);padding:0 1.5rem;height:60px;display:flex;align-items:center;justify-content:space-between;}
+.brand{display:flex;align-items:center;gap:12px;}
+.brand-logo{width:36px;height:36px;background:linear-gradient(135deg,var(--orange),var(--orange-dark));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:white;letter-spacing:-1px;box-shadow:0 0 20px var(--orange-glow);}
+.brand-text{font-size:16px;font-weight:700;letter-spacing:-0.02em;}
+.brand-text span{color:var(--orange);}
+.brand-sub{font-size:10px;color:var(--text3);margin-top:1px;}
+.topbar-right{display:flex;align-items:center;gap:12px;}
+.live-badge{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--green);background:var(--green-bg);border:0.5px solid var(--green-border);padding:4px 10px;border-radius:20px;font-weight:600;}
+.live-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:livepulse 1.5s infinite;}
+@keyframes livepulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(34,197,94,0.4);}50%{opacity:0.7;box-shadow:0 0 0 4px rgba(34,197,94,0);}}
+.branch-toggle{display:flex;background:var(--slate2);border:0.5px solid var(--glass-border);border-radius:22px;padding:3px;gap:2px;}
+.branch-btn{font-size:11px;font-weight:600;padding:5px 14px;border-radius:18px;border:none;cursor:pointer;transition:all 0.2s;color:var(--text3);background:transparent;}
+.branch-btn.active{background:var(--orange);color:white;box-shadow:0 0 12px var(--orange-glow);}
+
+/* MAIN LAYOUT */
+.main{display:grid;grid-template-columns:360px 1fr;min-height:calc(100vh - 60px);position:relative;z-index:1;}
+
+/* ====== WHATSAPP PANEL ====== */
+.wa-panel{background:var(--slate2);border-right:0.5px solid var(--glass-border);display:flex;flex-direction:column;height:calc(100vh - 60px);position:sticky;top:60px;}
+.wa-header{background:rgba(15,23,42,0.8);padding:12px 16px;display:flex;align-items:center;gap:12px;border-bottom:0.5px solid var(--glass-border);}
+.wa-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#FB923C);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:white;box-shadow:0 0 10px var(--orange-glow);}
+.wa-contact{flex:1;}
+.wa-name{font-size:13px;font-weight:700;}
+.wa-status{font-size:10px;color:var(--green);margin-top:1px;}
+.wa-badge{font-size:9px;color:var(--orange);background:rgba(249,115,22,0.12);border:0.5px solid var(--orange-border);padding:3px 8px;border-radius:10px;font-weight:700;letter-spacing:0.05em;}
+
+.wa-bg{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px;background:linear-gradient(180deg,rgba(15,23,42,0.3) 0%,transparent 100%);}
+.wa-bg::-webkit-scrollbar{width:3px;}
+.wa-bg::-webkit-scrollbar-thumb{background:var(--slate3);border-radius:3px;}
+
+.wa-msg{max-width:82%;display:flex;flex-direction:column;gap:3px;}
+.wa-msg.customer{align-self:flex-end;}
+.wa-msg.bot{align-self:flex-start;}
+.wa-msg.system-wa{align-self:center;max-width:95%;}
+
+.wa-bubble{padding:9px 12px;border-radius:12px;font-size:12.5px;line-height:1.55;}
+.customer .wa-bubble{background:linear-gradient(135deg,var(--orange-dark),var(--orange));color:white;border-bottom-right-radius:3px;box-shadow:0 2px 8px var(--orange-glow);}
+.bot .wa-bubble{background:var(--glass);border:0.5px solid var(--glass-border);color:var(--text);border-bottom-left-radius:3px;backdrop-filter:blur(10px);}
+.system-wa .wa-bubble{background:rgba(249,115,22,0.08);border:0.5px solid var(--orange-border);color:var(--orange);font-size:10.5px;text-align:center;border-radius:20px;padding:5px 14px;}
+
+.wa-time{font-size:9.5px;color:var(--text3);}
+.customer .wa-time{text-align:right;}
+
+.menu-options{display:flex;flex-direction:column;gap:5px;margin-top:8px;}
+.menu-btn{background:rgba(249,115,22,0.1);border:0.5px solid var(--orange-border);color:var(--orange);padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;text-align:left;transition:all 0.2s;display:flex;align-items:center;gap:8px;}
+.menu-btn:hover{background:rgba(249,115,22,0.2);transform:translateX(3px);}
+.menu-btn.used{opacity:0.4;pointer-events:none;}
+.menu-btn .arrow{margin-left:auto;font-size:10px;}
+
+.catalog-item{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:rgba(249,115,22,0.06);border:0.5px solid rgba(249,115,22,0.15);border-radius:8px;cursor:pointer;transition:all 0.2s;margin-bottom:4px;}
+.catalog-item:hover{background:rgba(249,115,22,0.14);border-color:var(--orange-border);}
+.catalog-name{font-size:12px;font-weight:500;color:var(--text);}
+.catalog-price{font-size:12px;font-weight:700;color:var(--orange);}
+
+.branch-choice{display:flex;gap:8px;margin-top:6px;}
+.branch-choice-btn{flex:1;padding:9px;background:var(--glass);border:0.5px solid var(--glass-border);color:var(--text2);border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;text-align:center;transition:all 0.2s;}
+.branch-choice-btn:hover{background:var(--slate3);color:white;}
+
+.typing-wa{display:flex;align-items:center;gap:4px;padding:9px 12px;background:var(--glass);border:0.5px solid var(--glass-border);border-radius:12px;border-bottom-left-radius:3px;width:fit-content;}
+.typing-wa span{width:5px;height:5px;background:var(--text3);border-radius:50%;animation:tdot 1.2s infinite;}
+.typing-wa span:nth-child(2){animation-delay:.2s;}
+.typing-wa span:nth-child(3){animation-delay:.4s;}
+@keyframes tdot{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-5px);}}
+
+.wa-input-row{padding:10px 12px;border-top:0.5px solid var(--glass-border);background:rgba(15,23,42,0.6);display:flex;gap:8px;align-items:center;}
+.wa-input{flex:1;background:var(--slate3);border:0.5px solid var(--glass-border);border-radius:22px;padding:9px 14px;font-size:12px;color:var(--text);outline:none;}
+.wa-input:focus{border-color:var(--orange-border);}
+.wa-input::placeholder{color:var(--text3);}
+.wa-send{width:36px;height:36px;border-radius:50%;background:var(--orange);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 0 10px var(--orange-glow);flex-shrink:0;transition:all 0.2s;}
+.wa-send:hover{background:var(--orange-dark);transform:scale(1.05);}
+
+/* ====== DASHBOARD ====== */
+.dashboard{padding:1.5rem;overflow-y:auto;display:flex;flex-direction:column;gap:1.25rem;}
+
+/* METRICS */
+.metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.metric-card{background:var(--glass);border:0.5px solid var(--glass-border);border-radius:var(--radius-lg);padding:16px;backdrop-filter:blur(10px);position:relative;overflow:hidden;}
+.metric-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:var(--radius-lg) var(--radius-lg) 0 0;}
+.metric-card.orange::before{background:linear-gradient(90deg,var(--orange),var(--orange-dark));}
+.metric-card.green::before{background:linear-gradient(90deg,var(--green),#16A34A);}
+.metric-card.amber::before{background:linear-gradient(90deg,var(--amber),#D97706);}
+.metric-card.blue::before{background:linear-gradient(90deg,var(--blue),#2563EB);}
+.metric-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px;font-weight:600;}
+.metric-value{font-size:28px;font-weight:800;color:var(--text);letter-spacing:-0.02em;line-height:1;}
+.metric-value.orange{color:var(--orange);}
+.metric-value.green{color:var(--green);}
+.metric-value.amber{color:var(--amber);}
+.metric-sub{font-size:10px;color:var(--text3);margin-top:6px;}
+.metric-sub.good{color:var(--green);}
+.metric-sub.warn{color:var(--amber);}
+.metric-icon{position:absolute;right:14px;top:14px;font-size:20px;opacity:0.4;}
+
+/* TRIAGE INBOX */
+.inbox-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.inbox-title{font-size:14px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px;}
+.inbox-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:rgba(249,115,22,0.15);color:var(--orange);border:0.5px solid var(--orange-border);}
+.view-toggle{display:flex;gap:4px;}
+.view-btn{font-size:10px;padding:4px 10px;border-radius:6px;border:0.5px solid var(--glass-border);background:transparent;color:var(--text3);cursor:pointer;transition:all 0.2s;font-weight:500;}
+.view-btn.active{background:var(--slate3);color:var(--text);}
+
+/* TRIAGE CARDS */
+.triage-grid{display:flex;flex-direction:column;gap:10px;}
+.triage-card{background:var(--glass);border:0.5px solid var(--glass-border);border-radius:var(--radius-lg);padding:14px 16px;backdrop-filter:blur(10px);position:relative;overflow:hidden;transition:all 0.3s;border-left:3px solid transparent;}
+.triage-card:hover{border-color:var(--orange-border);transform:translateX(2px);box-shadow:0 4px 20px rgba(0,0,0,0.3);}
+.triage-card.new{border-left-color:var(--orange);}
+.triage-card.urgent{border-left-color:var(--amber);animation:urgentpulse 2s infinite;}
+.triage-card.critical{border-left-color:var(--red);animation:criticalpulse 1.5s infinite;}
+.triage-card.resolved{border-left-color:var(--green);opacity:0.65;}
+.triage-card.incoming{animation:cardslide 0.5s cubic-bezier(0.34,1.56,0.64,1);}
+@keyframes cardslide{from{opacity:0;transform:translateX(40px) scale(0.95);}to{opacity:1;transform:translateX(0) scale(1);}}
+@keyframes urgentpulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,0);}50%{box-shadow:0 0 0 4px rgba(245,158,11,0.15);}}
+@keyframes criticalpulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0);}50%{box-shadow:0 0 0 5px rgba(239,68,68,0.2);}}
+
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.card-customer{display:flex;align-items:center;gap:10px;}
+.card-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--slate3),var(--slate4));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--text2);flex-shrink:0;}
+.card-name{font-size:13px;font-weight:700;}
+.card-phone{font-size:10px;color:var(--text3);margin-top:1px;}
+.card-right{text-align:right;}
+.wait-timer{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;}
+.wait-timer.fresh{background:var(--green-bg);color:var(--green);border:0.5px solid var(--green-border);}
+.wait-timer.warn{background:var(--amber-bg);color:var(--amber);border:0.5px solid var(--amber-border);}
+.wait-timer.crit{background:var(--red-bg);color:var(--red);border:0.5px solid var(--red-border);}
+.card-branch-tag{font-size:9px;color:var(--text3);margin-top:4px;}
+
+.card-item{background:rgba(249,115,22,0.07);border:0.5px solid rgba(249,115,22,0.15);border-radius:8px;padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;}
+.item-name{font-size:12px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:6px;}
+.item-name .icon{font-size:14px;}
+.item-price{font-size:13px;font-weight:800;color:var(--orange);}
+.item-branch{font-size:10px;font-weight:600;color:var(--text2);background:var(--slate3);padding:2px 8px;border-radius:6px;margin-left:8px;}
+
+.card-actions{display:flex;gap:7px;flex-wrap:wrap;}
+.action-btn{font-size:11px;font-weight:600;padding:7px 12px;border-radius:8px;border:none;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:5px;letter-spacing:0.01em;}
+.action-btn:hover{transform:translateY(-1px);}
+.action-btn.instock{background:var(--green-bg);color:var(--green);border:0.5px solid var(--green-border);}
+.action-btn.instock:hover{background:rgba(34,197,94,0.2);}
+.action-btn.outstock{background:var(--amber-bg);color:var(--amber);border:0.5px solid var(--amber-border);}
+.action-btn.outstock:hover{background:rgba(245,158,11,0.2);}
+.action-btn.request{background:var(--blue-bg);color:var(--blue);border:0.5px solid var(--blue-border);}
+.action-btn.request:hover{background:rgba(59,130,246,0.2);}
+.action-btn.resolved-state{background:var(--green);color:white;cursor:default;transform:none;}
+
+/* DEMO CONTROLS BAR */
+.demo-bar{background:rgba(249,115,22,0.05);border:0.5px solid var(--orange-border);border-radius:var(--radius-lg);padding:14px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.demo-bar-label{font-size:10px;color:var(--orange);text-transform:uppercase;letter-spacing:0.07em;font-weight:700;flex-shrink:0;}
+.demo-btn{font-size:11px;font-weight:600;padding:8px 14px;border-radius:8px;border:0.5px solid var(--glass-border);background:var(--glass);color:var(--text2);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px;}
+.demo-btn:hover{background:var(--slate3);color:var(--text);}
+.demo-btn.orange-demo{border-color:var(--orange-border);color:var(--orange);background:rgba(249,115,22,0.08);}
+.demo-btn.orange-demo:hover{background:rgba(249,115,22,0.16);}
+
+/* SECTION DIVIDER */
+.section-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;font-weight:600;display:flex;align-items:center;gap:8px;}
+.section-label::after{content:'';flex:1;height:0.5px;background:var(--glass-border);}
+
+/* RESOLVED TAG */
+.resolved-tag{font-size:10px;color:var(--green);background:var(--green-bg);border:0.5px solid var(--green-border);padding:2px 8px;border-radius:10px;font-weight:600;display:inline-flex;align-items:center;gap:4px;}
+
+@media(max-width:900px){
+  .main{grid-template-columns:1fr;}
+  .wa-panel{height:auto;position:static;}
+  .metrics-row{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-logo">G</div>
+    <div>
+      <div class="brand-text"><span>Demo Parts</span> Triage</div>
+      <div class="brand-sub">Instant Catalog & Auto-Response System</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="live-badge"><div class="live-dot"></div>System Live</div>
+    <div class="branch-toggle">
+      <button class="branch-btn active" onclick="filterBranch('all',this)">All Branches</button>
+      <button class="branch-btn" onclick="filterBranch('ruiru',this)">Ruiru</button>
+      <button class="branch-btn" onclick="filterBranch('machakos',this)">Machakos</button>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- WHATSAPP SIMULATOR -->
+  <div class="wa-panel">
+    <div class="wa-header">
+      <div class="wa-avatar">G</div>
+      <div class="wa-contact">
+        <div class="wa-name">Demo Parts Ltd</div>
+        <div class="wa-status">● Auto-responder active</div>
+      </div>
+      <div class="wa-badge">BOT ACTIVE</div>
+    </div>
+
+    <div class="wa-bg" id="wa-messages">
+      <div class="wa-msg system-wa">
+        <div class="wa-bubble">⚡ Demo Parts Bot is online — respond instantly, 24/7</div>
+      </div>
+    </div>
+
+    <div class="wa-input-row">
+      <input class="wa-input" id="wa-input" placeholder='Type "Hello" to start or use Demo buttons...' onkeydown="if(event.key==='Enter')sendWA()"/>
+      <button class="wa-send" onclick="sendWA()">↑</button>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="dashboard">
+
+    <!-- METRICS -->
+    <div class="metrics-row">
+      <div class="metric-card orange">
+        <div class="metric-icon">📥</div>
+        <div class="metric-label">Active Inquiries</div>
+        <div class="metric-value orange" id="m-active">6</div>
+        <div class="metric-sub warn">↑ 3 new today</div>
+      </div>
+      <div class="metric-card green">
+        <div class="metric-icon">⚡</div>
+        <div class="metric-label">Avg Response Time</div>
+        <div class="metric-value green" id="m-response">0:47</div>
+        <div class="metric-sub good">✓ Under 3 min target</div>
+      </div>
+      <div class="metric-card amber">
+        <div class="metric-icon">📍</div>
+        <div class="metric-label">Leads → Ruiru</div>
+        <div class="metric-value" id="m-ruiru">4</div>
+        <div class="metric-sub">Ruiru branch</div>
+      </div>
+      <div class="metric-card blue">
+        <div class="metric-icon">📍</div>
+        <div class="metric-label">Leads → Machakos</div>
+        <div class="metric-value" id="m-machakos">2</div>
+        <div class="metric-sub">Machakos branch</div>
+      </div>
+    </div>
+
+    <!-- DEMO CONTROLS -->
+    <div class="demo-bar">
+      <div class="demo-bar-label">⚡ Live Demo</div>
+      <button class="demo-btn orange-demo" onclick="fullSimulation()">🎬 Run Full Demo</button>
+      <button class="demo-btn orange-demo" onclick="spawnLead()">👤 Simulate Customer</button>
+      <button class="demo-btn" onclick="resetAll()">↺ Reset</button>
+    </div>
+
+    <!-- TRIAGE INBOX -->
+    <div>
+      <div class="inbox-header">
+        <div class="inbox-title">
+          Triage Inbox
+          <span class="inbox-badge" id="inbox-count">6 active</span>
+        </div>
+        <div class="section-label"></div>
+      </div>
+      <div class="triage-grid" id="triage-grid"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ===== STATE =====
+let branchFilter = 'all';
+let botState = 'idle'; // idle, greeted, category, sub, item, branch
+let pendingItem = null;
+let pendingCategory = null;
+let demoRunning = false;
+
+const CATALOG = {
+  power: {
+    label: 'Power Tools & Machinery',
+    icon: '🔧',
+    items: [
+      { name: 'Total Angle Grinder 9"', price: 'KES 8,500', icon: '⚙️' },
+      { name: 'Makita Drill Machine', price: 'KES 12,000', icon: '🔩' },
+      { name: 'Total Generator 3.5KVA', price: 'KES 45,000', icon: '⚡' },
+      { name: 'Circular Saw 7"', price: 'KES 9,800', icon: '🔧' },
+      { name: 'Welding Machine 200A', price: 'KES 18,500', icon: '🛠️' },
+    ]
+  },
+  tuktuk: {
+    label: 'TukTuk Spare Parts',
+    icon: '🛺',
+    sub: { piaggio: 'Piaggio', tvs: 'TVS' },
+    piaggio: [
+      { name: 'Piaggio Carburetor', price: 'KES 4,500', icon: '⚙️' },
+      { name: 'Piaggio Brake Shoes (pair)', price: 'KES 1,200', icon: '🔩' },
+      { name: 'Piaggio Engine Oil Seal', price: 'KES 850', icon: '🛠️' },
+      { name: 'Piaggio Clutch Plate', price: 'KES 3,200', icon: '⚙️' },
+      { name: 'Piaggio Air Filter', price: 'KES 950', icon: '🔧' },
+    ],
+    tvs: [
+      { name: 'TVS King Carburetor', price: 'KES 3,800', icon: '⚙️' },
+      { name: 'TVS Brake Shoes (pair)', price: 'KES 1,000', icon: '🔩' },
+      { name: 'TVS Drive Belt', price: 'KES 2,200', icon: '🛠️' },
+      { name: 'TVS Rear Shock Absorber', price: 'KES 4,500', icon: '⚙️' },
+      { name: 'TVS Spark Plug', price: 'KES 650', icon: '🔧' },
+    ]
+  },
+  pumps: {
+    label: 'Water Pumps',
+    icon: '💧',
+    items: [
+      { name: 'Grundfos Submersible 0.5HP', price: 'KES 22,000', icon: '💧' },
+      { name: 'Surface Pump 1HP', price: 'KES 15,500', icon: '⚙️' },
+      { name: 'Solar Pump 3" DC', price: 'KES 38,000', icon: '☀️' },
+      { name: 'Water Pump Impeller Kit', price: 'KES 3,200', icon: '🔧' },
+      { name: 'Float Switch for Tank', price: 'KES 1,800', icon: '🛠️' },
+    ]
+  }
+};
+
+const SEED_LEADS = [
+  { id: 1, name: 'Kamau M.', phone: '+254 712 001 234', item: 'TVS Brake Shoes', category: 'TukTuk Parts', price: 'KES 1,000', branch: 'machakos', ts: Date.now() - 7*60000, status: 'critical' },
+  { id: 2, name: 'Onyango J.', phone: '+254 723 456 789', item: 'Total Generator 3.5KVA', category: 'Power Tools', price: 'KES 45,000', branch: 'ruiru', ts: Date.now() - 4*60000, status: 'urgent' },
+  { id: 3, name: 'Wanjiku P.', phone: '+254 734 567 890', item: 'Piaggio Carburetor', category: 'TukTuk Parts', price: 'KES 4,500', branch: 'ruiru', ts: Date.now() - 2*60000, status: 'new' },
+  { id: 4, name: 'Maina D.', phone: '+254 745 678 901', item: 'Grundfos Submersible 0.5HP', category: 'Water Pumps', price: 'KES 22,000', branch: 'ruiru', ts: Date.now() - 9*60000, status: 'critical' },
+  { id: 5, name: 'Achieng R.', phone: '+254 756 789 012', item: 'Makita Drill Machine', category: 'Power Tools', price: 'KES 12,000', branch: 'machakos', ts: Date.now() - 1*60000, status: 'new' },
+  { id: 6, name: 'Kipchoge S.', phone: '+254 767 890 123', item: 'TVS Drive Belt', category: 'TukTuk Parts', price: 'KES 2,200', branch: 'ruiru', ts: Date.now() - 6*60000, status: 'urgent' },
+];
+
+let leads = JSON.parse(localStorage.getItem('gremond_leads') || JSON.stringify(SEED_LEADS));
+let leadCounter = leads.length + 10;
+
+// ===== TIMER =====
+function formatWait(ts) {
+  const m = Math.floor((Date.now() - ts) / 60000);
+  const s = Math.floor(((Date.now() - ts) % 60000) / 1000);
+  if (m >= 60) return `${Math.floor(m/60)}h ${m%60}m`;
+  return m > 0 ? `${m}m ${s}s` : `${s}s`;
+}
+function waitClass(ts, status) {
+  if (status === 'resolved') return 'fresh';
+  const m = (Date.now() - ts) / 60000;
+  if (m >= 5) return 'crit';
+  if (m >= 3) return 'warn';
+  return 'fresh';
+}
+function cardStatus(ts) {
+  const m = (Date.now() - ts) / 60000;
+  if (m >= 5) return 'critical';
+  if (m >= 3) return 'urgent';
+  return 'new';
+}
+
+// ===== RENDER =====
+function render() {
+  const grid = document.getElementById('triage-grid');
+  const filtered = branchFilter === 'all' ? leads : leads.filter(l => l.branch === branchFilter);
+  const active = leads.filter(l => l.status !== 'resolved');
+
+  // Update metrics
+  const ruiru = leads.filter(l => l.branch === 'ruiru').length;
+  const mach = leads.filter(l => l.branch === 'machakos').length;
+  document.getElementById('m-active').textContent = active.length;
+  document.getElementById('m-ruiru').textContent = ruiru;
+  document.getElementById('m-machakos').textContent = mach;
+  document.getElementById('inbox-count').textContent = `${filtered.filter(l=>l.status!=='resolved').length} active`;
+
+  if (!filtered.length) { grid.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text3);font-size:13px;">No leads for this branch yet.</div>'; return; }
+
+  grid.innerHTML = filtered.map(lead => {
+    const currentStatus = lead.status === 'resolved' ? 'resolved' : cardStatus(lead.ts);
+    const wc = waitClass(lead.ts, lead.status);
+    const initials = lead.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
+    const branchLabel = lead.branch === 'ruiru' ? '📍 Ruiru' : '📍 Machakos';
+
+    return `<div class="triage-card ${currentStatus}" id="card-${lead.id}">
+      <div class="card-top">
+        <div class="card-customer">
+          <div class="card-avatar">${initials}</div>
+          <div>
+            <div class="card-name">${lead.name}</div>
+            <div class="card-phone">${lead.phone}</div>
+          </div>
+        </div>
+        <div class="card-right">
+          ${lead.status === 'resolved'
+            ? `<span class="resolved-tag">✓ Resolved</span>`
+            : `<span class="wait-timer ${wc}" id="timer-${lead.id}">${formatWait(lead.ts)}</span>`}
+          <div class="card-branch-tag">${branchLabel}</div>
+        </div>
+      </div>
+      <div class="card-item">
+        <div class="item-name"><span class="icon">🔩</span>${lead.item}<span class="item-branch">${lead.category}</span></div>
+        <div class="item-price">${lead.price}</div>
+      </div>
+      ${lead.status === 'resolved'
+        ? `<div style="font-size:11px;color:var(--green);">✓ ${lead.resolvedMsg || 'Customer notified'}</div>`
+        : `<div class="card-actions">
+          <button class="action-btn instock" onclick="resolveCard(${lead.id},'In stock — come pick up 📦')">✓ In Stock</button>
+          <button class="action-btn outstock" onclick="resolveCard(${lead.id},'Out of stock — arriving tomorrow 🚚')">⏰ Tomorrow</button>
+          <button class="action-btn request" onclick="resolveCard(${lead.id},'Request confirmed — checking now 🔍')">📷 Request Photo</button>
+        </div>`}
+    </div>`;
+  }).join('');
+
+  saveleads();
+}
+
+function resolveCard(id, msg) {
+  const lead = leads.find(l => l.id === id);
+  if (!lead || lead.status === 'resolved') return;
+  lead.status = 'resolved';
+  lead.resolvedMsg = msg;
+  addWASystemMsg(`✅ Staff replied to ${lead.name}: "${msg}"`);
+  render();
+}
+
+function saveleads() { localStorage.setItem('gremond_leads', JSON.stringify(leads)); }
+
+function filterBranch(branch, el) {
+  branchFilter = branch;
+  document.querySelectorAll('.branch-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+// ===== TIMERS =====
+setInterval(() => {
+  leads.forEach(lead => {
+    if (lead.status !== 'resolved') {
+      const el = document.getElementById(`timer-${lead.id}`);
+      if (el) {
+        el.textContent = formatWait(lead.ts);
+        el.className = `wait-timer ${waitClass(lead.ts, lead.status)}`;
+        // Update card urgency class
+        const card = document.getElementById(`card-${lead.id}`);
+        if (card) {
+          card.className = `triage-card ${cardStatus(lead.ts)}`;
+        }
+      }
+    }
+  });
+}, 1000);
+
+// ===== WHATSAPP BOT =====
+function time() { return new Date().toLocaleTimeString('en-KE', { hour: '2-digit', minute: '2-digit' }); }
+
+function addWAMsg(type, text, extras = '') {
+  const c = document.getElementById('wa-messages');
+  const d = document.createElement('div');
+  d.className = `wa-msg ${type}`;
+  d.innerHTML = `<div class="wa-bubble">${text}</div><div class="wa-time">${time()}</div>${extras}`;
+  c.appendChild(d);
+  c.scrollTop = c.scrollHeight;
+}
+
+function addWASystemMsg(text) {
+  const c = document.getElementById('wa-messages');
+  const d = document.createElement('div');
+  d.className = 'wa-msg system-wa';
+  d.innerHTML = `<div class="wa-bubble">${text}</div>`;
+  c.appendChild(d);
+  c.scrollTop = c.scrollHeight;
+}
+
+function showWATyping(cb, delay = 900) {
+  const c = document.getElementById('wa-messages');
+  const t = document.createElement('div');
+  t.className = 'wa-msg bot';
+  t.id = 'wa-typing';
+  t.innerHTML = `<div class="typing-wa"><span></span><span></span><span></span></div>`;
+  c.appendChild(t);
+  c.scrollTop = c.scrollHeight;
+  setTimeout(() => { const e = document.getElementById('wa-typing'); if (e) e.remove(); cb(); }, delay);
+}
+
+function addMenuOptions(options) {
+  const c = document.getElementById('wa-messages');
+  const d = document.createElement('div');
+  d.className = 'wa-msg bot';
+  d.id = 'wa-menu';
+  const btns = options.map((o, i) =>
+    `<button class="menu-btn" onclick="handleMenu('${o.key}')" id="mbtn-${o.key}">
+      <span>${o.icon}</span> ${o.label} <span class="arrow">→</span>
+    </button>`
+  ).join('');
+  d.innerHTML = `<div class="menu-options">${btns}</div>`;
+  c.appendChild(d);
+  c.scrollTop = c.scrollHeight;
+}
+
+function addCatalogList(items, onSelect) {
+  const c = document.getElementById('wa-messages');
+  const d = document.createElement('div');
+  d.className = 'wa-msg bot';
+  const list = items.map((item, i) =>
+    `<div class="catalog-item" onclick="selectItem('${encodeURIComponent(JSON.stringify(item))}')" id="citem-${i}">
+      <div class="catalog-name">${item.icon} ${item.name}</div>
+      <div class="catalog-price">${item.price}</div>
+    </div>`
+  ).join('');
+  d.innerHTML = `<div style="width:100%">${list}</div>`;
+  c.appendChild(d);
+  c.scrollTop = c.scrollHeight;
+}
+
+function addBranchChoice() {
+  const c = document.getElementById('wa-messages');
+  const d = document.createElement('div');
+  d.className = 'wa-msg bot';
+  d.innerHTML = `<div class="wa-bubble">Where will you pick this up?
+    <div class="branch-choice">
+      <button class="branch-choice-btn" onclick="selectBranch('ruiru')">📍 Ruiru</button>
+      <button class="branch-choice-btn" onclick="selectBranch('machakos')">📍 Machakos</button>
+    </div>
+  </div>`;
+  c.appendChild(d);
+  c.scrollTop = c.scrollHeight;
+}
+
+function sendWA() {
+  const input = document.getElementById('wa-input');
+  const text = input.value.trim();
+  if (!text) return;
+  addWAMsg('customer', text);
+  input.value = '';
+  processBot(text.toLowerCase());
+}
+
+function processBot(text) {
+  if (botState === 'idle' || text.includes('hello') || text.includes('hi') || text === 'helo' || text === 'hey') {
+    botState = 'greeted';
+    showWATyping(() => {
+      addWAMsg('bot', `👋 <strong>Welcome to Demo Parts!</strong><br>Hardware, Machinery & TukTuk Spares.<br><br>What are you looking for?`);
+      addMenuOptions([
+        { key: 'power', icon: '🔧', label: '1. Power Tools & Machinery' },
+        { key: 'tuktuk', icon: '🛺', label: '2. TukTuk Spare Parts' },
+        { key: 'pumps', icon: '💧', label: '3. Water Pumps' },
+        { key: 'human', icon: '🧑', label: '4. Speak to a Human' },
+      ]);
+    }, 700);
+  } else {
+    showWATyping(() => {
+      addWAMsg('bot', `Please reply with a number (1-4) or type <strong>Hello</strong> to start.`);
+    }, 500);
+  }
+}
+
+function handleMenu(key) {
+  document.querySelectorAll('.menu-btn').forEach(b => b.classList.add('used'));
+  botState = key;
+
+  if (key === 'human') {
+    addWAMsg('customer', '4. Speak to a Human');
+    showWATyping(() => {
+      addWAMsg('bot', '👷 Connecting you to our team now. Someone will respond within 3 minutes. In the meantime, our branches:<br><br>📍 <strong>Ruiru:</strong> 0712 000 001<br>📍 <strong>Machakos:</strong> 0712 000 002');
+      addWASystemMsg('🔔 Handoff requested — staff notified');
+    }, 800);
+    return;
+  }
+
+  const cat = CATALOG[key];
+  addWAMsg('customer', `${cat.icon} ${cat.label}`);
+
+  if (key === 'tuktuk') {
+    pendingCategory = key;
+    showWATyping(() => {
+      addWAMsg('bot', '🛺 TukTuk spares — which brand?');
+      addMenuOptions([
+        { key: 'piaggio', icon: '🔵', label: 'Piaggio' },
+        { key: 'tvs', icon: '🟠', label: 'TVS King' },
+      ]);
+    }, 700);
+  } else {
+    pendingCategory = key;
+    showWATyping(() => {
+      addWAMsg('bot', `Here are our top ${cat.label}. Tap to select:`);
+      addCatalogList(cat.items);
+    }, 800);
+  }
+}
+
+// Override handleMenu for piaggio/tvs sub
+const origHandleMenu = window.handleMenu;
+window.handleMenu = function(key) {
+  if (key === 'piaggio' || key === 'tvs') {
+    document.querySelectorAll('.menu-btn').forEach(b => b.classList.add('used'));
+    addWAMsg('customer', key === 'piaggio' ? '🔵 Piaggio' : '🟠 TVS King');
+    showWATyping(() => {
+      addWAMsg('bot', `Here are top ${key === 'piaggio' ? 'Piaggio' : 'TVS King'} spares:`);
+      addCatalogList(CATALOG.tuktuk[key]);
+    }, 700);
+  } else {
+    origHandleMenu(key);
+  }
+};
+
+function selectItem(itemJson) {
+  const item = JSON.parse(decodeURIComponent(itemJson));
+  pendingItem = item;
+  document.querySelectorAll('.catalog-item').forEach(c => c.style.opacity = '0.4');
+  addWAMsg('customer', `${item.icon} ${item.name}`);
+  addWASystemMsg(`📦 Customer selected: ${item.name} (${item.price})`);
+  showWATyping(() => {
+    addWAMsg('bot', `Great choice! <strong>${item.name}</strong> — <span style="color:var(--orange);font-weight:700;">${item.price}</span><br><br>Will you pick this up in Ruiru or Machakos?`);
+    addBranchChoice();
+  }, 800);
+}
+
+function selectBranch(branch) {
+  document.querySelectorAll('.branch-choice-btn').forEach(b => b.style.opacity = '0.4');
+  const branchLabel = branch === 'ruiru' ? 'Ruiru' : 'Machakos';
+  addWAMsg('customer', `📍 ${branchLabel}`);
+
+  showWATyping(() => {
+    addWAMsg('bot', `✅ Perfect. Let me check the shelf at <strong>${branchLabel}</strong>.<br>Transferring you to the <strong>${branchLabel} store manager</strong> now...<br><br>⏱ <em>Usually responds in under 2 minutes.</em>`);
+    addWASystemMsg(`⚡ Lead created → routed to ${branchLabel} branch`);
+
+    // Spawn dashboard card
+    setTimeout(() => spawnLeadFromWA(branch), 400);
+    botState = 'done';
+  }, 900);
+}
+
+function spawnLeadFromWA(branch) {
+  const names = ['Njoro K.', 'Hassan M.', 'Wendo A.', 'Omondi B.', 'Karimi T.'];
+  const phones = ['+254 711 555 001', '+254 722 666 002', '+254 733 777 003'];
+  const lead = {
+    id: ++leadCounter,
+    name: names[Math.floor(Math.random() * names.length)],
+    phone: phones[Math.floor(Math.random() * phones.length)],
+    item: pendingItem ? pendingItem.name : 'Custom inquiry',
+    category: pendingCategory ? CATALOG[pendingCategory]?.label || 'General' : 'General',
+    price: pendingItem ? pendingItem.price : 'TBD',
+    branch,
+    ts: Date.now(),
+    status: 'new'
+  };
+  leads.unshift(lead);
+  branchFilter = 'all';
+  document.querySelectorAll('.branch-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.branch-btn')[0].classList.add('active');
+  render();
+  pendingItem = null;
+  pendingCategory = null;
+}
+
+function spawnLead() {
+  const items = ['Piaggio Carburetor KES 4,500', 'TVS Brake Shoes KES 1,000', 'Angle Grinder KES 8,500', 'Water Pump 1HP KES 15,500', 'Total Generator KES 45,000'];
+  const names = ['Mutua J.', 'Adhiambo C.', 'Gitonga R.', 'Waweru E.', 'Ouma P.', 'Ndungu M.'];
+  const phones = ['+254 711 999 001', '+254 722 888 002', '+254 733 777 003', '+254 744 666 004'];
+  const branches = ['ruiru', 'machakos'];
+  const cats = ['TukTuk Parts', 'Power Tools', 'Water Pumps'];
+  const prices = ['KES 1,000', 'KES 4,500', 'KES 8,500', 'KES 15,500', 'KES 45,000'];
+  const branch = branches[Math.floor(Math.random() * 2)];
+  const itemFull = items[Math.floor(Math.random() * items.length)].split(' KES ');
+  const lead = {
+    id: ++leadCounter,
+    name: names[Math.floor(Math.random() * names.length)],
+    phone: phones[Math.floor(Math.random() * phones.length)],
+    item: itemFull[0],
+    category: cats[Math.floor(Math.random() * cats.length)],
+    price: 'KES ' + (itemFull[1] || '4,500'),
+    branch,
+    ts: Date.now(),
+    status: 'new'
+  };
+  leads.unshift(lead);
+  addWASystemMsg(`⚡ New customer inquiry routed to ${branch === 'ruiru' ? 'Ruiru' : 'Machakos'} — ${lead.name}`);
+  render();
+}
+
+// ===== FULL DEMO SIMULATION =====
+function fullSimulation() {
+  if (demoRunning) return;
+  demoRunning = true;
+  botState = 'idle';
+  pendingItem = null;
+  pendingCategory = null;
+  const msgs = document.getElementById('wa-messages');
+  msgs.innerHTML = '<div class="wa-msg system-wa"><div class="wa-bubble">⚡ Demo starting — watch the dashboard respond in real-time</div></div>';
+
+  const steps = [
+    () => { addWAMsg('customer', 'Hello'); processBot('hello'); },
+    () => { handleMenu('tuktuk'); },
+    () => { window.handleMenu('tvs'); },
+    () => { const item = CATALOG.tuktuk.tvs[0]; selectItem(encodeURIComponent(JSON.stringify(item))); },
+    () => { selectBranch('ruiru'); demoRunning = false; }
+  ];
+  const delays = [300, 2500, 4500, 7000, 10000];
+  steps.forEach((fn, i) => setTimeout(fn, delays[i]));
+}
+
+function resetAll() {
+  leads = JSON.parse(JSON.stringify(SEED_LEADS)).map(l => ({ ...l, ts: Date.now() - Math.random() * 8 * 60000 }));
+  leadCounter = leads.length + 10;
+  botState = 'idle';
+  pendingItem = null;
+  pendingCategory = null;
+  demoRunning = false;
+  const msgs = document.getElementById('wa-messages');
+  msgs.innerHTML = '<div class="wa-msg system-wa"><div class="wa-bubble">⚡ Demo Parts Bot is online — respond instantly, 24/7</div></div>';
+  branchFilter = 'all';
+  document.querySelectorAll('.branch-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.branch-btn')[0].classList.add('active');
+  render();
+}
+
+// Init
+render();
+</script>
+<div id="gs-proto-banner" style="position:fixed;left:0;right:0;bottom:0;z-index:2147483647;background:#1a1030;color:#fff;font:13px/1.4 system-ui,sans-serif;padding:7px 12px;text-align:center;opacity:.94">Working prototype by <b>Emmanuel Muteti</b> &middot; names and numbers are demo data &middot; <a href="../../work/" style="color:#c9a7ff">See all work</a> &middot; <a href="https://wa.me/254740562812" style="color:#7dffb0">WhatsApp</a></div>
+</body>
+</html>

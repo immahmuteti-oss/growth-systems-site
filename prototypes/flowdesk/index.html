@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlowDesk — Client Automation Engine</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --surface2: #1c1c26;
+    --surface3: #252533;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --accent: #7c6af7;
+    --accent2: #a78bfa;
+    --accent-glow: rgba(124,106,247,0.25);
+    --green: #22d3a0;
+    --green-bg: rgba(34,211,160,0.1);
+    --amber: #f59e0b;
+    --amber-bg: rgba(245,158,11,0.1);
+    --red: #f87171;
+    --red-bg: rgba(248,113,113,0.1);
+    --blue: #60a5fa;
+    --blue-bg: rgba(96,165,250,0.1);
+    --text: #e8e8f0;
+    --text2: #8b8ba0;
+    --text3: #5a5a72;
+    --radius: 14px;
+    --radius-sm: 8px;
+    --font-head: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { height:100%; background:var(--bg); color:var(--text); font-family:var(--font-body); font-size:14px; overflow:hidden; }
+
+  /* LAYOUT */
+  .app { display:grid; grid-template-columns:220px 1fr 300px; grid-template-rows:56px 1fr; height:100vh; }
+
+  /* TOPBAR */
+  .topbar {
+    grid-column: 1/-1;
+    background:var(--surface);
+    border-bottom:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 20px;
+    z-index:10;
+  }
+  .logo { font-family:var(--font-head); font-size:17px; font-weight:800; letter-spacing:-0.5px; display:flex; align-items:center; gap:8px; }
+  .logo-dot { width:8px; height:8px; border-radius:50%; background:var(--accent); box-shadow:0 0 12px var(--accent); }
+  .topbar-center { display:flex; align-items:center; gap:8px; }
+  .status-pill { display:flex; align-items:center; gap:6px; background:var(--green-bg); border:1px solid rgba(34,211,160,0.2); color:var(--green); font-size:11px; font-weight:500; padding:4px 10px; border-radius:20px; }
+  .status-dot { width:6px; height:6px; border-radius:50%; background:var(--green); animation:pulse-green 2s infinite; }
+  @keyframes pulse-green { 0%,100%{box-shadow:0 0 0 0 rgba(34,211,160,0.4)} 50%{box-shadow:0 0 0 6px rgba(34,211,160,0)} }
+  .topbar-actions { display:flex; gap:8px; align-items:center; }
+
+  /* BUTTONS */
+  .btn { font-family:var(--font-body); font-size:12px; font-weight:500; border:none; cursor:pointer; border-radius:var(--radius-sm); padding:7px 14px; transition:all .2s; display:inline-flex; align-items:center; gap:6px; }
+  .btn-primary { background:var(--accent); color:#fff; box-shadow:0 0 20px var(--accent-glow); }
+  .btn-primary:hover { background:#8b7af8; box-shadow:0 0 30px var(--accent-glow); transform:translateY(-1px); }
+  .btn-secondary { background:var(--surface3); color:var(--text); border:1px solid var(--border2); }
+  .btn-secondary:hover { background:var(--surface2); border-color:rgba(255,255,255,0.2); transform:translateY(-1px); }
+  .btn-ghost { background:transparent; color:var(--text2); border:1px solid var(--border); }
+  .btn-ghost:hover { background:var(--surface3); color:var(--text); }
+  .btn-green { background:var(--green-bg); color:var(--green); border:1px solid rgba(34,211,160,0.25); }
+  .btn-green:hover { background:rgba(34,211,160,0.2); transform:translateY(-1px); }
+  .btn:active { transform:scale(0.97) !important; }
+  .btn:disabled { opacity:0.4; cursor:not-allowed; transform:none !important; }
+
+  /* SIDEBAR */
+  .sidebar {
+    background:var(--surface);
+    border-right:1px solid var(--border);
+    padding:16px 12px;
+    display:flex; flex-direction:column; gap:4px;
+    overflow-y:auto;
+  }
+  .sidebar-label { font-size:10px; font-weight:600; letter-spacing:0.1em; color:var(--text3); text-transform:uppercase; padding:8px 8px 6px; }
+  .nav-item { display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:var(--radius-sm); cursor:pointer; transition:all .15s; color:var(--text2); font-size:13px; }
+  .nav-item:hover { background:var(--surface2); color:var(--text); }
+  .nav-item.active { background:var(--accent-glow); color:var(--accent2); border:1px solid rgba(124,106,247,0.2); }
+  .nav-icon { font-size:14px; width:18px; text-align:center; }
+  .nav-badge { margin-left:auto; background:var(--accent); color:#fff; font-size:10px; font-weight:600; padding:2px 6px; border-radius:10px; min-width:18px; text-align:center; }
+  .nav-badge.amber { background:var(--amber); }
+  .sidebar-divider { height:1px; background:var(--border); margin:8px 0; }
+
+  /* MAIN CHAT AREA */
+  .main {
+    background:var(--bg);
+    display:flex; flex-direction:column;
+    overflow:hidden;
+    position:relative;
+  }
+  .chat-header {
+    background:var(--surface);
+    border-bottom:1px solid var(--border);
+    padding:12px 20px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .chat-title { font-family:var(--font-head); font-size:14px; font-weight:600; display:flex; align-items:center; gap:8px; }
+  .chat-subtitle { font-size:11px; color:var(--text3); margin-top:1px; }
+  .chat-controls { display:flex; gap:8px; }
+  .chat-messages {
+    flex:1; overflow-y:auto; padding:20px;
+    display:flex; flex-direction:column; gap:12px;
+    scroll-behavior:smooth;
+  }
+  .chat-messages::-webkit-scrollbar { width:4px; }
+  .chat-messages::-webkit-scrollbar-track { background:transparent; }
+  .chat-messages::-webkit-scrollbar-thumb { background:var(--surface3); border-radius:4px; }
+
+  /* MESSAGES */
+  .msg-row { display:flex; gap:10px; max-width:85%; animation:fadeSlideUp .3s ease; }
+  .msg-row.inbound { align-self:flex-start; }
+  .msg-row.outbound { align-self:flex-end; flex-direction:row-reverse; }
+  @keyframes fadeSlideUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .msg-avatar {
+    width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:12px; font-weight:700; flex-shrink:0; margin-top:2px;
+  }
+  .msg-avatar.client { background:linear-gradient(135deg,#667eea,#764ba2); color:#fff; }
+  .msg-avatar.bot { background:linear-gradient(135deg,var(--accent),#a78bfa); color:#fff; font-size:10px; }
+  .msg-bubble {
+    padding:10px 14px; border-radius:14px; font-size:13px; line-height:1.5;
+    max-width:100%; word-break:break-word;
+  }
+  .msg-row.inbound .msg-bubble { background:var(--surface2); border:1px solid var(--border); color:var(--text); border-bottom-left-radius:4px; }
+  .msg-row.outbound .msg-bubble { background:linear-gradient(135deg,#6d60e8,#7c6af7); color:#fff; border-bottom-right-radius:4px; box-shadow:0 4px 20px rgba(124,106,247,0.3); }
+  .msg-meta { font-size:10px; color:var(--text3); margin-top:4px; padding:0 4px; }
+  .msg-row.outbound .msg-meta { text-align:right; }
+  .msg-row.outbound .msg-meta .read { color:var(--accent2); }
+  .typing-indicator { display:flex; gap:4px; align-items:center; padding:12px 14px; background:var(--surface2); border:1px solid var(--border); border-radius:14px; border-bottom-left-radius:4px; width:fit-content; }
+  .typing-dot { width:6px; height:6px; border-radius:50%; background:var(--text3); animation:typingBounce 1.2s infinite; }
+  .typing-dot:nth-child(2) { animation-delay:.2s; }
+  .typing-dot:nth-child(3) { animation-delay:.4s; }
+  @keyframes typingBounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
+  .system-msg { text-align:center; font-size:11px; color:var(--text3); padding:4px 0; }
+  .question-msg { display:flex; flex-direction:column; gap:8px; }
+  .question-field { display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:var(--radius-sm); padding:8px 12px; }
+  .question-label { font-size:11px; color:var(--text3); min-width:60px; }
+  .question-input { flex:1; background:transparent; border:none; outline:none; color:var(--text); font-family:var(--font-body); font-size:13px; }
+  .chat-input-area {
+    background:var(--surface);
+    border-top:1px solid var(--border);
+    padding:12px 20px;
+    display:flex; gap:10px; align-items:center;
+  }
+  .chat-input {
+    flex:1; background:var(--surface2); border:1px solid var(--border); color:var(--text);
+    font-family:var(--font-body); font-size:13px; padding:10px 14px; border-radius:20px;
+    outline:none; transition:border-color .2s;
+  }
+  .chat-input:focus { border-color:var(--accent); }
+  .send-btn { width:36px; height:36px; border-radius:50%; background:var(--accent); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#fff; transition:all .2s; flex-shrink:0; }
+  .send-btn:hover { transform:scale(1.1); box-shadow:0 0 16px var(--accent-glow); }
+
+  /* RIGHT PANEL */
+  .panel {
+    background:var(--surface);
+    border-left:1px solid var(--border);
+    display:flex; flex-direction:column;
+    overflow:hidden;
+  }
+  .panel-header {
+    padding:14px 16px;
+    border-bottom:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .panel-title { font-family:var(--font-head); font-size:13px; font-weight:700; letter-spacing:-0.3px; }
+  .panel-tabs { display:flex; gap:2px; background:var(--surface2); padding:3px; border-radius:var(--radius-sm); }
+  .panel-tab { font-size:11px; font-weight:500; padding:5px 10px; border-radius:5px; cursor:pointer; color:var(--text2); transition:all .15s; }
+  .panel-tab.active { background:var(--surface3); color:var(--text); }
+  .panel-body { flex:1; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:8px; }
+  .panel-body::-webkit-scrollbar { width:3px; }
+  .panel-body::-webkit-scrollbar-thumb { background:var(--surface3); }
+
+  /* LEAD CARDS */
+  .lead-card {
+    background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius);
+    padding:12px; transition:all .2s; cursor:pointer; animation:fadeSlideUp .4s ease;
+  }
+  .lead-card:hover { border-color:var(--border2); background:var(--surface3); }
+  .lead-card.new { border-left:3px solid var(--accent); }
+  .lead-card.followup { border-left:3px solid var(--amber); }
+  .lead-card.done { border-left:3px solid var(--green); opacity:0.7; }
+  .lead-card-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+  .lead-name { font-family:var(--font-head); font-size:13px; font-weight:700; }
+  .lead-badge { font-size:10px; font-weight:600; padding:3px 8px; border-radius:10px; }
+  .badge-new { background:var(--accent-glow); color:var(--accent2); border:1px solid rgba(124,106,247,0.3); }
+  .badge-followup { background:var(--amber-bg); color:var(--amber); border:1px solid rgba(245,158,11,0.3); }
+  .badge-done { background:var(--green-bg); color:var(--green); border:1px solid rgba(34,211,160,0.3); }
+  .badge-hot { background:var(--red-bg); color:var(--red); border:1px solid rgba(248,113,113,0.3); }
+  .lead-info { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:8px; }
+  .lead-info-item { display:flex; flex-direction:column; gap:2px; }
+  .lead-info-label { font-size:9px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text3); font-weight:600; }
+  .lead-info-val { font-size:12px; color:var(--text2); }
+  .lead-actions { display:flex; gap:6px; }
+  .lead-actions .btn { font-size:10px; padding:5px 8px; flex:1; justify-content:center; }
+
+  /* NOTIFICATION TOAST */
+  .toast-container { position:fixed; top:70px; right:20px; z-index:100; display:flex; flex-direction:column; gap:8px; pointer-events:none; }
+  .toast {
+    background:var(--surface2); border:1px solid var(--border2);
+    border-radius:var(--radius); padding:12px 14px; min-width:260px; max-width:300px;
+    display:flex; align-items:flex-start; gap:10px;
+    animation:toastIn .3s ease; pointer-events:all;
+    box-shadow:0 8px 32px rgba(0,0,0,0.4);
+  }
+  .toast.exit { animation:toastOut .3s ease forwards; }
+  @keyframes toastIn { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+  @keyframes toastOut { from{opacity:1;transform:translateX(0)} to{opacity:0;transform:translateX(20px)} }
+  .toast-icon { font-size:16px; flex-shrink:0; margin-top:1px; }
+  .toast-content { flex:1; }
+  .toast-title { font-size:12px; font-weight:600; color:var(--text); margin-bottom:2px; }
+  .toast-body { font-size:11px; color:var(--text2); line-height:1.4; }
+  .toast-close { font-size:14px; color:var(--text3); cursor:pointer; background:none; border:none; flex-shrink:0; }
+  .toast-close:hover { color:var(--text); }
+
+  /* STATS BAR */
+  .stats-bar {
+    display:flex; gap:1px;
+    background:var(--surface);
+    border-top:1px solid var(--border);
+    padding:0;
+  }
+  .stat-item { flex:1; padding:10px 14px; border-right:1px solid var(--border); }
+  .stat-item:last-child { border-right:none; }
+  .stat-num { font-family:var(--font-head); font-size:20px; font-weight:700; }
+  .stat-label { font-size:10px; color:var(--text3); text-transform:uppercase; letter-spacing:0.06em; margin-top:1px; }
+  .stat-item.accent .stat-num { color:var(--accent2); }
+  .stat-item.amber .stat-num { color:var(--amber); }
+  .stat-item.green .stat-num { color:var(--green); }
+
+  /* SCENARIO SELECTOR */
+  .scenario-bar {
+    background:var(--surface2);
+    border-bottom:1px solid var(--border);
+    padding:8px 20px;
+    display:flex; gap:8px; align-items:center;
+  }
+  .scenario-label { font-size:11px; color:var(--text3); font-weight:600; text-transform:uppercase; letter-spacing:0.08em; margin-right:4px; }
+  .scenario-btn { font-size:11px; padding:5px 12px; border-radius:20px; border:1px solid var(--border); background:transparent; color:var(--text2); cursor:pointer; transition:all .15s; font-family:var(--font-body); }
+  .scenario-btn:hover { background:var(--surface3); color:var(--text); border-color:var(--border2); }
+  .scenario-btn.active { background:var(--accent-glow); color:var(--accent2); border-color:rgba(124,106,247,0.3); }
+
+  /* PULSE ANIMATION FOR NEW LEADS */
+  @keyframes cardPulse { 0%{box-shadow:0 0 0 0 rgba(124,106,247,0.4)} 70%{box-shadow:0 0 0 8px rgba(124,106,247,0)} 100%{box-shadow:0 0 0 0 rgba(124,106,247,0)} }
+  .lead-card.pulse { animation:fadeSlideUp .4s ease, cardPulse 1.5s ease 0.4s; }
+
+  /* EMPTY STATE */
+  .empty-state { text-align:center; padding:32px 16px; color:var(--text3); }
+  .empty-icon { font-size:28px; margin-bottom:8px; opacity:0.4; }
+  .empty-text { font-size:12px; line-height:1.6; }
+
+  /* DEMO MODE OVERLAY */
+  .demo-tip {
+    position:absolute; bottom:80px; left:50%; transform:translateX(-50%);
+    background:rgba(124,106,247,0.15); border:1px solid rgba(124,106,247,0.3);
+    color:var(--accent2); font-size:11px; padding:6px 14px; border-radius:20px;
+    white-space:nowrap; pointer-events:none; opacity:1; transition:opacity .5s;
+  }
+  .demo-tip.hide { opacity:0; }
+
+  /* SCROLLBAR GLOBAL */
+  *::-webkit-scrollbar { width:4px; }
+  *::-webkit-scrollbar-track { background:transparent; }
+  *::-webkit-scrollbar-thumb { background:var(--surface3); border-radius:4px; }
+
+  /* FLOW INDICATOR */
+  .flow-step { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--text3); }
+  .flow-step .dot { width:6px; height:6px; border-radius:50%; background:var(--text3); }
+  .flow-step.done .dot { background:var(--green); }
+  .flow-step.active .dot { background:var(--accent); animation:pulse-accent 1.5s infinite; }
+  @keyframes pulse-accent { 0%,100%{box-shadow:0 0 0 0 rgba(124,106,247,0.4)} 50%{box-shadow:0 0 0 5px rgba(124,106,247,0)} }
+  .flow-step.done { color:var(--green); }
+  .flow-step.active { color:var(--accent2); }
+  .flow-connector { width:14px; height:1px; background:var(--border2); }
+
+  /* HIGHLIGHT CARD */
+  .highlight-banner {
+    background:linear-gradient(135deg,rgba(124,106,247,0.1),rgba(167,139,250,0.05));
+    border:1px solid rgba(124,106,247,0.2);
+    border-radius:var(--radius);
+    padding:10px 12px;
+    margin-bottom:4px;
+  }
+  .highlight-banner-title { font-size:11px; font-weight:600; color:var(--accent2); margin-bottom:4px; display:flex; align-items:center; gap:6px; }
+  .highlight-banner-text { font-size:11px; color:var(--text2); line-height:1.5; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="logo">
+      <div class="logo-dot"></div>
+      FlowDesk
+    </div>
+    <div class="topbar-center">
+      <div class="status-pill">
+        <div class="status-dot"></div>
+        AI Engine Active
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-left:4px;">
+        <div class="flow-step done"><div class="dot"></div>Inbox</div>
+        <div class="flow-connector"></div>
+        <div class="flow-step done" id="flow-capture"><div class="dot"></div>Capture</div>
+        <div class="flow-connector"></div>
+        <div class="flow-step" id="flow-qualify"><div class="dot"></div>Qualify</div>
+        <div class="flow-connector"></div>
+        <div class="flow-step" id="flow-followup"><div class="dot"></div>Follow-up</div>
+        <div class="flow-connector"></div>
+        <div class="flow-step" id="flow-done"><div class="dot"></div>Closed</div>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn btn-secondary" onclick="resetDemo()">↺ Reset</button>
+      <button class="btn btn-primary" id="sim-btn" onclick="simulateCustomer()">+ Simulate Customer</button>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-label">Workspace</div>
+    <div class="nav-item active">
+      <span class="nav-icon">💬</span> Live Inbox
+      <span class="nav-badge" id="inbox-badge">1</span>
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon">👥</span> All Leads
+      <span class="nav-badge" id="leads-badge">0</span>
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon">⏰</span> Follow-ups
+      <span class="nav-badge amber" id="followup-badge">0</span>
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon">✅</span> Completed
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-label">Automation</div>
+    <div class="nav-item">
+      <span class="nav-icon">⚡</span> Auto-Replies
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon">🔔</span> Reminders
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon">📊</span> Reports
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-label">Actions</div>
+    <button class="btn btn-green" style="width:100%;justify-content:center;margin-top:4px;" onclick="triggerFollowUp()">⚡ Trigger Follow-Up</button>
+    <button class="btn btn-secondary" style="width:100%;justify-content:center;margin-top:6px;" onclick="markDone()">✓ Mark Complete</button>
+  </aside>
+
+  <!-- CHAT MAIN -->
+  <main class="main">
+    <!-- SCENARIO BAR -->
+    <div class="scenario-bar">
+      <span class="scenario-label">Scenario:</span>
+      <button class="scenario-btn active" id="s1" onclick="setScenario(1,this)">✂ Barber Shop</button>
+      <button class="scenario-btn" id="s2" onclick="setScenario(2,this)">🏠 Real Estate</button>
+      <button class="scenario-btn" id="s3" onclick="setScenario(3,this)">💅 Salon</button>
+      <button class="scenario-btn" id="s4" onclick="setScenario(4,this)">🛒 Shop / Retail</button>
+    </div>
+
+    <!-- CHAT HEADER -->
+    <div class="chat-header">
+      <div>
+        <div class="chat-title">
+          <span id="chat-name-display">✂ Kevo Barber Shop</span>
+          <span style="font-size:10px;background:var(--green-bg);color:var(--green);padding:2px 8px;border-radius:10px;font-weight:500;border:1px solid rgba(34,211,160,0.2)">WhatsApp Channel</span>
+        </div>
+        <div class="chat-subtitle" id="chat-subtitle">Automated responses active — 0ms average reply time</div>
+      </div>
+      <div class="chat-controls">
+        <div id="flow-status" style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text3)">Waiting for message...</div>
+      </div>
+    </div>
+
+    <!-- MESSAGES -->
+    <div class="chat-messages" id="messages">
+      <div class="system-msg">Today · Automation started at 9:00 AM</div>
+      <div style="display:flex;justify-content:center;margin:8px 0;">
+        <div class="highlight-banner" style="max-width:400px;text-align:center;">
+          <div class="highlight-banner-title" style="justify-content:center;">👋 Demo Ready</div>
+          <div class="highlight-banner-text">Click <strong style="color:var(--accent2)">Simulate Customer</strong> to watch the AI engine handle a real booking request — from first message to lead capture in seconds.</div>
+        </div>
+      </div>
+    </div>
+    <div class="demo-tip" id="demo-tip">Click "Simulate Customer" to start →</div>
+
+    <!-- STATS -->
+    <div class="stats-bar">
+      <div class="stat-item accent"><div class="stat-num" id="stat-new">0</div><div class="stat-label">New Leads</div></div>
+      <div class="stat-item amber"><div class="stat-num" id="stat-followup">0</div><div class="stat-label">Follow-ups</div></div>
+      <div class="stat-item green"><div class="stat-num" id="stat-done">0</div><div class="stat-label">Completed</div></div>
+      <div class="stat-item"><div class="stat-num" id="stat-rate">—</div><div class="stat-label">Response Time</div></div>
+    </div>
+  </main>
+
+  <!-- RIGHT PANEL -->
+  <aside class="panel">
+    <div class="panel-header">
+      <div class="panel-title">Lead Pipeline</div>
+      <div class="panel-tabs">
+        <div class="panel-tab active" onclick="switchTab('all',this)">All</div>
+        <div class="panel-tab" onclick="switchTab('new',this)">New</div>
+        <div class="panel-tab" onclick="switchTab('pending',this)">Pending</div>
+      </div>
+    </div>
+    <div class="panel-body" id="lead-panel">
+      <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <div class="empty-text">No leads yet.<br>Simulate a customer to see<br>the pipeline fill up.</div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toasts"></div>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+let state = {
+  scenario: 1,
+  leads: [],
+  simRunning: false,
+  stats: { new: 0, followup: 0, done: 0 },
+  currentCustomer: null,
+  tabFilter: 'all'
+};
+
+const scenarios = {
+  1: {
+    name: '✂ Kevo Barber Shop',
+    subtitle: 'Barber — Ruiru Town',
+    customerName: 'Brian Njoroge',
+    initials: 'BN',
+    message: 'Hi, I want a haircut tomorrow at 10am. Do you have space?',
+    service: 'Haircut + Beard',
+    time: 'Tomorrow 10:00 AM',
+    questions: ['Your name?', 'What service? (Cut / Shave / Both)', 'Preferred time slot?'],
+    answers: ['Brian Njoroge', 'Haircut + Beard Trim', 'Tomorrow 10:00 AM'],
+    color: '#667eea'
+  },
+  2: {
+    name: '🏠 Grace Realty',
+    subtitle: 'Real Estate — Nairobi / Ruiru',
+    customerName: 'James Kamau',
+    initials: 'JK',
+    message: "Hi, I'm interested in a 2-bedroom apartment in Ruiru. What's available?",
+    service: '2-Bed Apartment',
+    time: 'This Weekend',
+    questions: ['Your name?', 'Property type? (1-bed / 2-bed / 3-bed)', 'Budget range?'],
+    answers: ['James Kamau', '2-Bedroom Apartment', 'Ksh 18,000–25,000/mo'],
+    color: '#22d3a0'
+  },
+  3: {
+    name: '💅 Bella Salon',
+    subtitle: 'Beauty Salon — Westlands',
+    customerName: 'Amina Hassan',
+    initials: 'AH',
+    message: 'Hello, I need a full hair treatment and braids. Are you available Saturday?',
+    service: 'Braids + Treatment',
+    time: 'Saturday 2:00 PM',
+    questions: ['Your name?', 'Service needed? (Braids/Locs/Color/Treatment)', 'Preferred day & time?'],
+    answers: ['Amina Hassan', 'Full Braids + Deep Treatment', 'Saturday 2:00 PM'],
+    color: '#f472b6'
+  },
+  4: {
+    name: '🛒 Mama Pima Shop',
+    subtitle: 'Retail Shop — Kasarani',
+    customerName: 'Kevin Ochieng',
+    initials: 'KO',
+    message: 'Do you have basmati rice 10kg? Whats the price and can you deliver?',
+    service: 'Basmati Rice 10kg',
+    time: 'Deliver Today',
+    questions: ['Your name?', 'What items and quantity?', 'Delivery address?'],
+    answers: ['Kevin Ochieng', 'Basmati Rice 10kg x2', 'Kasarani Estate, House 14B'],
+    color: '#f59e0b'
+  }
+};
+
+// ============================================================
+// HELPERS
+// ============================================================
+function scrollChat() {
+  const msgs = document.getElementById('messages');
+  setTimeout(() => msgs.scrollTop = msgs.scrollHeight, 50);
+}
+
+function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function setFlowStep(step) {
+  ['flow-capture','flow-qualify','flow-followup','flow-done'].forEach(id => {
+    document.getElementById(id).className = 'flow-step';
+  });
+  const steps = { capture:'flow-capture', qualify:'flow-qualify', followup:'flow-followup', done:'flow-done' };
+  for (const [k,v] of Object.entries(steps)) {
+    const el = document.getElementById(v);
+    if (k === step) { el.className = 'flow-step active'; break; }
+    el.className = 'flow-step done';
+  }
+}
+
+function addMessage(type, text, avatarText, avatarClass) {
+  const msgs = document.getElementById('messages');
+  const row = document.createElement('div');
+  row.className = `msg-row ${type}`;
+
+  const avatar = document.createElement('div');
+  avatar.className = `msg-avatar ${avatarClass || (type==='inbound'?'client':'bot')}`;
+  avatar.textContent = avatarText || (type==='inbound'?'👤':'AI');
+
+  const inner = document.createElement('div');
+  inner.style.cssText = 'display:flex;flex-direction:column;gap:4px;max-width:100%;';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+  bubble.innerHTML = text;
+
+  const meta = document.createElement('div');
+  meta.className = 'msg-meta';
+  const now = new Date();
+  const t = `${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
+  meta.innerHTML = type === 'outbound' ? `${t} <span class="read">✓✓</span>` : t;
+
+  inner.appendChild(bubble);
+  inner.appendChild(meta);
+  row.appendChild(avatar);
+  row.appendChild(inner);
+  msgs.appendChild(row);
+  scrollChat();
+  return row;
+}
+
+function showTyping(avatarText, avatarClass) {
+  const msgs = document.getElementById('messages');
+  const row = document.createElement('div');
+  row.className = 'msg-row inbound';
+  const avatar = document.createElement('div');
+  avatar.className = `msg-avatar ${avatarClass || 'bot'}`;
+  avatar.textContent = avatarText || 'AI';
+  const typing = document.createElement('div');
+  typing.className = 'typing-indicator';
+  typing.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+  row.appendChild(avatar);
+  row.appendChild(typing);
+  msgs.appendChild(row);
+  scrollChat();
+  return row;
+}
+
+function showToast(icon, title, body, type) {
+  const container = document.getElementById('toasts');
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.innerHTML = `
+    <div class="toast-icon">${icon}</div>
+    <div class="toast-content">
+      <div class="toast-title">${title}</div>
+      <div class="toast-body">${body}</div>
+    </div>
+    <button class="toast-close" onclick="this.parentElement.remove()">✕</button>
+  `;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.classList.add('exit');
+    setTimeout(() => toast.remove(), 300);
+  }, 4500);
+}
+
+function updateStats() {
+  document.getElementById('stat-new').textContent = state.stats.new;
+  document.getElementById('stat-followup').textContent = state.stats.followup;
+  document.getElementById('stat-done').textContent = state.stats.done;
+  document.getElementById('leads-badge').textContent = state.leads.length;
+  document.getElementById('followup-badge').textContent = state.stats.followup;
+  document.getElementById('inbox-badge').textContent = state.leads.filter(l=>l.status==='new').length || '—';
+  if (state.stats.new > 0 || state.stats.done > 0) {
+    document.getElementById('stat-rate').textContent = '< 1s';
+  }
+}
+
+function renderLeads() {
+  const panel = document.getElementById('lead-panel');
+  const filter = state.tabFilter;
+  let leads = state.leads;
+  if (filter === 'new') leads = leads.filter(l => l.status === 'new');
+  if (filter === 'pending') leads = leads.filter(l => l.status === 'followup');
+
+  if (leads.length === 0) {
+    panel.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">No leads in this view.<br>Simulate a customer to start.</div></div>`;
+    return;
+  }
+
+  panel.innerHTML = '';
+  [...leads].reverse().forEach(lead => {
+    const card = document.createElement('div');
+    const isPulse = lead.fresh;
+    card.className = `lead-card ${lead.status} ${isPulse ? 'pulse' : ''}`;
+    lead.fresh = false;
+
+    const badgeMap = {
+      new: '<span class="lead-badge badge-new">New Lead</span>',
+      followup: '<span class="lead-badge badge-followup">Follow-up</span>',
+      done: '<span class="lead-badge badge-done">Closed ✓</span>'
+    };
+    const hotBadge = lead.hot ? '<span class="lead-badge badge-hot" style="margin-left:4px">Hot 🔥</span>' : '';
+
+    card.innerHTML = `
+      <div class="lead-card-header">
+        <div class="lead-name">${lead.name}</div>
+        <div style="display:flex;gap:4px">${badgeMap[lead.status] || ''}${hotBadge}</div>
+      </div>
+      <div class="lead-info">
+        <div class="lead-info-item"><div class="lead-info-label">Service</div><div class="lead-info-val">${lead.service}</div></div>
+        <div class="lead-info-item"><div class="lead-info-label">Time</div><div class="lead-info-val">${lead.time}</div></div>
+        <div class="lead-info-item"><div class="lead-info-label">Channel</div><div class="lead-info-val">WhatsApp</div></div>
+        <div class="lead-info-item"><div class="lead-info-label">Captured</div><div class="lead-info-val">${lead.captured}</div></div>
+      </div>
+      <div class="lead-actions">
+        ${lead.status !== 'done' ? `<button class="btn btn-green" onclick="confirmLead('${lead.id}')">✓ Confirm</button>` : ''}
+        ${lead.status !== 'done' ? `<button class="btn btn-secondary" onclick="reachOutLead('${lead.id}')">📲 Reach Out</button>` : ''}
+        ${lead.status === 'done' ? `<button class="btn btn-secondary" style="flex:1;justify-content:center;opacity:0.5" disabled>Completed</button>` : ''}
+      </div>
+    `;
+    panel.appendChild(card);
+  });
+}
+
+// ============================================================
+// MAIN SIMULATION
+// ============================================================
+async function simulateCustomer() {
+  if (state.simRunning) return;
+  state.simRunning = true;
+  document.getElementById('sim-btn').disabled = true;
+  document.getElementById('demo-tip').classList.add('hide');
+
+  const sc = scenarios[state.scenario];
+  state.currentCustomer = sc;
+
+  // Clear welcome msg
+  const msgs = document.getElementById('messages');
+  const welcome = msgs.querySelector('.highlight-banner')?.parentElement;
+  if (welcome) welcome.remove();
+
+  document.getElementById('flow-status').innerHTML = `<span style="color:var(--accent2)">⚡ Processing incoming message...</span>`;
+
+  // Step 1: Incoming message
+  const initials = sc.initials;
+  addMessage('inbound', sc.message, initials, 'client');
+  setFlowStep('capture');
+  await wait(700);
+
+  showToast('📨', 'New Message Received', `${sc.customerName}: "${sc.message.substring(0,50)}..."`, 'info');
+
+  // Step 2: AI typing
+  const typing1 = showTyping('AI', 'bot');
+  await wait(1200);
+  typing1.remove();
+
+  // Step 3: Auto-reply
+  addMessage('outbound', `Hi! 👋 Thanks for reaching out to <strong>${sc.name.replace(/[✂🏠💅🛒]\s/,'')}</strong>.<br>Let me get a few quick details so I can assist you right away!`, 'AI', 'bot');
+  document.getElementById('flow-status').innerHTML = `<span style="color:var(--green)">✓ Auto-reply sent instantly</span>`;
+  await wait(900);
+
+  // Step 4: Ask questions
+  const typing2 = showTyping('AI', 'bot');
+  await wait(800);
+  typing2.remove();
+
+  const qMsg = addMessage('outbound', sc.questions.map((q,i) => `<div style="margin:3px 0;opacity:${1-i*0.1}">📋 ${q}</div>`).join(''), 'AI', 'bot');
+  setFlowStep('qualify');
+  await wait(1200);
+
+  // Step 5: Client answers
+  for (let i = 0; i < sc.answers.length; i++) {
+    const typing = showTyping(initials, 'client');
+    await wait(800 + i*200);
+    typing.remove();
+    addMessage('inbound', sc.answers[i], initials, 'client');
+    await wait(400);
+  }
+
+  // Step 6: Confirmation
+  const typing3 = showTyping('AI', 'bot');
+  await wait(1000);
+  typing3.remove();
+
+  addMessage('outbound', `Perfect, ${sc.customerName.split(' ')[0]}! ✅<br><strong>Here's what I've noted:</strong><br>📌 ${sc.service}<br>🕐 ${sc.time}<br><br>You'll get a confirmation shortly. We look forward to serving you!`, 'AI', 'bot');
+  document.getElementById('flow-status').innerHTML = `<span style="color:var(--green)">✓ Lead captured & confirmed</span>`;
+
+  // Step 7: Add to pipeline
+  const now = new Date();
+  const timeStr = `${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
+  const lead = {
+    id: `lead_${Date.now()}`,
+    name: sc.customerName,
+    service: sc.service,
+    time: sc.time,
+    status: 'new',
+    captured: `Today ${timeStr}`,
+    hot: true,
+    fresh: true
+  };
+  state.leads.push(lead);
+  state.stats.new++;
+  updateStats();
+  renderLeads();
+
+  showToast('🎯', 'Lead Captured!', `${sc.customerName} — ${sc.service} at ${sc.time}`, 'success');
+  await wait(1200);
+
+  // Step 8: Follow-up simulation
+  setFlowStep('followup');
+  const typing4 = showTyping('AI', 'bot');
+  await wait(2000);
+  typing4.remove();
+
+  addMessage('outbound', `Hey ${sc.customerName.split(' ')[0]}, just checking in 👋<br>Are you still interested? I can confirm your slot right now — just say <strong>"Yes, confirm"</strong> and you're all set!`, 'AI', 'bot');
+
+  // Step 9: Owner reminder
+  await wait(800);
+  showToast('🔔', 'Owner Reminder', `Follow up with ${sc.customerName} — ${sc.service}`, 'warning');
+
+  // Update lead to followup
+  lead.status = 'followup';
+  state.stats.new--;
+  state.stats.followup++;
+  lead.fresh = true;
+  updateStats();
+  renderLeads();
+
+  document.getElementById('flow-status').innerHTML = `<span style="color:var(--amber)">⏰ Follow-up sent — awaiting response</span>`;
+
+  // Step 10: Client confirms
+  await wait(1800);
+  const typing5 = showTyping(initials, 'client');
+  await wait(900);
+  typing5.remove();
+  addMessage('inbound', 'Yes please, confirm! 🙏', initials, 'client');
+
+  await wait(600);
+  const typing6 = showTyping('AI', 'bot');
+  await wait(800);
+  typing6.remove();
+  addMessage('outbound', `Confirmed! ✅🎉<br><strong>${sc.service}</strong> is booked for <strong>${sc.time}</strong>.<br>We'll see you then, ${sc.customerName.split(' ')[0]}! Don't forget to bring this message.`, 'AI', 'bot');
+
+  // Done
+  lead.status = 'done';
+  lead.hot = false;
+  state.stats.followup--;
+  state.stats.done++;
+  lead.fresh = true;
+  updateStats();
+  renderLeads();
+  setFlowStep('done');
+
+  document.getElementById('flow-status').innerHTML = `<span style="color:var(--green)">✅ Booking confirmed — lead closed!</span>`;
+  showToast('🎉', 'Booking Confirmed!', `${sc.customerName} is confirmed for ${sc.service}`, 'success');
+
+  // System message
+  const sysMsg = document.createElement('div');
+  sysMsg.className = 'system-msg';
+  sysMsg.innerHTML = `✅ Full flow completed in ~8 seconds — zero manual effort`;
+  document.getElementById('messages').appendChild(sysMsg);
+  scrollChat();
+
+  state.simRunning = false;
+  document.getElementById('sim-btn').disabled = false;
+  document.getElementById('sim-btn').textContent = '+ New Customer';
+}
+
+// ============================================================
+// ACTIONS
+// ============================================================
+function triggerFollowUp() {
+  const pending = state.leads.filter(l => l.status === 'new' || l.status === 'followup');
+  if (pending.length === 0) {
+    showToast('ℹ️', 'No pending leads', 'Simulate a customer first to generate leads.', 'info');
+    return;
+  }
+  const lead = pending[0];
+  showToast('🔔', 'Follow-up Triggered!', `Reminder sent for ${lead.name} — ${lead.service}`, 'warning');
+  addMessage('outbound', `Hi ${lead.name.split(' ')[0]}, this is a quick follow-up from us! ⏰<br>Your request for <strong>${lead.service}</strong> is still available.<br>Reply <strong>"Confirm"</strong> to lock it in!`, 'AI', 'bot');
+  scrollChat();
+}
+
+function markDone() {
+  const pending = state.leads.filter(l => l.status !== 'done');
+  if (pending.length === 0) {
+    showToast('ℹ️', 'Nothing to complete', 'All leads are already closed or no leads exist.', 'info');
+    return;
+  }
+  const lead = pending[pending.length - 1];
+  lead.status = 'done';
+  lead.hot = false;
+  lead.fresh = true;
+  state.stats.done++;
+  if (lead.status === 'followup') state.stats.followup = Math.max(0, state.stats.followup - 1);
+  else state.stats.new = Math.max(0, state.stats.new - 1);
+  updateStats();
+  renderLeads();
+  showToast('✅', 'Lead Completed', `${lead.name} marked as closed.`, 'success');
+  setFlowStep('done');
+}
+
+function confirmLead(id) {
+  const lead = state.leads.find(l => l.id === id);
+  if (!lead || lead.status === 'done') return;
+  if (lead.status === 'new') { state.stats.new = Math.max(0, state.stats.new-1); }
+  if (lead.status === 'followup') { state.stats.followup = Math.max(0, state.stats.followup-1); }
+  lead.status = 'done';
+  lead.hot = false;
+  lead.fresh = true;
+  state.stats.done++;
+  updateStats();
+  renderLeads();
+  showToast('✅', 'Confirmed!', `${lead.name} booking confirmed.`, 'success');
+  addMessage('outbound', `Your booking is confirmed, ${lead.name.split(' ')[0]}! ✅ See you at ${lead.time}.`, 'AI', 'bot');
+  scrollChat();
+}
+
+function reachOutLead(id) {
+  const lead = state.leads.find(l => l.id === id);
+  if (!lead) return;
+  showToast('📲', 'Reach Out Sent', `Follow-up message sent to ${lead.name}`, 'info');
+  addMessage('outbound', `Hi ${lead.name.split(' ')[0]}! 👋 Just checking in on your request for <strong>${lead.service}</strong>. Still interested? We can confirm right away!`, 'AI', 'bot');
+  scrollChat();
+}
+
+function resetDemo() {
+  state.leads = [];
+  state.stats = { new:0, followup:0, done:0 };
+  state.simRunning = false;
+  state.currentCustomer = null;
+  document.getElementById('sim-btn').disabled = false;
+  document.getElementById('sim-btn').textContent = '+ Simulate Customer';
+  document.getElementById('flow-status').innerHTML = 'Waiting for message...';
+  document.getElementById('messages').innerHTML = `
+    <div class="system-msg">Today · Automation started at 9:00 AM</div>
+    <div style="display:flex;justify-content:center;margin:8px 0;">
+      <div class="highlight-banner" style="max-width:400px;text-align:center;">
+        <div class="highlight-banner-title" style="justify-content:center;">👋 Demo Ready</div>
+        <div class="highlight-banner-text">Click <strong style="color:var(--accent2)">Simulate Customer</strong> to watch the AI engine handle a real booking request — from first message to lead capture in seconds.</div>
+      </div>
+    </div>
+  `;
+  document.getElementById('demo-tip').classList.remove('hide');
+  ['flow-capture','flow-qualify','flow-followup','flow-done'].forEach(id => {
+    document.getElementById(id).className = 'flow-step';
+  });
+  updateStats();
+  renderLeads();
+  showToast('↺', 'Demo Reset', 'Ready for a fresh demonstration.', 'info');
+}
+
+function setScenario(num, btn) {
+  state.scenario = num;
+  document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const sc = scenarios[num];
+  document.getElementById('chat-name-display').textContent = sc.name;
+  document.getElementById('chat-subtitle').textContent = `${sc.subtitle} — Automated responses active`;
+}
+
+function switchTab(filter, el) {
+  state.tabFilter = filter;
+  document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderLeads();
+}
+
+// Init
+updateStats();
+renderLeads();
+</script>
+<div id="gs-proto-banner" style="position:fixed;left:0;right:0;bottom:0;z-index:2147483647;background:#1a1030;color:#fff;font:13px/1.4 system-ui,sans-serif;padding:7px 12px;text-align:center;opacity:.94">Working prototype by <b>Emmanuel Muteti</b> &middot; names and numbers are demo data &middot; <a href="../../work/" style="color:#c9a7ff">See all work</a> &middot; <a href="https://wa.me/254740562812" style="color:#7dffb0">WhatsApp</a></div>
+</body>
+</html>
