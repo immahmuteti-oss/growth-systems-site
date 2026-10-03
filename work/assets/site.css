@@ -24,9 +24,8 @@ img{max-width:100%;display:block}
 :focus-visible{outline:2px solid var(--mint);outline-offset:3px;border-radius:6px}
 
 /* ---------- page transition + cursor glow + progress ---------- */
-#veil{position:fixed;inset:0;background:var(--ink);z-index:150;pointer-events:none;transform:scaleY(1);transform-origin:top;transition:transform .7s var(--ease2)}
-body.ready #veil{transform:scaleY(0)}
-body.leaving #veil{transform:scaleY(1);transform-origin:bottom;transition-duration:.45s}
+#veil{position:fixed;inset:0;background:var(--ink);z-index:150;pointer-events:none;transform:scaleY(0);transform-origin:bottom;transition:transform .45s var(--ease2)}
+body.leaving #veil{transform:scaleY(1)}
 #glow{position:fixed;width:520px;height:520px;left:0;top:0;margin:-260px 0 0 -260px;border-radius:50%;pointer-events:none;z-index:1;
   background:radial-gradient(circle,rgba(164,108,255,.13),rgba(94,240,176,.05) 40%,transparent 68%);transition:opacity .4s;opacity:0}
 body.has-pointer #glow{opacity:1}
@@ -219,7 +218,7 @@ footer.site .row{display:flex;justify-content:space-between;gap:30px;flex-wrap:w
 footer.site .big{font-family:var(--serif);font-size:clamp(28px,3.4vw,44px);line-height:1.1;max-width:560px}
 footer.site nav a{display:block;color:var(--muted);text-decoration:none;font-size:14.5px;margin:6px 0}
 footer.site nav a:hover{color:var(--text)}
-footer.site small{display:block;color:var(--dim);margin-top:40px;font-size:13px}
+footer.site small{display:block;color:#958eb0;margin-top:40px;font-size:13px}
 
 /* ---------- responsive ---------- */
 @media (max-width:980px){
@@ -292,3 +291,16 @@ footer.site small{display:block;color:var(--dim);margin-top:40px;font-size:13px}
 .quote figcaption b{display:block}.quote figcaption span{color:var(--muted);font-size:14px}
 @media (max-width:980px){.sim{grid-template-columns:minmax(0,1fr)}.quotes{grid-template-columns:minmax(0,1fr)}}
 @media (max-height:900px){.scrollcue{display:none}}
+
+.hero-in>*{animation:heroin .9s var(--ease) both}.hero-in>*:nth-child(2){animation-delay:.05s}.hero-in>*:nth-child(3){animation-delay:.1s}.hero-in>*:nth-child(4){animation-delay:.15s}.hero-in>*:nth-child(5){animation-delay:.2s}.hero-in>*:nth-child(6){animation-delay:.25s}
+@keyframes heroin{from{transform:translateY(18px)}to{transform:none}}
+@media (prefers-reduced-motion:reduce){.hero-in>*{animation:none}}
+/* phones and low-power devices: CSS orb instead of WebGL */
+#gl.orb-mode{background:
+  radial-gradient(circle at 50% 50%,rgba(232,194,122,.9) 0 5%,transparent 6%),
+  radial-gradient(circle at 50% 50%,transparent 0 22%,rgba(164,108,255,.55) 22.5% 23%,transparent 23.5%),
+  radial-gradient(circle at 50% 50%,transparent 0 33%,rgba(94,240,176,.35) 33.4% 33.8%,transparent 34.2%),
+  radial-gradient(circle at 50% 50%,rgba(164,108,255,.35),transparent 55%);
+  background-size:min(90vw,520px) min(90vw,520px);background-repeat:no-repeat;background-position:50% 22%;animation:orb 9s ease-in-out infinite}
+@keyframes orb{50%{background-position:50% 18%;filter:hue-rotate(25deg)}}
+@media (prefers-reduced-motion:reduce){#gl.orb-mode{animation:none}}

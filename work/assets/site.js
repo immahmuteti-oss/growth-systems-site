@@ -5,7 +5,7 @@
   var body = document.body;
 
   // page-in transition
-  requestAnimationFrame(function () { body.classList.add('ready'); });
+  body.classList.add("ready");
   // page-out transition on internal links
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href]');
@@ -119,9 +119,21 @@
   var gl = document.getElementById('gl');
   if (gl) {
     var fallback = function () { gl.style.background = 'radial-gradient(circle at 72% 42%,rgba(164,108,255,.38),transparent 58%),radial-gradient(circle at 85% 75%,rgba(94,240,176,.18),transparent 50%)'; };
-    if (!window.THREE) return fallback();
+    if (innerWidth < 760 || (navigator.hardwareConcurrency || 8) <= 4) { gl.classList.add('orb-mode'); return; }
+    if (!window.THREE) {
+      var sc = document.createElement('script');
+      sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+      sc.integrity = 'sha384-CI3ELBVUz9XQO+97x6nwMDPosPR5XvsxW2ua7N1Xeygeh1IxtgqtCkGfQY9WWdHu'; sc.crossOrigin = 'anonymous';
+      sc.onload = function () { start3D(); }; sc.onerror = fallback;
+      document.head.appendChild(sc); return;
+    }
+    start3D(); return;
+    function start3D() {
     var R; try { R = new THREE.WebGLRenderer({ canvas: gl, antialias: true, alpha: true }); } catch (e) { return fallback(); }
-    R.setPixelRatio(Math.min(devicePixelRatio, 2));
+    var small = innerWidth < 760;
+    R.setPixelRatio(small ? 1 : Math.min(devicePixelRatio, 2));
+    var go3d = false; var startIt = function () { go3d = true; };
+    if (document.readyState === 'complete') setTimeout(startIt, 900); else addEventListener('load', function () { setTimeout(startIt, 900); });
     var S = new THREE.Scene(), C = new THREE.PerspectiveCamera(55, 1, .1, 200); C.position.set(0, 0, 14);
     var G = new THREE.Group(); S.add(G);
     var core = new THREE.Mesh(new THREE.IcosahedronGeometry(3.1, 1), new THREE.MeshBasicMaterial({ color: 0xa46cff, wireframe: true, transparent: true, opacity: .55 }));
@@ -132,7 +144,7 @@
     G.add(core, inner, nucleus, ring, ring2);
     // satellites orbiting on the rings
     var sats = []; for (var s = 0; s < 6; s++) { var m = new THREE.Mesh(new THREE.SphereGeometry(.09, 10, 10), new THREE.MeshBasicMaterial({ color: s % 2 ? 0x5ef0b0 : 0xa46cff })); G.add(m); sats.push(m); }
-    var N = 1100, pos = new Float32Array(N * 3), col = new Float32Array(N * 3), c1 = new THREE.Color(0xa46cff), c2 = new THREE.Color(0x5ef0b0), c3 = new THREE.Color(0xe8c27a), tmp = new THREE.Color();
+    var N = small ? 450 : 1100, pos = new Float32Array(N * 3), col = new Float32Array(N * 3), c1 = new THREE.Color(0xa46cff), c2 = new THREE.Color(0x5ef0b0), c3 = new THREE.Color(0xe8c27a), tmp = new THREE.Color();
     for (var i = 0; i < N; i++) {
       var r = 6 + Math.random() * 18, th = Math.random() * Math.PI * 2, ph = Math.acos(2 * Math.random() - 1);
       pos[i * 3] = r * Math.sin(ph) * Math.cos(th); pos[i * 3 + 1] = r * Math.sin(ph) * Math.sin(th) * .6; pos[i * 3 + 2] = r * Math.cos(ph);
@@ -150,7 +162,7 @@
     var on = true; new IntersectionObserver(function (e) { on = e[0].isIntersecting; }).observe(gl);
     var T = 0;
     (function loop() {
-      requestAnimationFrame(loop); if (!on) return;
+      requestAnimationFrame(loop); if (!on || !go3d) return;
       T += reduce ? 0 : .004; mx += (tx - mx) * .05; my += (ty - my) * .05;
       var sc = Math.min(1, scrollY / innerHeight);
       core.rotation.y = T * 1.2 + mx * .8; core.rotation.x = T * .6 + my * .6;
@@ -162,6 +174,7 @@
       G.rotation.y = sc * 1.2; C.position.z = 14 + sc * 6; C.position.y = -sc * 2;
       R.render(S, C);
     })();
+    }
   }
 
   // contact form builds a WhatsApp message (nothing is stored or sent anywhere else)
