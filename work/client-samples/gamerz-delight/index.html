@@ -1,0 +1,1171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Sample for the owner. Kept out of Google until the owner approves and it moves to the shop's own domain. -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Gamerz Delight | PS5, Xbox, Games & Phones, Accra Plaza, Nairobi</title>
+<meta name="description" content="PS5, Xbox, games, phones and accessories at Accra Plaza, Shop 23, Kenneth Matiba Rd, Nairobi. Order on WhatsApp, trade in your old console, pay by M-PESA, same-day delivery in Nairobi.">
+<meta property="og:title" content="Gamerz Delight, Accra Plaza, Nairobi">
+<meta property="og:description" content="Consoles, games, phones and accessories. Trade-in, warranty check, order on WhatsApp, pay by M-PESA.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#07080c">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Store",
+  "name": "Gamerz Delight",
+  "description": "Consoles, games, phones and accessories in Nairobi CBD. Trade-in and same-day delivery.",
+  "telephone": "+254792027503",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Accra Plaza, Ground Floor, Shop 23, Kenneth Matiba Road",
+    "addressLocality": "Nairobi",
+    "addressCountry": "KE"
+  },
+  "openingHours": "Mo-Sa 09:00-19:00",
+  "paymentAccepted": "M-PESA, Cash"
+}
+</script>
+<script>
+  // Google Analytics 4: set the shop's own measurement ID (G-XXXXXXX) to switch it on.
+  // Until then, events are only written to the browser console so the sample can be checked.
+  const GA_ID = "";
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  if (GA_ID) {
+    const s = document.createElement("script");
+    s.async = true; s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_ID;
+    document.head.appendChild(s);
+    gtag("js", new Date()); gtag("config", GA_ID);
+  }
+  function track(name, params){ if (GA_ID) gtag("event", name, params); else console.log("[GA4 event]", name, params); }
+</script>
+<style>
+  :root{
+    --bg:#07080c;--bg2:#0c0e14;--card:#11141c;--card2:#181c27;--line:#232838;--line2:#323a50;
+    --text:#eef1f6;--muted:#949db0;--accent:#7c5cff;--accent2:#22d3ee;--wa:#1fa855;--warn:#ffd54a;--bad:#ef4444;--ok:#4ade80;
+    --metal:linear-gradient(160deg,#2a2f3d 0%,#161a24 45%,#0e1118 100%);
+    --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,monospace;
+    --r:16px;--ease:cubic-bezier(.2,.8,.2,1);--spring:cubic-bezier(.34,1.56,.64,1);
+    --tabh:0px
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  /* faint circuit-board texture behind everything */
+  body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;
+    background:
+      radial-gradient(900px 500px at 85% -10%,rgba(124,92,255,.14),transparent 60%),
+      radial-gradient(700px 400px at -10% 110%,rgba(34,211,238,.08),transparent 60%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' fill='none' stroke='%23ffffff' stroke-opacity='.035'%3E%3Cpath d='M0 40h50l20 20h40M80 0v30l20 20v60M160 120h-40l-20-20H40l-20 20v40'/%3E%3Ccircle cx='110' cy='60' r='3'/%3E%3Ccircle cx='100' cy='110' r='3'/%3E%3Ccircle cx='20' cy='140' r='3'/%3E%3C/svg%3E")}
+  h1,h2,h3,.logo{font-family:"Space Grotesk",Inter,system-ui,sans-serif}
+  a{color:inherit}
+  :focus-visible{outline:2px solid var(--accent2);outline-offset:2px;border-radius:8px}
+  button{font:inherit}
+  .mono{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .sample{background:var(--warn);color:#1a1400;font-size:12.5px;text-align:center;padding:6px 12px;font-weight:600;position:relative;z-index:21}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+
+  /* ---------- top bar ---------- */
+  .top{position:sticky;top:0;z-index:20;background:rgba(7,8,12,.78);backdrop-filter:saturate(1.5) blur(14px);-webkit-backdrop-filter:saturate(1.5) blur(14px);border-bottom:1px solid var(--line);view-transition-name:top}
+  .top::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:linear-gradient(90deg,transparent,var(--accent) 30%,var(--accent2) 70%,transparent);opacity:.55}
+  .top .wrap{display:flex;align-items:center;gap:12px;height:62px}
+  .logo{font-weight:700;letter-spacing:.06em;font-size:18px;text-decoration:none;white-space:nowrap;display:flex;align-items:center;gap:9px}
+  .logo i{width:9px;height:9px;border-radius:50%;background:var(--accent2);box-shadow:0 0 10px var(--accent2),0 0 2px #fff inset;animation:led 3.2s ease-in-out infinite}
+  @keyframes led{50%{opacity:.45;box-shadow:0 0 4px var(--accent2)}}
+  .logo span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .links{display:flex;gap:2px;margin-left:auto;position:relative}
+  .links a{position:relative;z-index:1;text-decoration:none;color:var(--muted);font-size:14px;font-weight:500;padding:8px 12px;border-radius:10px;transition:color .2s}
+  .links a.on,.links a:hover{color:var(--text)}
+  .ind{position:absolute;z-index:0;top:0;height:100%;border-radius:10px;background:var(--card2);border:1px solid var(--line2);transition:left .35s var(--spring),width .35s var(--spring),opacity .2s;opacity:0}
+  .ownerlink{display:none;font-size:13px;color:var(--muted);text-decoration:none;padding:7px 10px;border:1px solid var(--line);border-radius:10px;margin-left:auto}
+  .cartbtn{position:relative;white-space:nowrap;background:var(--accent);border:0;color:#fff;border-radius:12px;padding:9px 14px;font-weight:700;font-size:14px;cursor:pointer;transition:transform .15s var(--ease);box-shadow:0 0 0 1px rgba(255,255,255,.08) inset,0 6px 20px rgba(124,92,255,.35)}
+  .cartbtn:active{transform:scale(.96)}
+  .cartbtn b{display:inline-block;min-width:20px;margin-left:6px;background:#fff;color:var(--accent);border-radius:999px;font-size:12px;padding:0 6px}
+  .cartbtn.bump{animation:bump .4s var(--spring)}
+  @keyframes bump{40%{transform:scale(1.14)}}
+
+  /* ---------- phone tab bar ---------- */
+  .tabbar{display:none}
+  @media (max-width:760px){
+    :root{--tabh:64px}
+    .links{display:none}.ownerlink{display:inline-block}
+    .tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:30;height:calc(var(--tabh) + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);
+      background:rgba(9,10,15,.9);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--line);view-transition-name:tabbar}
+    .tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-decoration:none;color:var(--muted);font-size:11px;font-weight:600;position:relative;z-index:1;transition:color .2s}
+    .tabbar a svg{width:22px;height:22px;transition:transform .3s var(--spring)}
+    .tabbar a.on{color:#fff}.tabbar a.on svg{transform:translateY(-2px)}
+    .tabbar .tind{position:absolute;top:6px;height:calc(var(--tabh) - 12px);border-radius:14px;background:linear-gradient(180deg,rgba(124,92,255,.28),rgba(124,92,255,.08));border:1px solid rgba(124,92,255,.45);transition:left .38s var(--spring),width .38s var(--spring)}
+  }
+
+  /* ---------- pages ---------- */
+  main{view-transition-name:page;min-height:60vh}
+  .page{display:none}
+  .page.on{display:block;animation:in .32s var(--ease)}
+  html.vt .page.on{animation:none}
+  @keyframes in{from{opacity:0;transform:translateY(8px)}}
+  ::view-transition-old(page){animation:vt-out .2s var(--ease) both}
+  ::view-transition-new(page){animation:vt-in .36s var(--ease) both}
+  @keyframes vt-out{to{opacity:0;transform:translateX(calc(var(--dir,1) * -28px)) scale(.985);filter:blur(2px)}}
+  @keyframes vt-in{from{opacity:0;transform:translateX(calc(var(--dir,1) * 36px)) scale(.985);filter:blur(2px)}}
+
+  /* ---------- intro ---------- */
+  #boot{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;transition:opacity .5s var(--ease),visibility .5s;cursor:pointer}
+  #boot.done{opacity:0;visibility:hidden}
+  #boot .bx{text-align:center}
+  #boot .bl{font:700 clamp(28px,7vw,54px)/1 "Space Grotesk",Inter,sans-serif;letter-spacing:.14em;display:flex;justify-content:center;gap:.04em}
+  #boot .bl span{display:inline-block;opacity:0;transform:translateY(14px) rotateX(70deg);animation:let .6s var(--spring) forwards;animation-delay:calc(var(--i) * 45ms)}
+  #boot .bl span.g{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  @keyframes let{to{opacity:1;transform:none}}
+  #boot .bar{width:min(260px,60vw);height:2px;margin:22px auto 12px;background:var(--line);border-radius:2px;overflow:hidden}
+  #boot .bar b{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));transform-origin:left;transform:scaleX(0);animation:load 1.15s .25s var(--ease) forwards;box-shadow:0 0 12px var(--accent2)}
+  @keyframes load{to{transform:scaleX(1)}}
+  #boot .skip{position:absolute;bottom:calc(24px + env(safe-area-inset-bottom));left:0;right:0;text-align:center}
+
+  /* ---------- hero with 3D scene ---------- */
+  .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+  #bg{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .hero::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,transparent 55%,var(--bg) 100%)}
+  .hero .wrap{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr 1fr;align-items:center;gap:8px;min-height:540px;padding-top:28px;padding-bottom:36px}
+  .hero h1{font-size:clamp(32px,5.6vw,58px);line-height:1.02;margin:10px 0 14px;letter-spacing:-.02em}
+  .hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p.lead{color:var(--muted);max-width:520px;margin:0 0 20px;font-size:17px}
+  .live{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;padding:6px 12px;border-radius:999px;background:rgba(17,20,28,.75);border:1px solid var(--line2)}
+  .live i{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok)}
+  .live.off i{background:var(--warn);box-shadow:0 0 8px var(--warn)}
+  .stage{height:480px;perspective:1100px;position:relative;touch-action:pan-y}
+  .rig{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d;transform:rotateX(var(--rx,-8deg)) rotateY(var(--ry,-28deg))}
+  .cube{position:absolute;transform-style:preserve-3d}
+  .face{position:absolute;backface-visibility:hidden;border:1px solid rgba(255,255,255,.07)}
+  .console{width:140px;height:250px;left:-70px;top:-150px}
+  .console .f{width:140px;height:250px;transform:translateZ(100px);border-radius:10px;background:var(--metal);overflow:hidden}
+  .console .f::before{content:"";position:absolute;left:14px;right:14px;top:22px;height:120px;border-radius:6px;background:repeating-linear-gradient(90deg,#0a0c12 0 3px,transparent 3px 8px);opacity:.9}
+  .console .f::after{content:"";position:absolute;left:18px;right:18px;bottom:30px;height:3px;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));box-shadow:0 0 14px var(--accent2),0 0 28px var(--accent);animation:led 3.2s ease-in-out infinite}
+  .console .b{width:140px;height:250px;transform:rotateY(180deg) translateZ(100px);background:#0d1017;border-radius:10px}
+  .console .rt{width:200px;height:250px;left:-30px;transform:rotateY(90deg) translateZ(70px);background:linear-gradient(180deg,#1d2230,#0f121a);border-radius:10px}
+  .console .rt::before{content:"GD-01 · 1 TB · TESTED";position:absolute;left:16px;bottom:16px;font:600 9px var(--mono);letter-spacing:.2em;color:rgba(255,255,255,.35)}
+  .console .lt{width:200px;height:250px;left:-30px;transform:rotateY(-90deg) translateZ(70px);background:#141823;border-radius:10px}
+  .console .tp{width:140px;height:200px;top:25px;transform:rotateX(90deg) translateZ(125px);background:linear-gradient(90deg,#2b3142,#1a1f2b);border-radius:10px}
+  .console .tp::before{content:"";position:absolute;inset:18px;border-radius:6px;background:repeating-linear-gradient(0deg,#0b0d13 0 2px,transparent 2px 7px);opacity:.8}
+  .console .bt{width:140px;height:200px;top:25px;transform:rotateX(-90deg) translateZ(125px);background:#050608}
+  .pad{position:absolute;left:-150px;top:30px;width:230px;transform:translateZ(190px) rotateY(18deg) rotateX(14deg);filter:drop-shadow(0 22px 26px rgba(0,0,0,.6))}
+  .chip{position:absolute;white-space:nowrap;font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;padding:7px 11px;border-radius:10px;background:rgba(12,14,20,.82);border:1px solid var(--line2);color:var(--text);box-shadow:0 10px 30px rgba(0,0,0,.45)}
+  .chip b{color:var(--accent2);font-weight:700}
+  .c1{left:60px;top:-170px;transform:translateZ(150px)}
+  .c2{left:80px;top:40px;transform:translateZ(230px)}
+  .c3{left:-215px;top:-70px;transform:translateZ(175px)}
+  .floor{position:absolute;left:-220px;top:90px;width:440px;height:440px;transform:rotateX(90deg) translateZ(-10px);background:radial-gradient(closest-side,rgba(124,92,255,.45),rgba(34,211,238,.12) 55%,transparent 72%);filter:blur(6px)}
+  @media (max-width:860px){
+    .hero .wrap{grid-template-columns:1fr;min-height:0;padding-top:4px;gap:0}
+    .stage{height:330px;order:-1;margin:0 -16px}
+    .rig{scale:.66}
+  }
+  .cta{display:flex;flex-wrap:wrap;gap:10px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;border-radius:12px;padding:12px 18px;font-weight:700;font-size:15px;border:1px solid var(--line2);background:var(--card);cursor:pointer;color:var(--text);transition:transform .15s var(--ease),filter .15s,translate .25s var(--ease),box-shadow .2s;min-height:44px}
+  .btn:hover{filter:brightness(1.12)}.btn:active{transform:scale(.97)}
+  .btn.p{background:linear-gradient(180deg,#8a6dff,#6d4cf5);border-color:#8a6dff;color:#fff;box-shadow:0 8px 26px rgba(124,92,255,.35),0 1px 0 rgba(255,255,255,.25) inset}
+  .btn.w{background:linear-gradient(180deg,#25bd61,#1a9a4c);border-color:#25bd61;color:#fff;box-shadow:0 8px 24px rgba(31,168,85,.28),0 1px 0 rgba(255,255,255,.2) inset}
+  .btn.d{background:transparent;border-color:#5b1d1d;color:#fca5a5}
+  .btn.s{padding:8px 12px;font-size:13px;border-radius:10px;min-height:36px}
+  .btn[disabled]{opacity:.45;pointer-events:none}
+  .trust{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:26px 0 0}
+  @media (max-width:860px){.trust{grid-template-columns:1fr 1fr}}
+  .trust div{background:rgba(17,20,28,.7);backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:14px;padding:12px;font-size:13px;color:var(--muted)}
+  .trust b{display:block;font-size:14px;color:var(--text)}
+  h2{font-size:clamp(22px,3.4vw,30px);margin:34px 0 14px;letter-spacing:-.02em}
+  .kicker{display:block;margin-bottom:4px}
+
+  /* ---------- shop ---------- */
+  .tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+  input,select,textarea{background:var(--card);color:var(--text);border:1px solid var(--line2);border-radius:11px;padding:11px 12px;font:inherit;font-size:16px;width:100%;transition:border-color .15s,box-shadow .15s}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,92,255,.22)}
+  .tools input{flex:1;min-width:180px;width:auto}.tools select{width:auto}
+  .chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:6px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chips button{flex:none;background:var(--card);color:var(--text);border:1px solid var(--line2);border-radius:999px;padding:8px 15px;font-size:14px;cursor:pointer;transition:background .2s,border-color .2s;min-height:38px}
+  .chips button.on{background:var(--accent);border-color:var(--accent)}
+  .hint{font-size:12px;color:var(--muted);margin:0 0 12px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:12px}
+  .grid.anim > .item{animation:card .5s var(--ease) both}
+  .grid.anim > .item:nth-child(2){animation-delay:.04s}.grid.anim > .item:nth-child(3){animation-delay:.08s}.grid.anim > .item:nth-child(4){animation-delay:.12s}
+  .grid.anim > .item:nth-child(5){animation-delay:.16s}.grid.anim > .item:nth-child(6){animation-delay:.2s}.grid.anim > .item:nth-child(n+7){animation-delay:.24s}
+  @keyframes card{from{opacity:0;transform:translateY(14px) scale(.98)}}
+  .item{position:relative;background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:var(--r);padding:10px;display:flex;flex-direction:column;
+    transform:perspective(800px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(var(--ty,0px));transition:transform .35s var(--ease),border-color .25s,box-shadow .25s}
+  .item::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(260px circle at var(--gx,50%) var(--gy,0%),rgba(255,255,255,.09),transparent 60%)}
+  @media (hover:hover){.item:hover{--ty:-4px;border-color:var(--line2);box-shadow:0 18px 40px rgba(0,0,0,.45),0 0 0 1px rgba(124,92,255,.15)}.item:hover::after{opacity:1}}
+  .pic{aspect-ratio:4/3;border-radius:11px;display:grid;place-items:center;margin-bottom:10px;position:relative;overflow:hidden;cursor:pointer}
+  .pic::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.08),transparent 40%)}
+  .pic svg{width:56%;height:auto;transition:transform .5s var(--ease)}
+  @media (hover:hover){.item:hover .pic svg{transform:scale(1.07) translateY(-2px)}}
+  .pic img{width:100%;height:100%;object-fit:cover}
+  .badge{position:absolute;top:8px;left:8px;z-index:1;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;background:rgba(0,0,0,.55);backdrop-filter:blur(4px)}
+  .badge.out{background:#5b1d1d}
+  .badge.low{left:auto;right:8px;background:rgba(255,213,74,.18);color:#fde68a;border:1px solid rgba(255,213,74,.35)}
+  .name{font-weight:650;font-size:15px;line-height:1.3;cursor:pointer}
+  .note{color:var(--muted);font-size:13px;margin:3px 0 8px;flex:1}
+  .price{font-size:17px;font-weight:800;margin-bottom:8px;font-variant-numeric:tabular-nums}
+  .price small{font-weight:500;color:var(--muted);font-size:11px;margin-left:4px}
+  .row{display:flex;gap:6px}
+  .row button,.row a{flex:1;text-align:center;border-radius:11px;padding:10px 6px;font-weight:700;font-size:13px;cursor:pointer;text-decoration:none;border:0;transition:transform .15s var(--ease),background .2s;min-height:40px;display:flex;align-items:center;justify-content:center}
+  .row button:active,.row a:active{transform:scale(.95)}
+  .add{background:var(--card2);color:var(--text);border:1px solid var(--line2)!important}
+  .add.in{background:var(--accent);color:#fff;border-color:var(--accent)!important}
+  .ask{background:var(--wa);color:#fff}
+  .notify{background:transparent;color:#fde68a;border:1px solid rgba(255,213,74,.4)!important}
+  .empty{color:var(--muted);padding:30px 0;text-align:center}
+
+  /* ---------- sections ---------- */
+  .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+  .box{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:var(--r);padding:16px}
+  .box h3{margin:0 0 6px;font-size:17px}
+  .box p{margin:0;color:var(--muted);font-size:14px}
+  .step{font:700 12px var(--mono);color:var(--accent2);letter-spacing:.15em}
+  details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 15px;margin-bottom:8px;transition:border-color .2s}
+  details[open]{border-color:var(--line2)}
+  summary{cursor:pointer;font-weight:650;list-style:none;display:flex;justify-content:space-between;gap:10px}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";color:var(--muted);transition:transform .25s var(--ease)}
+  details[open] summary::after{transform:rotate(45deg)}
+  details p{color:var(--muted);margin:8px 0 0;font-size:14px}
+  footer{margin-top:44px;padding:24px 0 calc(120px + var(--tabh));border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+  .est{margin-top:14px;border-radius:var(--r);padding:18px;background:radial-gradient(400px 160px at 100% 0%,rgba(34,211,238,.14),transparent),linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line2)}
+  .est .big{font:700 clamp(26px,5vw,36px)/1.1 "Space Grotesk",Inter,sans-serif;font-variant-numeric:tabular-nums;margin:4px 0}
+  .checks{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+  .checks label{display:flex;align-items:center;gap:8px;margin:0;padding:9px 12px;border:1px solid var(--line2);border-radius:11px;background:var(--card);color:var(--text);font-size:14px;cursor:pointer}
+  .checks input{width:auto;accent-color:var(--accent)}
+  .seg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+  .seg button{background:var(--card);border:1px solid var(--line2);color:var(--text);border-radius:11px;padding:10px 4px;font-size:13px;font-weight:600;cursor:pointer;min-height:44px;transition:all .2s var(--ease)}
+  .seg button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  @media (max-width:420px){.seg{grid-template-columns:1fr 1fr}}
+
+  /* ---------- drawers and dialogs ---------- */
+  .shade{position:fixed;inset:0;background:rgba(3,4,8,.6);backdrop-filter:blur(3px);z-index:40;opacity:0;pointer-events:none;transition:opacity .25s}
+  .drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--bg2);border-left:1px solid var(--line);z-index:50;transform:translateX(100%);transition:transform .35s var(--ease);display:flex;flex-direction:column}
+  .open-cart .shade,.open-item .shade{opacity:1;pointer-events:auto}
+  .open-cart #drawer{transform:none}
+  .sheet{position:fixed;left:0;right:0;bottom:0;max-width:580px;margin:0 auto;max-height:90vh;overflow:auto;background:var(--bg2);border:1px solid var(--line2);border-radius:22px 22px 0 0;z-index:50;transform:translateY(105%);transition:transform .38s var(--ease);padding:10px 16px calc(24px + env(safe-area-inset-bottom));overscroll-behavior:contain}
+  .sheet::before{content:"";display:block;width:40px;height:4px;border-radius:4px;background:var(--line2);margin:0 auto 6px}
+  .open-item #sheet{transform:none}
+  .sheet .pic{aspect-ratio:16/9;cursor:default}
+  .dh{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line)}
+  .x{background:none;border:0;color:var(--muted);font-size:26px;cursor:pointer;line-height:1;min-width:44px;min-height:44px}
+  .db{flex:1;overflow:auto;padding:12px 16px}
+  .line{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+  .line .n{flex:1}
+  .qty{display:flex;align-items:center;gap:6px}
+  .qty button{width:34px;height:34px;border-radius:9px;border:1px solid var(--line2);background:var(--card);color:var(--text);cursor:pointer}
+  .df{padding:12px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--line);max-height:62vh;overflow:auto}
+  label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+  .sum{font-size:14px;color:var(--muted);display:flex;justify-content:space-between;margin:2px 0}
+  .total{display:flex;justify-content:space-between;font-weight:800;font-size:18px;margin:6px 0 2px;font-variant-numeric:tabular-nums}
+  .cut{display:flex;align-items:center;gap:8px;font-size:13px;padding:9px 12px;border-radius:11px;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.25);color:#bbf7d0}
+  .cut.late{background:rgba(255,213,74,.07);border-color:rgba(255,213,74,.28);color:#fde68a}
+  .spec{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14px;margin:12px 0}
+  .spec dt{color:var(--muted)}.spec dd{margin:0}
+  .mini{display:flex;align-items:center;gap:10px;padding:8px;border:1px solid var(--line);border-radius:12px;background:var(--card);margin-bottom:6px}
+  .mini .thumb{width:46px;height:36px}
+  .mini .n{flex:1;font-size:14px}
+  .parts{border:1px dashed var(--line2);border-radius:14px;padding:12px;margin:12px 0}
+
+  .float{position:fixed;left:16px;right:16px;bottom:calc(14px + var(--tabh) + env(safe-area-inset-bottom));max-width:1088px;margin:0 auto;z-index:30;display:flex;gap:8px;justify-content:flex-end;view-transition-name:float;pointer-events:none}
+  .float > *{pointer-events:auto}
+  .float a,.float button{text-align:center;text-decoration:none;font-weight:800;padding:14px 18px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.55);border:0;font-size:15px;cursor:pointer}
+  .float a{background:var(--wa);color:#fff;display:flex;align-items:center;gap:8px}
+  .float a svg{width:22px;height:22px}
+  .float button{background:var(--accent);color:#fff;display:none;flex:1;animation:rise .4s var(--spring)}
+  @keyframes rise{from{transform:translateY(20px);opacity:0}}
+  .float.has button{display:block}
+  @media (max-width:760px){.float a span{display:none}.float a{padding:14px}}
+  @media (min-width:900px){.float button{flex:none;padding:13px 22px}}
+  .admin-on .float{display:none}
+  .toast{position:fixed;left:50%;top:76px;transform:translate(-50%,-20px);background:#fff;color:#111;font-weight:600;font-size:14px;padding:10px 16px;border-radius:999px;opacity:0;pointer-events:none;transition:all .3s var(--spring);z-index:90;box-shadow:0 10px 30px rgba(0,0,0,.45);max-width:calc(100% - 32px);text-align:center}
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+
+  /* ---------- cursor (computers with a mouse only) ---------- */
+  #cur,#dot{display:none}
+  html.has-cur, html.has-cur a, html.has-cur button, html.has-cur summary, html.has-cur label, html.has-cur select{cursor:none}
+  html.has-cur input, html.has-cur textarea{cursor:text}
+  html.has-cur #cur,html.has-cur #dot{display:block;position:fixed;left:0;top:0;pointer-events:none;z-index:200}
+  #dot{width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:#fff;mix-blend-mode:difference}
+  #cur{width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;border:1.5px solid rgba(255,255,255,.55);display:grid!important;place-items:center;
+    transition:width .3s var(--ease),height .3s var(--ease),margin .3s var(--ease),background .3s,border-color .3s,opacity .2s}
+  html:not(.has-cur) #cur{display:none!important}
+  #cur span{font:700 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#fff;opacity:0;transition:opacity .2s}
+  #cur.hov{width:46px;height:46px;margin:-23px 0 0 -23px;border-color:var(--accent2);background:rgba(34,211,238,.08)}
+  #cur.lab{width:64px;height:64px;margin:-32px 0 0 -32px;background:var(--accent);border-color:var(--accent)}
+  #cur.lab span{opacity:1}
+  #cur.wa{background:var(--wa);border-color:var(--wa)}
+  #cur.txt,#cur.hide{opacity:0}
+  #cur.down{transform:scale(.85)}
+
+  /* ---------- owner area ---------- */
+  .login{max-width:420px;margin:24px auto}
+  .demo-note{background:rgba(255,213,74,.07);border:1px dashed rgba(255,213,74,.45);color:#f5e6a8;border-radius:12px;padding:10px 12px;font-size:13px;margin:12px 0}
+  .tabs{display:flex;gap:6px;overflow-x:auto;margin:6px 0 14px;scrollbar-width:none}
+  .tabs button{flex:none;background:var(--card);color:var(--muted);border:1px solid var(--line);border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:600;min-height:40px}
+  .tabs button.on{color:#fff;background:var(--accent);border-color:var(--accent)}
+  .tabs button i{font-style:normal;background:var(--warn);color:#1a1400;border-radius:999px;font-size:11px;padding:0 6px;margin-left:6px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+  .kpi{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:14px;padding:12px}
+  .kpi b{display:block;font-size:22px;font-family:"Space Grotesk",Inter,sans-serif;font-variant-numeric:tabular-nums}
+  .kpi span{color:var(--muted);font-size:13px}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  td,th{padding:9px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+  th{color:var(--muted);font-weight:600;font-size:13px}
+  .tw{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:var(--r)}
+  .bar{height:8px;border-radius:4px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+  .thumb{width:44px;height:34px;border-radius:7px;overflow:hidden;display:grid;place-items:center;flex:none}
+  .thumb svg{width:60%}.thumb img{width:100%;height:100%;object-fit:cover}
+  .pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;background:var(--card2);border:1px solid var(--line2)}
+  .pill.g{color:#86efac;border-color:#14532d}.pill.r{color:#fca5a5;border-color:#5b1d1d}.pill.y{color:#fde68a;border-color:#5b4a12}
+  .formgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+  .formgrid .full{grid-column:1/-1}
+  .who{display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap}
+  .err{color:#fca5a5;font-size:13px;min-height:18px;margin-top:6px}
+  .alert{display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap;padding:11px 12px;border-bottom:1px solid var(--line);font-size:14px}
+  .alert:last-child{border-bottom:0}
+
+  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div id="boot" hidden aria-hidden="true"><div class="bx">
+  <div class="bl" id="bootLogo"></div>
+  <div class="bar"><b></b></div>
+  <div class="mono">Consoles · Games · Phones · Accessories</div>
+</div><div class="skip mono">Tap to skip</div></div>
+
+<div class="sample">SAMPLE built for Gamerz Delight by Emmanuel Muteti · items, prices and fees are examples, not today's stock</div>
+
+<div class="top"><div class="wrap">
+  <a class="logo" href="#/"><i></i>GAMERZ<span>DELIGHT</span></a>
+  <nav class="links" id="links">
+    <span class="ind" id="ind"></span>
+    <a href="#/">Home</a><a href="#/shop">Shop</a><a href="#/trade-in">Trade-in</a><a href="#/warranty">Warranty</a><a href="#/visit">Visit us</a><a href="#/owner">Owner</a>
+  </nav>
+  <a class="ownerlink" href="#/owner">Owner</a>
+  <button class="cartbtn" id="cartbtn" aria-label="Open your order">Order<b id="count">0</b></button>
+</div></div>
+
+<main id="main">
+<!-- HOME -->
+<section class="page" id="p-home">
+  <div class="hero" id="hero">
+    <canvas id="bg" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <div>
+        <span class="live" id="openNow"><i></i><span>Checking hours…</span></span>
+        <h1>Play more.<br><em>Pay less to upgrade.</em></h1>
+        <p class="lead">PS5, Xbox, games and phones at Accra Plaza. Trade in your old console, pay the difference by M-PESA, and have it delivered in Nairobi today.</p>
+        <div class="cta"><a class="btn p mag" href="#/shop">See what's in stock</a><a class="btn mag" href="#/trade-in">What's my console worth?</a></div>
+        <div class="trust">
+          <div><b>Same-day delivery</b><span id="cutHero">In Nairobi</span></div>
+          <div><b>Trade-in</b>Swap and pay the difference</div>
+          <div><b>Warranty you can check</b>Type your receipt number</div>
+          <div><b>Pay in parts</b>Deposit now, collect later</div>
+        </div>
+      </div>
+      <div class="stage" id="stage" aria-hidden="true">
+        <div class="rig" id="rig">
+          <div class="floor"></div>
+          <div class="cube console">
+            <div class="face f"></div><div class="face b"></div><div class="face rt"></div><div class="face lt"></div><div class="face tp"></div><div class="face bt"></div>
+          </div>
+          <svg class="pad" viewBox="0 0 240 150">
+            <defs>
+              <linearGradient id="pg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f6fb"/><stop offset="1" stop-color="#b9c0d0"/></linearGradient>
+              <linearGradient id="pl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7c5cff"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
+            </defs>
+            <path d="M58 22h124c22 0 36 14 44 40l12 44c6 24-10 40-28 34-12-4-20-18-30-30H60c-10 12-18 26-30 30-18 6-34-10-28-34l12-44c8-26 22-40 44-40z" fill="url(#pg)"/>
+            <path d="M96 30h48" stroke="url(#pl)" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="62" cy="66" r="15" fill="#1b1f2b"/><circle cx="62" cy="66" r="8" fill="#2c3242"/>
+            <circle cx="148" cy="96" r="13" fill="#1b1f2b"/><circle cx="148" cy="96" r="7" fill="#2c3242"/>
+            <circle cx="94" cy="96" r="13" fill="#1b1f2b"/><circle cx="94" cy="96" r="7" fill="#2c3242"/>
+            <circle cx="182" cy="52" r="7" fill="#7c5cff"/><circle cx="198" cy="66" r="7" fill="#22d3ee"/><circle cx="166" cy="66" r="7" fill="#22d3ee"/><circle cx="182" cy="80" r="7" fill="#7c5cff"/>
+          </svg>
+          <div class="chip c1">Tested <b>✓</b> before you pay</div>
+          <div class="chip c2">M-PESA · <b>on delivery</b></div>
+          <div class="chip c3">Trade-in · <b>same day</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="wrap">
+    <h2><span class="mono kicker">This week</span>Popular at the shop</h2>
+    <div class="grid" id="popular"></div>
+    <h2><span class="mono kicker">Upgrade</span>Your old console pays for the new one</h2>
+    <div class="two">
+      <div class="box"><div class="step">01</div><h3>Get a price in 20 seconds</h3><p>Pick your console or phone and its condition. See an estimate before you leave the house.</p></div>
+      <div class="box"><div class="step">02</div><h3>Bring it in</h3><p>We test it at the counter in front of you and confirm the price.</p></div>
+      <div class="box"><div class="step">03</div><h3>Pay only the difference</h3><p>By M-PESA. Your new console goes home with you, tested.</p></div>
+    </div>
+    <p style="margin-top:14px"><a class="btn p mag" href="#/trade-in">Check what mine is worth</a></p>
+    <h2><span class="mono kicker">Questions</span>What people ask us</h2>
+    <details><summary>Are your consoles new or used?</summary><p>Both. Each item says "New", "Refurbished" or "Used", with its warranty in months. Refurbished and used items are tested in front of you before you pay.</p></details>
+    <details><summary>How does delivery work?</summary><p>Order on WhatsApp before 4 pm, Monday to Saturday, and it arrives the same day within Nairobi. You pay by M-PESA when you have it in your hands. The delivery fee is shown in your order before you send it.</p></details>
+    <details><summary>Can I pay in parts?</summary><p>Yes, for items over KES 20,000. Pay a deposit, then the rest weekly. We keep the item for you and you collect it when it's fully paid.</p></details>
+    <details><summary>How do I check my warranty?</summary><p>Open the Warranty page and type the receipt number on your receipt, for example GD-1000.</p></details>
+  </div>
+</section>
+
+<!-- SHOP -->
+<section class="page" id="p-shop"><div class="wrap">
+  <h2><span class="mono kicker">In stock across our shops</span>Shop</h2>
+  <div class="tools">
+    <input id="q" type="search" placeholder="Search: PS5, FC 26, iPhone…" aria-label="Search">
+    <select id="sort" aria-label="Sort"><option value="pop">Most popular</option><option value="lo">Price: low to high</option><option value="hi">Price: high to low</option></select>
+  </div>
+  <div class="chips" id="chips"></div>
+  <p class="hint" id="swipeHint">Swipe left or right to change category.</p>
+  <div class="grid" id="grid"></div>
+</div></section>
+
+<!-- TRADE-IN -->
+<section class="page" id="p-trade"><div class="wrap">
+  <h2><span class="mono kicker">Trade-in estimate</span>What's my console or phone worth?</h2>
+  <div class="box">
+    <label for="tm">What do you have?</label><select id="tm"></select>
+    <label>Condition</label><div class="seg" id="tc"></div>
+    <label>Comes with</label>
+    <div class="checks"><label><input type="checkbox" id="tx1"> Its controller or charger</label><label><input type="checkbox" id="tx2"> Box and cables</label></div>
+    <label for="ts">Swap it for (optional)</label><select id="ts"></select>
+  </div>
+  <div class="est" id="est" aria-live="polite"></div>
+  <p class="hint" style="margin-top:10px">Sample values. The shop sets the real ones and confirms after testing your item at the counter.</p>
+</div></section>
+
+<!-- WARRANTY -->
+<section class="page" id="p-warranty"><div class="wrap">
+  <h2><span class="mono kicker">Warranty check</span>Is my item still covered?</h2>
+  <form class="box" id="wf" style="max-width:560px">
+    <label for="wr">Receipt number</label>
+    <div style="display:flex;gap:8px"><input id="wr" placeholder="e.g. GD-1000" autocapitalize="characters" maxlength="12" style="flex:1"><button class="btn p">Check</button></div>
+    <p class="hint" style="margin:8px 0 0">Try <b>GD-1000</b> to see an example.</p>
+  </form>
+  <div id="wout" style="max-width:560px;margin-top:12px" aria-live="polite"></div>
+</div></section>
+
+<!-- VISIT -->
+<section class="page" id="p-visit"><div class="wrap">
+  <h2><span class="mono kicker">Find us</span>Visit us</h2>
+  <div class="two" id="shops"></div>
+</div></section>
+
+<!-- OWNER -->
+<section class="page" id="p-owner"><div class="wrap" id="owner"></div></section>
+</main>
+
+<div class="wrap"><footer>
+  Gamerz Delight · Accra Plaza, Shop 23, Kenneth Matiba Rd, Nairobi · 0792 027 503<br>
+  Sample site prepared by Emmanuel Muteti for the owner's review. Not the shop's official site.
+</footer></div>
+
+<nav class="tabbar" id="tabbar" aria-label="Main">
+  <span class="tind" id="tind"></span>
+  <a href="#/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Home</a>
+  <a href="#/shop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 12H7z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg>Shop</a>
+  <a href="#/trade-in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13l-3-3M20 16H7l3 3"/></svg>Trade-in</a>
+  <a href="#/warranty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Warranty</a>
+  <a href="#/visit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>Visit</a>
+</nav>
+
+<div class="float" id="float">
+  <button id="floatCart">Send my order</button>
+  <a id="floatWa" href="#" aria-label="WhatsApp us"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.8-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg><span>WhatsApp us</span></a>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div id="cur"><span></span></div><div id="dot"></div>
+
+<div class="shade" id="shade"></div>
+<aside class="drawer" id="drawer" aria-label="Your order">
+  <div class="dh"><b>Your order</b><button class="x" data-close aria-label="Close">×</button></div>
+  <div class="db" id="lines"></div>
+  <div class="df">
+    <div class="cut" id="cutCart"></div>
+    <label for="how">Delivery or collection</label>
+    <select id="how"></select>
+    <div id="delivBox">
+      <label for="zone">Delivery area</label><select id="zone"></select>
+      <label for="area">Street, building or landmark</label><input id="area" placeholder="e.g. Kilimani, Argwings Kodhek Rd" maxlength="80">
+    </div>
+    <label for="nm">Your name</label><input id="nm" autocomplete="name" maxlength="60">
+    <div style="margin-top:12px">
+      <div class="sum"><span>Items</span><span id="sub">KES 0</span></div>
+      <div class="sum"><span>Delivery <small>(sample fee)</small></span><span id="fee">—</span></div>
+      <div class="total"><span>Total</span><span id="total">KES 0</span></div>
+    </div>
+    <p style="margin:12px 0 0"><a class="btn w" style="display:flex" id="send" href="#">Send order on WhatsApp</a></p>
+    <p style="font-size:12px;color:var(--muted);margin:8px 0 0">You pay by M-PESA to the shop's Till when the order reaches you, or at the counter. Nothing is charged on this page.</p>
+  </div>
+</aside>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Item"></div>
+
+<script>
+  const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const WA = "254792027503"; // shop line from the public Google Maps listing
+  const wa = t => "https://wa.me/" + WA + "?text=" + encodeURIComponent(t);
+  const kes = n => "KES " + Number(n||0).toLocaleString("en-KE");
+  // Everything typed by staff or buyers is escaped before it is put on the page.
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const $ = id => document.getElementById(id);
+  const store = { get(k,d){ try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch(e){ return d; } },
+                  set(k,v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){ toast("This phone's storage is full; use a smaller photo"); } } };
+  const ss = { get(k){ try { return sessionStorage.getItem(k); } catch(e){ return null; } }, set(k,v){ try { sessionStorage.setItem(k,v); } catch(e){} } };
+  function toast(t){ const el = $("toast"); el.textContent = t; el.classList.add("on"); clearTimeout(toast.h); toast.h = setTimeout(() => el.classList.remove("on"), 2000); }
+  const buzz = () => { try { navigator.vibrate && navigator.vibrate(8); } catch(e){} };
+  const r500 = n => Math.round(n / 500) * 500;
+
+  // Nairobi time, so opening hours and the delivery cut-off are right wherever the phone is set.
+  function nbi(){
+    const p = Object.fromEntries(new Intl.DateTimeFormat("en-GB",{timeZone:"Africa/Nairobi",weekday:"short",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(new Date()).map(x => [x.type, x.value]));
+    return {day:p.weekday, h:+p.hour, m:+p.minute};
+  }
+  const OPEN = 9, CLOSE = 19, CUTOFF = 16;
+  function openState(){
+    const t = nbi(), mins = t.h*60 + t.m;
+    if (t.day !== "Sun" && mins >= OPEN*60 && mins < CLOSE*60) return {open:true, text:"Open now · closes 7 pm"};
+    const next = t.day === "Sat" && mins >= CLOSE*60 || t.day === "Sun" ? "Monday" : mins < OPEN*60 ? "today" : "tomorrow";
+    return {open:false, text:`Closed · opens 9 am ${next}`};
+  }
+  function cutoffText(){
+    const t = nbi(), mins = t.h*60 + t.m, left = CUTOFF*60 - mins;
+    if (t.day === "Sun") return {late:true, text:"Order today, delivered Monday"};
+    if (left > 0 && mins >= OPEN*60 - 60) { const h = Math.floor(left/60), m = left % 60; return {late:false, text:`Order in ${h ? h + " h " : ""}${m} min, delivered today`}; }
+    if (left > 0) return {late:false, text:"Order before 4 pm, delivered today"};
+    return {late:true, text:`Order now, delivered ${t.day === "Sat" ? "Monday" : "tomorrow"}`};
+  }
+  function drawClock(){
+    const o = openState(), c = cutoffText();
+    $("openNow").classList.toggle("off", !o.open); $("openNow").lastElementChild.textContent = o.text;
+    $("cutHero").textContent = c.text;
+    $("cutCart").className = "cut" + (c.late ? " late" : ""); $("cutCart").textContent = (c.late ? "◷ " : "⚡ ") + c.text;
+    document.querySelectorAll("[data-open]").forEach(el => { el.className = "pill " + (o.open ? "g" : "y"); el.textContent = o.text; });
+  }
+
+  // Shops. The second one is from a referral and is to be confirmed with the owner.
+  const SHOPS = [
+    {id:"s1", name:"Accra Plaza, Shop 23", addr:"Ground Floor, Kenneth Matiba Road, Nairobi CBD", hours:"Mon–Sat, 9 am – 7 pm", map:"https://www.google.com/maps/search/?api=1&query=Gamerz+Delight+Accra+Plaza+Nairobi"},
+    {id:"s2", name:"Second shop", addr:"Address to confirm with the owner", hours:"Hours to confirm", map:""}
+  ];
+  // Sample delivery fees; the owner sets the real ones. null = quoted on WhatsApp.
+  const ZONES = [
+    {id:"cbd", n:"Nairobi CBD", f:0},
+    {id:"in",  n:"Westlands, Kilimani, Upper Hill, Ngara, South B/C", f:300},
+    {id:"out", n:"Rest of Nairobi", f:500},
+    {id:"far", n:"Outside Nairobi (courier)", f:null}
+  ];
+
+  // Example items and prices: the owner's own list replaces these. w = warranty in months.
+  const DEFAULTS = [
+    {id:"ps5",  c:"Consoles", n:"PlayStation 5 Slim", d:"Disc edition, 1 TB, one controller", p:92000, t:"New", w:12, box:"Console, 1 controller, HDMI and power cables", pop:10, stock:{s1:4,s2:2}},
+    {id:"ps4",  c:"Consoles", n:"PlayStation 4 Slim", d:"500 GB, tested in front of you", p:32000, t:"Refurbished", w:3, box:"Console, 1 controller, cables", pop:8, stock:{s1:3,s2:1}},
+    {id:"xss",  c:"Consoles", n:"Xbox Series S", d:"512 GB, digital", p:52000, t:"New", w:12, box:"Console, 1 controller, cables", pop:6, stock:{s1:2,s2:0}},
+    {id:"sw",   c:"Consoles", n:"Nintendo Switch OLED", d:"White, 64 GB", p:52000, t:"New", w:12, box:"Console, dock, Joy-Cons, cables", pop:4, stock:{s1:1,s2:1}},
+    {id:"fc26", c:"Games", n:"EA Sports FC 26 (PS5)", d:"Sealed", p:9500, t:"New", w:0, pop:10, stock:{s1:12,s2:6}},
+    {id:"gow",  c:"Games", n:"God of War Ragnarök (PS5)", d:"Sealed", p:6500, t:"New", w:0, pop:7, stock:{s1:5,s2:2}},
+    {id:"gta",  c:"Games", n:"GTA V (PS4/PS5)", d:"Disc, tested", p:4000, t:"Used", w:0, pop:7, stock:{s1:6,s2:3}},
+    {id:"cod",  c:"Games", n:"Call of Duty (PS5)", d:"Latest edition, sealed", p:9000, t:"New", w:0, pop:6, stock:{s1:4,s2:0}},
+    {id:"a15",  c:"Phones", n:"Samsung Galaxy A15", d:"128 GB, 1-year warranty", p:19500, t:"New", w:12, box:"Phone, cable", pop:8, stock:{s1:5,s2:3}},
+    {id:"ip13", c:"Phones", n:"iPhone 13, ex-UK", d:"128 GB, battery health shown before you pay", p:58000, t:"Refurbished", w:6, box:"Phone, cable", pop:9, stock:{s1:2,s2:1}},
+    {id:"rn13", c:"Phones", n:"Redmi Note 13", d:"256 GB", p:23000, t:"New", w:12, box:"Phone, charger, case", pop:5, stock:{s1:3,s2:2}},
+    {id:"ds",   c:"Accessories", n:"DualSense controller", d:"PS5, several colours", p:9500, t:"New", w:6, pop:9, stock:{s1:8,s2:4}},
+    {id:"hs",   c:"Accessories", n:"Gaming headset", d:"Works with PS5, PS4 and PC", p:4500, t:"New", w:3, pop:5, stock:{s1:6,s2:2}},
+    {id:"chg",  c:"Accessories", n:"Fast charger + cable", d:"Type-C or Lightning", p:1500, t:"New", w:3, pop:6, stock:{s1:20,s2:10}},
+    {id:"bud",  c:"Accessories", n:"Wireless earbuds", d:"Several brands", p:2500, t:"New", w:3, pop:4, stock:{s1:0,s2:0}}
+  ];
+  const CATS = ["Consoles","Games","Phones","Accessories"];
+  // What the shop pays for a trade-in in good condition (sample values; owner edits them).
+  const TRADE_DEFAULTS = [
+    {id:"ps4s", n:"PlayStation 4 Slim", v:17000}, {id:"ps4p", n:"PlayStation 4 Pro", v:24000},
+    {id:"ps5d", n:"PlayStation 5 (disc)", v:55000}, {id:"ps5g", n:"PlayStation 5 (digital)", v:47000},
+    {id:"xos",  n:"Xbox One S", v:13000}, {id:"xss", n:"Xbox Series S", v:30000}, {id:"sw", n:"Nintendo Switch", v:20000},
+    {id:"ip11", n:"iPhone 11", v:22000}, {id:"ip12", n:"iPhone 12", v:30000}, {id:"sama", n:"Samsung A-series (2023 or newer)", v:8000}
+  ];
+  const COND = [{k:"Like new",x:1.1},{k:"Good",x:1},{k:"Worn",x:.75},{k:"Faulty",x:0}];
+  // An example sale so the warranty check can be tried straight away.
+  const DEMO_SALE = {no:1000, receipt:"GD-1000", soldAt: new Date(Date.now() - 62*864e5).toISOString(), name:"Example buyer",
+    lines:[{n:"PlayStation 5 Slim", q:1, p:92000, w:12}, {n:"DualSense controller", q:1, p:9500, w:6}, {n:"Fast charger + cable", q:1, p:1500, w:3}]};
+
+  let items  = store.get("gd_products", DEFAULTS);
+  let cart   = store.get("gd_cart", {});
+  let stats  = store.get("gd_stats", {});
+  let orders = store.get("gd_orders", []);
+  let wait   = store.get("gd_waitlist", []);
+  let trade  = store.get("gd_trade", TRADE_DEFAULTS);
+  const saveItems = () => store.set("gd_products", items);
+  const byId = id => items.find(i => i.id === id);
+  const inStock = i => Object.values(i.stock||{}).reduce((s,n)=>s+Number(n||0),0);
+  const warr = i => i.w ?? ({New:12, Refurbished:3, Used:1}[i.t] || 0);
+  const bump = (id, kind) => { stats[id] = stats[id] || {add:0, ask:0}; stats[id][kind] = (stats[id][kind]||0) + 1; store.set("gd_stats", stats); };
+
+  // Drawn pictures in place of product photos until the shop's own photos arrive.
+  const art = {
+    Consoles:["#2a1d6e","#7c5cff",'<rect x="20" y="30" width="60" height="40" rx="8" fill="#fff" opacity=".92"/><rect x="26" y="62" width="48" height="2" rx="1" fill="#22d3ee"/><circle cx="36" cy="46" r="5" fill="#7c5cff"/><circle cx="64" cy="42" r="3" fill="#22d3ee"/><circle cx="70" cy="50" r="3" fill="#22d3ee"/>'],
+    Games:["#0b4650","#22d3ee",'<rect x="28" y="18" width="44" height="64" rx="4" fill="#fff" opacity=".92"/><rect x="34" y="26" width="32" height="30" rx="2" fill="#22d3ee"/><rect x="34" y="62" width="22" height="4" rx="2" fill="#0b4650"/>'],
+    Phones:["#3d2a0c","#f5a524",'<rect x="34" y="12" width="32" height="76" rx="6" fill="#fff" opacity=".92"/><rect x="38" y="20" width="24" height="56" rx="2" fill="#f5a524"/><circle cx="50" cy="82" r="2.5" fill="#3d2a0c"/>'],
+    Accessories:["#103f24","#1fa855",'<path d="M26 56a24 24 0 0 1 48 0" stroke="#fff" stroke-width="6" fill="none" opacity=".92"/><rect x="20" y="52" width="14" height="22" rx="5" fill="#fff"/><rect x="66" y="52" width="14" height="22" rx="5" fill="#fff"/>']
+  };
+  const visual = (i, cls) => { const [a,b,g] = art[i.c] || art.Accessories;
+    return i.img ? `<div class="${cls}"><img src="${esc(i.img)}" alt="${esc(i.n)}" loading="lazy">`
+                 : `<div class="${cls}" style="background:radial-gradient(120% 90% at 30% 10%,${b},${a})"><svg viewBox="0 0 100 100" aria-hidden="true">${g}</svg>`; };
+  const pic = i => { const n = inStock(i);
+    return visual(i,"pic") + `<span class="badge ${n?"":"out"}">${n ? esc(i.t) : "Sold out"}</span>${n && n <= 2 ? `<span class="badge low">Only ${n} left</span>` : ""}</div>`; };
+
+  function card(i){
+    const out = !inStock(i), inCart = cart[i.id];
+    return `<div class="item"><div data-view="${esc(i.id)}">${pic(i)}</div>
+      <div class="name" data-view="${esc(i.id)}">${esc(i.n)}</div><div class="note">${esc(i.d)}</div>
+      <div class="price">${kes(i.p)}<small>sample price</small></div>
+      <div class="row">
+        ${out ? `<button class="notify" data-wait="${esc(i.id)}">Tell me when it's back</button>`
+              : `<button class="add ${inCart?"in":""}" data-add="${esc(i.id)}">${inCart?"Added ✓":"Add"}</button>
+                 <a class="ask" data-ask="${esc(i.id)}" href="${wa("Hi Gamerz Delight, is the " + i.n + " available today?")}">Ask</a>`}
+      </div></div>`;
+  }
+
+  let cat = "All";
+  function drawShop(animate){
+    $("chips").innerHTML = ["All", ...CATS].map(c => `<button class="${c===cat?"on":""}" data-c="${c}">${c}</button>`).join("");
+    const q = $("q").value.trim().toLowerCase(), s = $("sort").value;
+    let list = items.filter(i => (cat==="All" || i.c===cat) && (!q || (i.n+" "+i.d+" "+i.c).toLowerCase().includes(q)));
+    list.sort((a,b) => s==="lo" ? a.p-b.p : s==="hi" ? b.p-a.p : (!inStock(a))-(!inStock(b)) || b.pop-a.pop);
+    const g = $("grid");
+    g.innerHTML = list.length ? list.map(card).join("") : `<div class="empty">Nothing found for "${esc(q)}". <a href="${wa("Hi Gamerz Delight, do you have " + q + "?")}">Ask us on WhatsApp</a>; it may be in the back.</div>`;
+    if (animate && !RM) { g.classList.remove("anim"); void g.offsetWidth; g.classList.add("anim"); }
+  }
+  const drawPopular = () => $("popular").innerHTML = items.filter(inStock).sort((a,b)=>b.pop-a.pop).slice(0,4).map(card).join("");
+
+  function drawVisit(){
+    $("shops").innerHTML = SHOPS.map((s,k) => `<div class="box"><span class="mono">Shop ${k+1}</span><h3 style="margin-top:4px">${esc(s.name)}</h3><p>${esc(s.addr)}<br>${esc(s.hours)}</p>
+      ${s.map ? `<p style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span data-open></span><a class="btn s" target="_blank" rel="noopener" href="${s.map}">Directions</a></p>` : ""}</div>`).join("")
+      + `<div class="box"><span class="mono">Talk to us</span><h3 style="margin-top:4px">Call or WhatsApp</h3><p><a href="tel:+254792027503">0792 027 503</a></p>
+         ${SHOPS[0].map ? `<p style="margin-top:10px"><a class="btn s" target="_blank" rel="noopener" href="${SHOPS[0].map}">Read our Google reviews</a></p>` : ""}</div>`;
+    $("how").innerHTML = `<option value="deliver">Deliver to me</option>` + SHOPS.map(s => `<option value="${s.id}">Collect at ${esc(s.name)}</option>`).join("");
+    $("zone").innerHTML = `<option value="">Choose your area</option>` + ZONES.map(z => `<option value="${z.id}">${esc(z.n)} · ${z.f === null ? "quoted on WhatsApp" : z.f ? kes(z.f) : "free"}</option>`).join("");
+  }
+
+  // Item detail sheet: warranty, what's in the box, which shop has it, paying in parts, add-ons.
+  function openItem(id){
+    const i = byId(id); if (!i) return;
+    const where = SHOPS.map(s => `<span class="pill ${(i.stock||{})[s.id] ? "g" : "r"}">${esc(s.name)}: ${(i.stock||{})[s.id] ? (i.stock[s.id] + " in stock") : "none"}</span>`).join(" ");
+    const w = warr(i);
+    const rel = items.filter(x => x.id !== i.id && inStock(x) && !cart[x.id] &&
+      ({Consoles:["Games","Accessories"], Games:["Accessories"], Phones:["Accessories"], Accessories:["Games"]}[i.c]||[]).includes(x.c))
+      .sort((a,b) => b.pop - a.pop).slice(0,3);
+    $("sheet").innerHTML = `<div style="display:flex;justify-content:flex-end;margin-top:-6px"><button class="x" data-close aria-label="Close">×</button></div>
+      ${pic(i)}<h2 style="margin:8px 0 4px">${esc(i.n)}</h2><p style="color:var(--muted);margin:0 0 10px">${esc(i.d)}</p>
+      <div class="price" style="font-size:24px">${kes(i.p)}<small>sample price</small></div>
+      <p style="display:flex;gap:6px;flex-wrap:wrap;margin:0">${where}</p>
+      <dl class="spec"><dt>Condition</dt><dd>${esc(i.t)}${i.t !== "New" ? ", tested in front of you" : ", sealed"}</dd>
+        <dt>Warranty</dt><dd>${w ? w + " months, checkable online with your receipt number" : "Checked at the counter before you pay"}</dd>
+        ${i.box ? `<dt>In the box</dt><dd>${esc(i.box)}</dd>` : ""}</dl>
+      ${i.p >= 20000 && inStock(i) ? `<div class="parts"><b>Pay in parts</b> <small class="mono">sample terms</small>
+        <div class="seg" id="wk" style="margin-top:8px">${[2,4,6,8].map((n,k) => `<button data-wk="${n}" class="${k===1?"on":""}">${n} weeks</button>`).join("")}</div>
+        <p id="plan" style="margin:10px 0 8px;font-size:14px"></p>
+        <a class="btn s w" id="planWa" href="#">Ask about paying in parts</a></div>` : ""}
+      <div class="row" style="margin-top:12px">${inStock(i) ? `<button class="add" data-add="${esc(i.id)}">Add to order</button>` : `<button class="notify" data-wait="${esc(i.id)}">Tell me when it's back</button>`}
+        <a class="ask" data-ask="${esc(i.id)}" href="${wa("Hi Gamerz Delight, is the " + i.n + " available today?")}">Ask on WhatsApp</a></div>
+      ${rel.length ? `<h3 style="margin:18px 0 8px;font-size:15px">Goes well with it</h3>${rel.map(x => `<div class="mini">${visual(x,"thumb")}</div><div class="n">${esc(x.n)}<br><span style="color:var(--muted)">${kes(x.p)}</span></div><button class="btn s" data-add="${esc(x.id)}">+ Add</button></div>`).join("")}` : ""}`;
+    if ($("wk")) {
+      // Weekly amount rounded to KES 50; the deposit takes the remainder so the parts add up to the price exactly.
+      const plan = n => { const wkAmt = Math.floor(i.p * .7 / n / 50) * 50, dep = i.p - wkAmt * n;
+        $("plan").innerHTML = `Pay <b>${kes(dep)}</b> today, then <b>${kes(wkAmt)}</b> a week for ${n} weeks. We keep it for you; collect it when it's paid.`;
+        $("planWa").href = wa(`Hi Gamerz Delight, I'd like to pay for the ${i.n} in parts: ${kes(dep)} deposit, then ${kes(wkAmt)} a week for ${n} weeks. Is that possible?`); };
+      $("wk").onclick = e => { const b = e.target.closest("[data-wk]"); if (!b) return; $("wk").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b)); plan(+b.dataset.wk); };
+      $("planWa").addEventListener("click", () => track("layaway_interest", {item_name: i.n, value: i.p, currency: "KES"}));
+      plan(4);
+    }
+    document.body.classList.add("open-item");
+    track("view_item", {item_name: i.n, value: i.p, currency: "KES"});
+  }
+
+  // Back-in-stock list, with the buyer's consent (Kenya Data Protection Act).
+  function openWait(id){
+    const i = byId(id); if (!i) return;
+    $("sheet").innerHTML = `<div style="display:flex;justify-content:flex-end;margin-top:-6px"><button class="x" data-close aria-label="Close">×</button></div>
+      <h2 style="margin:0 0 4px">Tell me when it's back</h2><p style="color:var(--muted);margin:0 0 6px">${esc(i.n)}</p>
+      <form id="wtf"><label for="wn">Your name</label><input id="wn" maxlength="40" autocomplete="name">
+        <label for="wp">WhatsApp number</label><input id="wp" inputmode="tel" placeholder="07XX XXX XXX" maxlength="16" autocomplete="tel">
+        <div class="checks" style="margin-top:12px"><label><input type="checkbox" id="wc"> Gamerz Delight may message me once on WhatsApp when this is back. I can ask them to delete my number at any time.</label></div>
+        <div class="err" id="werr"></div><button class="btn p" style="width:100%">Add me to the list</button></form>`;
+    document.body.classList.add("open-item");
+    $("wtf").onsubmit = e => {
+      e.preventDefault();
+      const ph = $("wp").value.replace(/[\s-]/g, "");
+      if (!/^(?:\+?254|0)[17]\d{8}$/.test(ph)) return $("werr").textContent = "Enter a Kenyan number, e.g. 0712 345 678.";
+      if (!$("wc").checked) return $("werr").textContent = "Tick the box so the shop may message you.";
+      wait.unshift({item:i.id, n:$("wn").value.trim() || "(no name)", ph, at:new Date().toISOString()}); store.set("gd_waitlist", wait);
+      track("waitlist_join", {item_name: i.n}); closeAll(); toast("Done. You'll get one WhatsApp message when it's back.");
+    };
+  }
+
+  function drawCart(){
+    cart = Object.fromEntries(Object.entries(cart).filter(([id]) => byId(id)));
+    const ids = Object.keys(cart);
+    const n = ids.reduce((s,id) => s + cart[id], 0);
+    $("count").textContent = n;
+    $("float").classList.toggle("has", n > 0);
+    $("floatCart").textContent = `Send my order (${n}) · ${kes(cartTotal())}`;
+    const fee = feeNow();
+    $("sub").textContent = kes(cartTotal());
+    $("fee").textContent = fee === undefined ? "choose area" : fee === null ? "quoted on WhatsApp" : fee ? kes(fee) : "free";
+    $("total").textContent = kes(cartTotal() + (fee || 0));
+    $("delivBox").style.display = $("how").value === "deliver" ? "" : "none";
+    $("lines").innerHTML = ids.length ? ids.map(id => { const i = byId(id); return `
+      <div class="line">${visual(i,"thumb")}</div><div class="n">${esc(i.n)}<br><span style="color:var(--muted)">${kes(i.p)}</span></div>
+      <div class="qty"><button data-dec="${esc(id)}" aria-label="One less">−</button><b>${cart[id]}</b><button data-inc="${esc(id)}" aria-label="One more">+</button></div></div>`; }).join("")
+      : `<div class="empty">Nothing added yet.<br><a class="btn s" style="margin-top:10px" href="#/shop">Open the shop</a></div>`;
+  }
+  const cartTotal = () => Object.keys(cart).reduce((s,id) => s + cart[id] * byId(id).p, 0);
+  // undefined = no area chosen yet; null = quoted on WhatsApp; a number = the fee.
+  function feeNow(){ if ($("how").value !== "deliver") return 0; const z = ZONES.find(z => z.id === $("zone").value); return z ? z.f : undefined; }
+  function orderText(){
+    const lines = Object.keys(cart).map(id => `- ${cart[id]} x ${byId(id).n} (${kes(byId(id).p)})`).join("\n");
+    const nm = $("nm").value.trim(), deliver = $("how").value === "deliver", z = ZONES.find(z => z.id === $("zone").value), area = $("area").value.trim(), fee = feeNow();
+    const where = deliver ? `Deliver to: ${z ? z.n : "(area not chosen)"}${area ? ", " + area : ""}` : $("how").selectedOptions[0].text;
+    return `Hi Gamerz Delight, I'd like to order:\n${lines}\nItems: ${kes(cartTotal())}\n${deliver ? "Delivery: " + (fee === null ? "please quote" : fee === undefined ? "please quote" : fee ? kes(fee) : "free") + "\n" : ""}Total: ${kes(cartTotal() + (fee||0))}\n${where}\n${nm ? "Name: " + nm : ""}`;
+  }
+  function refresh(){ store.set("gd_cart", cart); drawCart(); drawShop(); drawPopular(); }
+  const closeAll = () => document.body.classList.remove("open-cart","open-item");
+
+  document.addEventListener("click", e => {
+    if (e.target.closest("[data-close]") || e.target.id === "shade") return closeAll();
+    const t = e.target.closest("[data-add],[data-ask],[data-c],[data-inc],[data-dec],[data-view],[data-wait]");
+    if (!t) return;
+    const d = t.dataset;
+    if (d.add){ cart[d.add] = (cart[d.add]||0) + 1; bump(d.add,"add"); track("add_to_cart", {item_name: byId(d.add).n, value: byId(d.add).p, currency:"KES"});
+      refresh(); buzz(); toast("Added: " + byId(d.add).n); const b = $("cartbtn"); b.classList.remove("bump"); void b.offsetWidth; b.classList.add("bump");
+      if (t.closest("#sheet") && t.classList.contains("btn")) t.replaceWith(Object.assign(document.createElement("span"), {className:"pill g", textContent:"Added ✓"})); }
+    else if (d.ask){ bump(d.ask,"ask"); track("whatsapp_enquiry", {item_name: byId(d.ask).n}); }
+    else if (d.c){ setCat(d.c); }
+    else if (d.inc){ cart[d.inc]++; refresh(); }
+    else if (d.dec){ if (--cart[d.dec] <= 0) delete cart[d.dec]; refresh(); }
+    else if (d.view){ openItem(d.view); }
+    else if (d.wait){ openWait(d.wait); }
+  });
+  function setCat(c){ cat = c; drawShop(true); track("view_item_list", {item_list_name: cat});
+    const on = $("chips").querySelector(".on"); on && on.scrollIntoView({inline:"center", block:"nearest", behavior: RM ? "auto" : "smooth"}); }
+  document.addEventListener("keydown", e => { if (e.key === "Escape") closeAll(); });
+  $("q").addEventListener("input", () => drawShop(true)); $("sort").addEventListener("input", () => drawShop(true));
+  ["how","zone"].forEach(id => $(id).addEventListener("change", drawCart));
+  $("cartbtn").onclick = $("floatCart").onclick = () => document.body.classList.add("open-cart");
+  $("send").onclick = e => {
+    if (!Object.keys(cart).length){ e.preventDefault(); toast("Add something first"); return; }
+    if ($("how").value === "deliver" && !$("zone").value){ e.preventDefault(); $("zone").focus(); toast("Choose your delivery area"); return; }
+    e.currentTarget.href = wa(orderText());
+    const fee = feeNow();
+    orders.unshift({no: 1001 + orders.length, at: new Date().toISOString(), name: $("nm").value.trim() || "(no name)", how: $("how").selectedOptions[0].text,
+      area: [($("how").value === "deliver" ? (ZONES.find(z => z.id === $("zone").value)||{}).n : ""), $("area").value.trim()].filter(Boolean).join(", "),
+      lines: Object.keys(cart).map(id => ({n: byId(id).n, q: cart[id], p: byId(id).p, w: warr(byId(id))})), fee: fee || 0, total: cartTotal() + (fee||0), status: "New"});
+    store.set("gd_orders", orders);
+    track("whatsapp_order", {value: cartTotal(), currency: "KES"});
+    cart = {}; setTimeout(() => { refresh(); closeAll(); toast("Order sent to WhatsApp"); }, 300);
+  };
+  const general = wa("Hi Gamerz Delight, I have a question.");
+  $("floatWa").href = general;
+
+  // Swipe between categories on phones.
+  (() => { let x0 = null, y0 = 0; const g = $("grid");
+    g.addEventListener("touchstart", e => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, {passive:true});
+    g.addEventListener("touchend", e => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null;
+      if (Math.abs(dx) < 70 || Math.abs(dy) > 50) return; const all = ["All", ...CATS], k = all.indexOf(cat) + (dx < 0 ? 1 : -1);
+      if (k >= 0 && k < all.length) { setCat(all[k]); buzz(); } }, {passive:true});
+    if (!matchMedia("(pointer:coarse)").matches) $("swipeHint").remove();
+  })();
+
+  /* ---------- TRADE-IN ESTIMATE ---------- */
+  let cond = "Good";
+  function drawTrade(){
+    const keep = $("tm").value;
+    $("tm").innerHTML = trade.map(t => `<option value="${esc(t.id)}">${esc(t.n)}</option>`).join("");
+    if (keep && trade.some(t => t.id === keep)) $("tm").value = keep;
+    $("tc").innerHTML = COND.map(c => `<button type="button" data-cond="${c.k}" class="${c.k===cond?"on":""}">${c.k}</button>`).join("");
+    const sk = $("ts").value;
+    $("ts").innerHTML = `<option value="">Just selling it</option>` + items.filter(i => inStock(i) && (i.c === "Consoles" || i.c === "Phones")).map(i => `<option value="${esc(i.id)}">${esc(i.n)} · ${kes(i.p)}</option>`).join("");
+    if (sk) $("ts").value = sk;
+    estimate();
+  }
+  function estimate(){
+    const t = trade.find(x => x.id === $("tm").value); if (!t) return;
+    const c = COND.find(x => x.k === cond), swap = byId($("ts").value);
+    if (!c.x) {
+      $("est").innerHTML = `<span class="mono">Estimate</span><div class="big">We need to see it</div><p style="color:var(--muted);margin:0 0 12px">Faulty items are priced after a check at the counter. Send a photo and tell us what's wrong.</p>
+        <a class="btn w" href="${wa(`Hi Gamerz Delight, I'd like to trade in a faulty ${t.n}. The problem is: `)}">Send photos on WhatsApp</a>`;
+      return;
+    }
+    const base = t.v * c.x + ($("tx1").checked ? 1500 : 0) + ($("tx2").checked ? 1000 : 0);
+    const lo = r500(base * .9), hi = r500(base);
+    const msg = `Hi Gamerz Delight, trade-in: ${t.n}, condition ${cond}${$("tx1").checked ? ", with controller/charger" : ""}${$("tx2").checked ? ", with box and cables" : ""}. Your site estimates ${kes(lo)} to ${kes(hi)}.${swap ? ` I'd like to swap it for the ${swap.n}.` : ""} I can send photos.`;
+    $("est").innerHTML = `<span class="mono">We'd give you about</span><div class="big" id="estV">${kes(lo)} – ${kes(hi)}</div>
+      ${swap ? `<p style="margin:2px 0 0">For the <b>${esc(swap.n)}</b> you'd pay about <b>${kes(Math.max(0, swap.p - hi))} – ${kes(Math.max(0, swap.p - lo))}</b> by M-PESA.</p>` : `<p style="color:var(--muted);margin:2px 0 0">Or put it towards anything in the shop.</p>`}
+      <p style="margin:14px 0 0"><a class="btn w" id="tradeSend" href="${wa(msg)}">Send this to the shop</a></p>`;
+    $("tradeSend").onclick = () => track("trade_estimate_sent", {item_name: t.n, value: hi, currency: "KES"});
+  }
+  $("tc").addEventListener("click", e => { const b = e.target.closest("[data-cond]"); if (!b) return; cond = b.dataset.cond; drawTrade(); });
+  ["tm","tx1","tx2","ts"].forEach(id => $(id).addEventListener("change", estimate));
+
+  /* ---------- WARRANTY CHECK ---------- */
+  $("wf").onsubmit = e => {
+    e.preventDefault();
+    const r = $("wr").value.trim().toUpperCase().replace(/\s/g, "");
+    const sale = r === DEMO_SALE.receipt ? DEMO_SALE : orders.find(o => o.receipt === r);
+    track("warranty_check", {found: !!sale});
+    if (!sale) { $("wout").innerHTML = `<div class="box"><h3>We couldn't find ${esc(r || "that number")}</h3><p>Check the number on your receipt. It starts with GD-. Still stuck? <a href="${wa("Hi Gamerz Delight, I need help with my warranty. Receipt: " + r)}">Ask us on WhatsApp</a>.</p></div>`; return; }
+    const sold = new Date(sale.soldAt), fmt = d => d.toLocaleDateString("en-KE", {day:"numeric", month:"short", year:"numeric"});
+    $("wout").innerHTML = `<div class="box"><div class="who"><h3 style="margin:0">Receipt ${esc(sale.receipt)}</h3><span class="mono">Bought ${fmt(sold)}</span></div>
+      ${sale.lines.map(l => { const w = l.w || 0, end = new Date(sold); end.setMonth(end.getMonth() + w); const left = Math.ceil((end - Date.now()) / 864e5);
+        return `<div class="alert"><span>${l.q} × ${esc(l.n)}</span>${!w ? `<span class="pill">No warranty</span>` : left > 0 ? `<span class="pill g">Covered until ${fmt(end)} · ${left} days left</span>` : `<span class="pill r">Ended ${fmt(end)}</span>`}</div>`; }).join("")}
+      <p style="margin-top:12px"><a class="btn s w" href="${wa("Hi Gamerz Delight, I have a warranty question. Receipt: " + sale.receipt)}">Make a warranty claim on WhatsApp</a></p></div>`;
+  };
+
+  /* ---------- OWNER AREA ----------
+     DEMO ONLY: accounts, products and orders live in this phone's browser storage.
+     The paid build moves all of this to a server: hashed passwords, sessions that expire,
+     one account per staff member, and a record of who changed what. */
+  const ROLES = {owner:"Owner: everything", manager:"Manager: products and orders", staff:"Staff: orders only"};
+  let users = store.get("gd_users", [
+    {u:"benard", name:"Benard", role:"owner", code:"2026"},
+    {u:"shop2",  name:"Shop 2 attendant", role:"staff", code:"1111"}
+  ]);
+  let audit = store.get("gd_audit", []);
+  let me = (() => { try { return JSON.parse(sessionStorage.getItem("gd_me")); } catch(e){ return null; } })();
+  let tab = "dash";
+  const ACCESS = {owner:["dash","products","orders","wait","trade","staff","log"], manager:["dash","products","orders","wait","trade","log"], staff:["orders","wait"]};
+  const can = what => me && (ACCESS[me.role]||[]).includes(what);
+  const log = what => { audit.unshift({at:new Date().toISOString(), who: me ? me.name : "?", what}); audit = audit.slice(0,200); store.set("gd_audit", audit); };
+  const when = iso => new Date(iso).toLocaleString("en-KE", {day:"numeric", month:"short", hour:"2-digit", minute:"2-digit"});
+  const shopName = id => SHOPS.find(s => s.id === id).name;
+  let tries = 0, lockUntil = 0;
+
+  function drawOwner(){
+    document.body.classList.toggle("admin-on", !!me);
+    const box = $("owner");
+    if (!me){
+      box.innerHTML = `<div class="login box"><span class="mono">Staff only</span><h2 style="margin:4px 0 6px">Owner sign-in</h2>
+        <p>Benard and his staff sign in here to change prices and stock, see orders and answer the waiting list.</p>
+        <div class="demo-note"><b>Sample sign-in.</b> Owner: <b>benard</b> / <b>2026</b>. Staff: <b>shop2</b> / <b>1111</b>. Everything you change stays on this phone only.</div>
+        <form id="loginForm" autocomplete="off"><label for="lu">Username</label><input id="lu" autocapitalize="none" maxlength="30">
+        <label for="lp">PIN</label><input id="lp" type="password" inputmode="numeric" maxlength="8">
+        <div class="err" id="lerr"></div><button class="btn p" style="width:100%;margin-top:6px">Sign in</button></form></div>`;
+      $("loginForm").onsubmit = e => {
+        e.preventDefault();
+        if (Date.now() < lockUntil) { $("lerr").textContent = "Too many tries. Wait 30 seconds."; return; }
+        const u = users.find(x => x.u === $("lu").value.trim().toLowerCase() && x.code === $("lp").value);
+        if (!u){ if (++tries >= 5){ lockUntil = Date.now() + 30000; tries = 0; } $("lerr").textContent = "Wrong username or PIN."; return; }
+        me = {u:u.u, name:u.name, role:u.role}; ss.set("gd_me", JSON.stringify(me));
+        tab = can("dash") ? "dash" : "orders"; log("Signed in"); drawOwner();
+      };
+      return;
+    }
+    const tabs = [["dash","Overview"],["products","Products"],["orders","Orders"],["wait","Waiting list"],["trade","Trade-in prices"],["staff","Staff"],["log","Activity"]].filter(([k]) => can(k));
+    const badge = {orders: orders.filter(o => o.status === "New").length, wait: wait.length};
+    box.innerHTML = `<div class="who" style="margin-top:22px"><div><h2 style="margin:0">Hello, ${esc(me.name)}</h2>
+      <span style="color:var(--muted);font-size:13px">${esc(ROLES[me.role])}</span></div>
+      <div style="display:flex;gap:8px"><a class="btn s" href="#/shop">View shop</a><button class="btn s" id="logout">Sign out</button></div></div>
+      <div class="demo-note">Sample owner area: changes are saved on this phone only. On the real site they are saved on the server and show for every buyer at once.</div>
+      <div class="tabs">${tabs.map(([k,l]) => `<button class="${k===tab?"on":""}" data-tab="${k}">${l}${badge[k] ? `<i>${badge[k]}</i>` : ""}</button>`).join("")}</div>
+      <div id="tabBody"></div>`;
+    $("logout").onclick = () => { log("Signed out"); me = null; try { sessionStorage.removeItem("gd_me"); } catch(e){} drawOwner(); };
+    box.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => { tab = b.dataset.tab; drawOwner(); });
+    ({dash:tabDash, products:tabProducts, orders:tabOrders, wait:tabWait, trade:tabTrade, staff:tabStaff, log:tabLog}[tab] || tabOrders)();
+  }
+
+  // Things the owner should act on today: stock to move between shops, items to reorder, buyers waiting.
+  function attention(){
+    const out = [];
+    items.forEach(i => {
+      const st = i.stock || {}, n = inStock(i), w = wait.filter(x => x.item === i.id).length;
+      if (!n) out.push({i, kind:"r", text:`Sold out in both shops${w ? ` · ${w} waiting` : ""}. Reorder.`});
+      else SHOPS.forEach(s => { const o = SHOPS.find(x => x.id !== s.id);
+        if (o && !Number(st[s.id]||0) && Number(st[o.id]||0) >= 3) out.push({i, kind:"y", text:`None at ${s.name}; ${st[o.id]} at ${o.name}.`, move:{from:o.id, to:s.id}}); });
+    });
+    return out;
+  }
+  function tabDash(){
+    const sold = orders.filter(o => o.status !== "Cancelled").reduce((s,o) => s + o.total, 0);
+    const out = items.filter(i => !inStock(i)).length, low = items.filter(i => inStock(i) && inStock(i) <= 2).length;
+    const rows = Object.entries(stats).map(([id,v]) => ({i:byId(id), a:v.add||0, k:v.ask||0, t:(v.add||0)+(v.ask||0)})).filter(r=>r.i).sort((a,b)=>b.t-a.t).slice(0,8);
+    const max = Math.max(1, ...rows.map(r=>r.t)), att = attention();
+    $("tabBody").innerHTML = `<div class="kpis">
+      <div class="kpi"><b>${orders.length}</b><span>WhatsApp orders</span></div>
+      <div class="kpi"><b>${kes(sold)}</b><span>Value of those orders</span></div>
+      <div class="kpi"><b>${wait.length}</b><span>Buyers waiting for stock</span></div>
+      <div class="kpi"><b>${out} / ${low}</b><span>Sold out / running low</span></div></div>
+      <h3>Needs attention today</h3>
+      <div class="tw" style="margin-bottom:16px">${att.length ? att.map((a,k) => `<div class="alert"><span><span class="pill ${a.kind}">${a.kind === "r" ? "Reorder" : "Move stock"}</span> <b>${esc(a.i.n)}</b>: ${esc(a.text)}</span>
+        ${a.move && can("products") ? `<button class="btn s" data-move="${k}">Move 1 to ${esc(shopName(a.move.to))}</button>` : ""}</div>`).join("")
+        : `<p style="padding:14px;margin:0;color:var(--muted)">All good. Nothing is sold out or stuck in one shop.</p>`}</div>
+      <h3>What buyers ask about most</h3>
+      <p style="color:var(--muted);font-size:13px;margin-top:-4px">On the real site this comes from Google Analytics for every visitor. Here it counts the taps made on this phone.</p>
+      <div class="tw">${rows.length ? `<table><tr><th>Item</th><th>Added</th><th>Asked</th><th style="width:30%"></th></tr>${rows.map(r=>`<tr><td>${esc(r.i.n)}</td><td>${r.a}</td><td>${r.k}</td><td><div class="bar" style="width:${100*r.t/max}%"></div></td></tr>`).join("")}</table>`
+        : `<p style="padding:14px;margin:0;color:var(--muted)">No taps yet. Open the Shop, tap "Add" and "Ask" on a few items, then come back.</p>`}</div>`;
+    $("tabBody").querySelectorAll("[data-move]").forEach(b => b.onclick = () => {
+      const a = att[b.dataset.move], st = a.i.stock;
+      st[a.move.from] = Number(st[a.move.from]) - 1; st[a.move.to] = Number(st[a.move.to]||0) + 1;
+      log(`Moved 1 × ${a.i.n} from ${shopName(a.move.from)} to ${shopName(a.move.to)}`); saveItems(); refresh(); tabDash(); toast("Moved. Both shops' stock is updated.");
+    });
+  }
+
+  function tabProducts(editing){
+    const shopCols = SHOPS.map(s => `<th>${esc(s.name.split(",")[0])}</th>`).join("");
+    $("tabBody").innerHTML = `<div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap"><button class="btn p s" id="newP">+ Add a product</button>
+      ${me.role==="owner" ? `<button class="btn d s" id="resetP">Put the sample products back</button>` : ""}</div>
+      <div id="pform"></div>
+      <div class="tw"><table><tr><th></th><th>Product</th><th>Price</th>${shopCols}<th></th></tr>
+      ${items.map(i => `<tr><td>${visual(i,"thumb")}</div></td><td>${esc(i.n)}<br><span class="pill">${esc(i.c)}</span></td>
+        <td><input style="width:100px;padding:6px 8px" type="number" min="0" step="50" value="${i.p}" data-price="${esc(i.id)}" aria-label="Price"></td>
+        ${SHOPS.map(s => `<td><input style="width:64px;padding:6px 8px" type="number" min="0" value="${(i.stock||{})[s.id]||0}" data-stock="${esc(i.id)}" data-shop="${s.id}" aria-label="Stock"></td>`).join("")}
+        <td><button class="btn s" data-edit="${esc(i.id)}">Edit</button></td></tr>`).join("")}</table></div>`;
+    $("newP").onclick = () => productForm();
+    if ($("resetP")) $("resetP").onclick = () => { items = JSON.parse(JSON.stringify(DEFAULTS)); saveItems(); log("Restored the sample products"); refresh(); tabProducts(); toast("Sample products restored"); };
+    $("tabBody").querySelectorAll("[data-price]").forEach(el => el.onchange = () => {
+      const i = byId(el.dataset.price), v = Math.max(0, Math.round(Number(el.value)||0));
+      log(`Price of ${i.n}: ${kes(i.p)} → ${kes(v)}`); i.p = v; saveItems(); refresh(); toast("Price saved"); });
+    $("tabBody").querySelectorAll("[data-stock]").forEach(el => el.onchange = () => {
+      const i = byId(el.dataset.stock), v = Math.max(0, Math.round(Number(el.value)||0)), was = inStock(i);
+      i.stock = i.stock || {}; log(`Stock of ${i.n} at ${shopName(el.dataset.shop)}: ${i.stock[el.dataset.shop]||0} → ${v}`);
+      i.stock[el.dataset.shop] = v; saveItems(); refresh();
+      const w = wait.filter(x => x.item === i.id).length;
+      toast(!was && v && w ? `Back in stock. ${w} ${w === 1 ? "buyer is" : "buyers are"} waiting: see Waiting list.` : v ? "Stock saved" : "Marked sold out at this shop"); });
+    $("tabBody").querySelectorAll("[data-edit]").forEach(b => b.onclick = () => productForm(byId(b.dataset.edit)));
+    if (editing) productForm(editing);
+  }
+
+  function productForm(i){
+    const isNew = !i; i = i || {id:"", c:"Consoles", n:"", d:"", p:0, t:"New", w:12, pop:5, stock:{s1:1,s2:0}};
+    $("pform").innerHTML = `<div class="box" style="margin-bottom:12px"><h3>${isNew ? "New product" : "Edit " + esc(i.n)}</h3>
+      <form id="pf" class="formgrid">
+        <div class="full"><label for="fn">Name</label><input id="fn" required maxlength="60" value="${esc(i.n)}"></div>
+        <div class="full"><label for="fd">Short description</label><input id="fd" maxlength="90" value="${esc(i.d)}"></div>
+        <div><label for="fc">Category</label><select id="fc">${CATS.map(c => `<option ${c===i.c?"selected":""}>${c}</option>`).join("")}</select></div>
+        <div><label for="ft">Condition</label><select id="ft">${["New","Refurbished","Used"].map(c => `<option ${c===i.t?"selected":""}>${c}</option>`).join("")}</select></div>
+        <div><label for="fp">Price (KES)</label><input id="fp" type="number" min="0" step="50" value="${i.p}"></div>
+        <div><label for="fw">Warranty (months)</label><input id="fw" type="number" min="0" max="36" value="${warr(i)}"></div>
+        <div class="full"><label for="fb">In the box</label><input id="fb" maxlength="90" value="${esc(i.box)}"></div>
+        <div class="full"><label for="fi">Photo from this phone</label><input id="fi" type="file" accept="image/*"></div>
+        <div class="full err" id="ferr"></div>
+        <div class="full" style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn p">Save</button><button type="button" class="btn" id="fcancel">Cancel</button>
+          ${!isNew && me.role==="owner" ? `<button type="button" class="btn d" id="fdel">Delete</button>` : ""}</div>
+      </form></div>`;
+    $("pform").scrollIntoView({behavior: RM ? "auto" : "smooth", block:"start"});
+    let img = i.img || "";
+    $("fi").onchange = () => {
+      const f = $("fi").files[0]; if (!f) return;
+      if (!/^image\/(jpeg|png|webp)$/.test(f.type)) { $("ferr").textContent = "Use a JPG, PNG or WebP photo."; return; }
+      // Shrink the photo on the phone before saving it.
+      const r = new FileReader(); r.onload = () => { const im = new Image(); im.onload = () => {
+        const W = 640, s = Math.min(1, W / im.width), c = document.createElement("canvas");
+        c.width = Math.round(im.width * s); c.height = Math.round(im.height * s);
+        c.getContext("2d").drawImage(im, 0, 0, c.width, c.height); img = c.toDataURL("image/jpeg", .78); $("ferr").textContent = "Photo ready."; };
+        im.src = r.result; }; r.readAsDataURL(f);
+    };
+    $("fcancel").onclick = () => $("pform").innerHTML = "";
+    if ($("fdel")) $("fdel").onclick = () => { items = items.filter(x => x.id !== i.id); saveItems(); log("Deleted " + i.n); refresh(); tabProducts(); toast("Deleted"); };
+    $("pf").onsubmit = e => {
+      e.preventDefault();
+      const n = $("fn").value.trim(); if (!n) { $("ferr").textContent = "Give the product a name."; return; }
+      const rec = {...i, n, d: $("fd").value.trim(), c: $("fc").value, t: $("ft").value, p: Math.max(0, Math.round(Number($("fp").value)||0)),
+        w: Math.min(36, Math.max(0, Math.round(Number($("fw").value)||0))), box: $("fb").value.trim(), img};
+      if (isNew) { rec.id = "p" + Date.now().toString(36); items.unshift(rec); log("Added " + n); }
+      else { items = items.map(x => x.id === i.id ? rec : x); log("Edited " + n); }
+      saveItems(); refresh(); tabProducts(); toast("Saved. It shows in the shop now.");
+    };
+  }
+
+  function tabOrders(){
+    const ST = ["New","Confirmed","Paid","Delivered","Cancelled"], cls = {New:"y",Confirmed:"",Paid:"g",Delivered:"g",Cancelled:"r"};
+    $("tabBody").innerHTML = orders.length ? `<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">
+      ${orders.map((o,k) => `<div class="box">
+        <div class="who"><b>#${o.no} · ${kes(o.total)}</b><span class="pill ${cls[o.status]}">${esc(o.status)}</span></div>
+        <p style="margin:4px 0 8px">${when(o.at)} · ${esc(o.name)}<br>${esc(o.how)}${o.area ? ", " + esc(o.area) : ""}${o.fee ? ` · delivery ${kes(o.fee)}` : ""}</p>
+        <div style="font-size:14px;margin-bottom:10px">${o.lines.map(l => `${l.q} × ${esc(l.n)}`).join("<br>")}</div>
+        ${o.receipt ? `<p style="margin:0 0 8px"><span class="pill g">Receipt ${esc(o.receipt)}</span> <span class="mono">warranty starts ${new Date(o.soldAt).toLocaleDateString("en-KE")}</span></p>` : ""}
+        <select data-ost="${k}" aria-label="Order status">${ST.map(s => `<option ${s===o.status?"selected":""}>${s}</option>`).join("")}</select></div>`).join("")}</div>`
+      : `<div class="box"><p>No orders yet. In the Shop, add a few items, open <b>Order</b> and press <b>Send order on WhatsApp</b>. The order appears here as well as in WhatsApp.</p></div>`;
+    $("tabBody").querySelectorAll("[data-ost]").forEach(s => s.onchange = () => {
+      const o = orders[s.dataset.ost]; log(`Order #${o.no}: ${o.status} → ${s.value}`); o.status = s.value;
+      // A paid or delivered order gets a receipt number, and its warranty starts that day.
+      if ((s.value === "Paid" || s.value === "Delivered") && !o.receipt) { o.receipt = "GD-" + o.no; o.soldAt = new Date().toISOString(); log(`Receipt ${o.receipt} issued`); }
+      store.set("gd_orders", orders); drawOwner(); toast(o.receipt && s.value !== "Cancelled" ? `Saved. Receipt ${o.receipt}: the buyer can check the warranty online.` : "Order updated"); });
+  }
+
+  function tabWait(){
+    $("tabBody").innerHTML = wait.length ? `<div class="tw">${wait.map((w,k) => { const i = byId(w.item), back = i && inStock(i);
+      return `<div class="alert"><span><b>${esc(w.n)}</b> · ${esc(w.ph)}<br><span style="color:var(--muted)">${i ? esc(i.n) : "(removed item)"} · asked ${when(w.at)}</span></span>
+        <span style="display:flex;gap:6px">${back ? `<a class="btn s w" target="_blank" rel="noopener" data-msg="${k}" href="https://wa.me/${esc(w.ph.replace(/^0/, "254").replace(/^\+/, ""))}?text=${encodeURIComponent(`Hi ${w.n}, the ${i.n} is back in stock at Gamerz Delight, ${kes(i.p)}. Reply here to reserve one.`)}">Tell them it's back</a>` : `<span class="pill y">still sold out</span>`}
+        <button class="btn s d" data-wdel="${k}">Remove</button></span></div>`; }).join("")}</div>
+      <p class="hint" style="margin-top:8px">Numbers are kept only for this purpose. Remove a number once you've messaged them, or if they ask.</p>`
+      : `<div class="box"><p>When an item is sold out, buyers can leave their WhatsApp number to hear when it's back. They appear here. Try it: in the Shop, open a sold-out item and tap "Tell me when it's back".</p></div>`;
+    $("tabBody").querySelectorAll("[data-wdel]").forEach(b => b.onclick = () => { const w = wait.splice(b.dataset.wdel, 1)[0]; store.set("gd_waitlist", wait); log(`Removed ${w.n} from the waiting list`); drawOwner(); });
+    $("tabBody").querySelectorAll("[data-msg]").forEach(a => a.addEventListener("click", () => log(`Messaged ${wait[a.dataset.msg].n}: back in stock`)));
+  }
+
+  function tabTrade(){
+    $("tabBody").innerHTML = `<p style="color:var(--muted);margin-top:0">What you pay for each item in good condition. The site adjusts for condition and extras, and shows buyers a range.</p>
+      <div class="tw"><table><tr><th>Item</th><th>You pay (good condition)</th></tr>
+      ${trade.map((t,k) => `<tr><td>${esc(t.n)}</td><td><input style="width:120px;padding:6px 8px" type="number" min="0" step="500" value="${t.v}" data-tv="${k}" aria-label="Trade-in value"></td></tr>`).join("")}</table></div>`;
+    $("tabBody").querySelectorAll("[data-tv]").forEach(el => el.onchange = () => {
+      const t = trade[el.dataset.tv], v = Math.max(0, Math.round(Number(el.value)||0)); log(`Trade-in value of ${t.n}: ${kes(t.v)} → ${kes(v)}`);
+      t.v = v; store.set("gd_trade", trade); drawTrade(); toast("Saved. Buyers see the new estimate."); });
+  }
+
+  function tabStaff(){
+    $("tabBody").innerHTML = `<div class="tw"><table><tr><th>Name</th><th>Username</th><th>Can do</th><th></th></tr>
+      ${users.map((u,k) => `<tr><td>${esc(u.name)}</td><td>${esc(u.u)}</td><td>${u.u===me.u ? esc(ROLES[u.role]) : `<select data-role="${k}" style="padding:6px 8px">${Object.entries(ROLES).map(([r,l]) => `<option value="${r}" ${r===u.role?"selected":""}>${l}</option>`).join("")}</select>`}</td>
+        <td>${u.u===me.u ? "<span class='pill'>you</span>" : `<button class="btn d s" data-rm="${k}">Remove</button>`}</td></tr>`).join("")}</table></div>
+      <div class="box" style="margin-top:12px"><h3>Add a staff member</h3><form id="sf" class="formgrid">
+        <div><label for="sn">Name</label><input id="sn" maxlength="40" required></div>
+        <div><label for="su">Username</label><input id="su" maxlength="20" autocapitalize="none" required></div>
+        <div><label for="sp">PIN (4–8 digits)</label><input id="sp" inputmode="numeric" maxlength="8" required></div>
+        <div><label for="sr">Can do</label><select id="sr">${Object.entries(ROLES).filter(([r]) => r!=="owner").map(([r,l]) => `<option value="${r}">${l}</option>`).join("")}</select></div>
+        <div class="full err" id="serr"></div><div class="full"><button class="btn p">Add</button></div></form></div>`;
+    $("tabBody").querySelectorAll("[data-role]").forEach(s => s.onchange = () => { const u = users[s.dataset.role]; log(`${u.name}: ${u.role} → ${s.value}`); u.role = s.value; store.set("gd_users", users); toast("Saved"); });
+    $("tabBody").querySelectorAll("[data-rm]").forEach(b => b.onclick = () => { const u = users[b.dataset.rm]; users.splice(b.dataset.rm,1); store.set("gd_users", users); log("Removed " + u.name); tabStaff(); toast("Removed"); });
+    $("sf").onsubmit = e => {
+      e.preventDefault();
+      const u = $("su").value.trim().toLowerCase(), code = $("sp").value.trim();
+      if (!/^[a-z0-9._-]{3,20}$/.test(u)) return $("serr").textContent = "Username: 3 to 20 letters or numbers.";
+      if (users.some(x => x.u === u)) return $("serr").textContent = "That username is taken.";
+      if (!/^\d{4,8}$/.test(code)) return $("serr").textContent = "PIN: 4 to 8 digits.";
+      users.push({u, name: $("sn").value.trim(), role: $("sr").value, code}); store.set("gd_users", users); log("Added staff " + $("sn").value.trim()); tabStaff(); toast("Staff member added");
+    };
+  }
+
+  function tabLog(){
+    $("tabBody").innerHTML = audit.length ? `<div class="tw"><table><tr><th>When</th><th>Who</th><th>What</th></tr>
+      ${audit.map(a => `<tr><td>${when(a.at)}</td><td>${esc(a.who)}</td><td>${esc(a.what)}</td></tr>`).join("")}</table></div>`
+      : `<div class="box"><p>Every change made by the owner or staff is listed here, with who made it and when.</p></div>`;
+  }
+
+  /* ---------- ROUTER with page transitions ---------- */
+  const ORDER = ["", "shop", "trade-in", "warranty", "visit", "owner"];
+  const pages = {"":"p-home", "shop":"p-shop", "trade-in":"p-trade", "warranty":"p-warranty", "visit":"p-visit", "owner":"p-owner"};
+  let curKey = null;
+  function moveInd(navSel, indId){
+    const nav = document.querySelector(navSel), ind = $(indId), a = nav && nav.querySelector("a.on");
+    if (!ind) return; if (!a || !a.offsetWidth) { ind.style.opacity = 0; return; }
+    ind.style.opacity = 1; ind.style.left = a.offsetLeft + (indId === "tind" ? 6 : 0) + "px"; ind.style.width = a.offsetWidth - (indId === "tind" ? 12 : 0) + "px";
+  }
+  function route(){
+    let key = location.hash.replace(/^#\/?/, ""); if (!(key in pages)) key = "";
+    const id = pages[key];
+    closeAll();
+    const swap = () => {
+      document.querySelectorAll(".page").forEach(p => p.classList.toggle("on", p.id === id));
+      document.querySelectorAll("#links a, #tabbar a").forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#/" + key));
+      document.body.classList.toggle("admin-on", id === "p-owner" && !!me);
+      if (id === "p-owner") drawOwner();
+      if (id === "p-trade") drawTrade();
+      window.scrollTo(0,0);
+      moveInd("#links", "ind"); moveInd("#tabbar", "tind");
+      hero.active(id === "p-home");
+    };
+    if (curKey !== null && curKey !== key && document.startViewTransition && !RM) {
+      document.documentElement.style.setProperty("--dir", ORDER.indexOf(key) >= ORDER.indexOf(curKey) ? 1 : -1);
+      document.documentElement.classList.add("vt");
+      document.startViewTransition(swap).finished.finally(() => document.documentElement.classList.remove("vt"));
+    } else swap();
+    curKey = key;
+    track("page_view", {page_path: "/" + key});
+  }
+
+  /* ---------- MOTION: hero scene, background, cursor ---------- */
+  const hero = (() => {
+    const c = $("bg"), x = c.getContext("2d"), rig = $("rig"), stage = $("stage");
+    let w = 0, h = 0, t = 0, on = true, vis = true, raf = 0;
+    let rx = -8, ry = -28, trx = -8, try_ = -28, px = .5, py = .5;
+    const pulses = Array.from({length:7}, () => ({lane: Math.floor(Math.random()*17) - 8, p: Math.random(), s: .0025 + Math.random()*.004}));
+    function size(){ const dpr = Math.min(1.5, devicePixelRatio || 1), r = c.getBoundingClientRect(); w = r.width; h = r.height; c.width = w*dpr; c.height = h*dpr; x.setTransform(dpr,0,0,dpr,0,0); }
+    function draw(){
+      x.clearRect(0,0,w,h);
+      const wide = w > 860, vx = wide ? w*.72 + (px-.5)*40 : w*.5 + (px-.5)*30, hy = h*(wide ? .46 : .36);
+      // horizon glow
+      const g = x.createRadialGradient(vx, hy, 0, vx, hy, w*.6); g.addColorStop(0,"rgba(124,92,255,.22)"); g.addColorStop(1,"rgba(124,92,255,0)"); x.fillStyle = g; x.fillRect(0,0,w,h);
+      x.lineWidth = 1;
+      // floor lines running to the vanishing point
+      for (let i = -8; i <= 8; i++) { x.strokeStyle = `rgba(124,92,255,${.16 - Math.abs(i)*.012})`; x.beginPath(); x.moveTo(vx, hy); x.lineTo(vx + i*w*.16, h); x.stroke(); }
+      // cross lines moving towards the viewer
+      for (let k = 0; k < 14; k++) { const p = ((k + t) % 14) / 14, y = hy + (h-hy)*p*p; x.strokeStyle = `rgba(34,211,238,${p*.22})`; x.beginPath(); x.moveTo(0, y); x.lineTo(w, y); x.stroke(); }
+      // light pulses travelling along the traces
+      pulses.forEach(q => { const p = q.p*q.p, X = vx + q.lane*w*.16*p, Y = hy + (h-hy)*p, r = 1 + p*3;
+        const gg = x.createRadialGradient(X,Y,0,X,Y,r*6); gg.addColorStop(0,"rgba(34,211,238,.9)"); gg.addColorStop(1,"rgba(34,211,238,0)");
+        x.fillStyle = gg; x.beginPath(); x.arc(X,Y,r*6,0,7); x.fill(); });
+    }
+    function frame(){
+      raf = 0; if (!on || !vis) return;
+      t += .006; pulses.forEach(q => { q.p += q.s; if (q.p > 1) { q.p = 0; q.lane = Math.floor(Math.random()*17) - 8; } });
+      const idle = Math.sin(t*1.3)*4;
+      rx += (trx - rx)*.07; ry += (try_ + idle - ry)*.07;
+      rig.style.setProperty("--rx", rx.toFixed(2) + "deg"); rig.style.setProperty("--ry", ry.toFixed(2) + "deg");
+      draw(); raf = requestAnimationFrame(frame);
+    }
+    const go = () => { if (!raf && on && vis && !RM) raf = requestAnimationFrame(frame); };
+    addEventListener("resize", () => { size(); draw(); });
+    addEventListener("pointermove", e => { if (e.pointerType !== "mouse") return; px = e.clientX / innerWidth; py = e.clientY / innerHeight; trx = -8 + (py-.5)*-22; try_ = -28 + (px-.5)*50; }, {passive:true});
+    // On phones the scene turns as you scroll, and follows a finger dragged across it.
+    addEventListener("scroll", () => { if (matchMedia("(pointer:coarse)").matches) try_ = -28 + Math.min(scrollY, 400) * .12; }, {passive:true});
+    stage.addEventListener("touchmove", e => { const r = stage.getBoundingClientRect(), T = e.touches[0]; try_ = -28 + ((T.clientX - r.left)/r.width - .5)*70; trx = -8 + ((T.clientY - r.top)/r.height - .5)*-24; }, {passive:true});
+    new IntersectionObserver(es => { vis = es[0].isIntersecting; go(); }).observe($("hero"));
+    document.addEventListener("visibilitychange", () => { vis = !document.hidden; go(); });
+    size(); draw();
+    return { active(a){ on = a; if (a) { size(); draw(); go(); } } };
+  })();
+
+  // Cursor that reacts to what it is over. Only on computers with a mouse; touch phones keep their normal behaviour.
+  (() => {
+    if (RM || !matchMedia("(pointer:fine)").matches) return;
+    document.documentElement.classList.add("has-cur");
+    const ring = $("cur"), dot = $("dot"), lab = ring.firstElementChild;
+    let mx = innerWidth/2, my = innerHeight/2, rx = mx, ry = my, magEl = null;
+    addEventListener("pointermove", e => {
+      if (e.pointerType !== "mouse") return; mx = e.clientX; my = e.clientY; dot.style.transform = `translate(${mx}px,${my}px)`;
+      // magnetic buttons
+      const m = e.target.closest(".mag,.cartbtn,.float button,.float a");
+      if (magEl && magEl !== m) { magEl.style.translate = ""; magEl = null; }
+      if (m) { const r = m.getBoundingClientRect(); m.style.translate = `${((mx - r.left)/r.width - .5)*10}px ${((my - r.top)/r.height - .5)*8}px`; magEl = m; }
+      // card tilt and glare
+      const it = e.target.closest(".item");
+      if (it) { const r = it.getBoundingClientRect(), u = (mx - r.left)/r.width, v = (my - r.top)/r.height;
+        it.style.setProperty("--ry", ((u - .5)*7).toFixed(2) + "deg"); it.style.setProperty("--rx", ((.5 - v)*7).toFixed(2) + "deg");
+        it.style.setProperty("--gx", u*100 + "%"); it.style.setProperty("--gy", v*100 + "%"); }
+    }, {passive:true});
+    document.addEventListener("pointerout", e => { const it = e.target.closest && e.target.closest(".item"); if (it && !it.contains(e.relatedTarget)) { it.style.removeProperty("--rx"); it.style.removeProperty("--ry"); } });
+    document.addEventListener("pointerover", e => {
+      const el = e.target; ring.className = ""; lab.textContent = "";
+      if (el.closest("input,textarea")) return ring.classList.add("txt");
+      if (el.closest("#boot")) return ring.classList.add("hide");
+      const add = el.closest("[data-add]"), view = el.closest("[data-view]"), w = el.closest('a[href*="wa.me"],.ask');
+      if (add) { ring.classList.add("lab"); lab.textContent = "Add"; }
+      else if (w) { ring.classList.add("lab","wa"); lab.textContent = "Chat"; }
+      else if (view) { ring.classList.add("lab"); lab.textContent = "View"; }
+      else if (el.closest("a,button,summary,select,label,[data-c]")) ring.classList.add("hov");
+    });
+    addEventListener("pointerdown", () => ring.classList.add("down")); addEventListener("pointerup", () => ring.classList.remove("down"));
+    document.addEventListener("mouseleave", () => ring.style.opacity = 0); document.addEventListener("mouseenter", () => ring.style.opacity = "");
+    (function loop(){ rx += (mx - rx)*.2; ry += (my - ry)*.2; ring.style.transform = `translate(${rx}px,${ry}px)` + (ring.classList.contains("down") ? " scale(.85)" : ""); requestAnimationFrame(loop); })();
+  })();
+
+  // Intro: plays once per visit, can be skipped, never for people who turn motion off.
+  (() => {
+    const b = $("boot");
+    if (RM || ss.get("gd_boot")) return;
+    ss.set("gd_boot", "1"); b.hidden = false;
+    $("bootLogo").innerHTML = [..."GAMERZ"].map((ch,k) => `<span style="--i:${k}">${ch}</span>`).join("") + `<span style="--i:6">&nbsp;</span>` + [..."DELIGHT"].map((ch,k) => `<span class="g" style="--i:${k+7}">${ch}</span>`).join("");
+    const end = () => { b.classList.add("done"); setTimeout(() => b.remove(), 600); };
+    const tm = setTimeout(end, 1700); b.onclick = () => { clearTimeout(tm); end(); };
+    addEventListener("keydown", function k(){ clearTimeout(tm); end(); removeEventListener("keydown", k); });
+  })();
+
+  addEventListener("hashchange", route);
+  addEventListener("resize", () => { moveInd("#links", "ind"); moveInd("#tabbar", "tind"); });
+  drawVisit(); drawClock(); setInterval(drawClock, 30000); refresh(); drawShop(true); route();
+</script>
+</body>
+</html>
