@@ -11,7 +11,7 @@ document.querySelectorAll("[data-whatsapp-link]").forEach((link) => {
 });
 
 function requestText(data) {
-  const subject = `Growth Systems review request: ${data.get("business")}`;
+  const subject = `Website review request: ${data.get("business")}`;
   const body = [
     `Name: ${data.get("name")}`,
     `Business: ${data.get("business")}`,
@@ -37,7 +37,7 @@ if (form && status) form.addEventListener("submit", async (event) => {
   if (data.get("website_confirm")) return;
   data.set("page", window.location.href);
   data.set("referrer", document.referrer || "Direct");
-  data.set("_subject", `Growth Systems review request: ${data.get("business")}`);
+  data.set("_subject", `Website review request: ${data.get("business")}`);
   data.set("_template", "table");
   const { subject, body } = requestText(data);
 
@@ -63,9 +63,9 @@ if (form && status) form.addEventListener("submit", async (event) => {
 
   try {
     await navigator.clipboard.writeText(`Subject: ${subject}\n\n${body}`);
-    status.textContent = "Your review request is prepared and copied. Send it to the Growth Systems contact channel to begin qualification.";
+    status.textContent = "Your review request is prepared and copied. Send it to Emmanuel Muteti to begin qualification.";
   } catch {
-    status.textContent = "Your request is ready. Copy the details from the completed form and send them to the Growth Systems contact channel.";
+    status.textContent = "Your request is ready. Copy the details from the completed form and send them to Emmanuel Muteti.";
   }
 });
 
