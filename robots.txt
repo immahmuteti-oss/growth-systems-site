@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /work/client-samples/
+
+Sitemap: https://emmanuelmuteti.co.ke/sitemap.xml
