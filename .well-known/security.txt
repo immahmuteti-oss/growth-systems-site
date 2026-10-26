@@ -1,5 +1,5 @@
 Contact: mailto:immahmuteti@gmail.com
 Expires: 2027-10-16T00:00:00.000Z
 Preferred-Languages: en
-Canonical: https://immahmuteti-oss.github.io/growth-systems-site/.well-known/security.txt
-Policy: https://immahmuteti-oss.github.io/growth-systems-site/work/privacy/#security
+Canonical: https://emmanuelmuteti.co.ke/.well-known/security.txt
+Policy: https://emmanuelmuteti.co.ke/work/privacy/#security
