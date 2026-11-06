@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://emmanuelmuteti.co.ke/work/</loc></url>
-  <url><loc>https://emmanuelmuteti.co.ke/work/story/</loc></url>
-  <url><loc>https://emmanuelmuteti.co.ke/work/clients/</loc></url>
-  <url><loc>https://emmanuelmuteti.co.ke/work/systems/</loc></url>
-  <url><loc>https://emmanuelmuteti.co.ke/work/services/</loc></url>
-  <url><loc>https://emmanuelmuteti.co.ke/work/contact/</loc></url>
+  <url><loc>https://emmanuelmuteti.co.ke/work/</loc><lastmod>2026-11-05</lastmod></url>
+  <url><loc>https://emmanuelmuteti.co.ke/work/story/</loc><lastmod>2026-11-05</lastmod></url>
+  <url><loc>https://emmanuelmuteti.co.ke/work/clients/</loc><lastmod>2026-11-05</lastmod></url>
+  <url><loc>https://emmanuelmuteti.co.ke/work/systems/</loc><lastmod>2026-11-05</lastmod></url>
+  <url><loc>https://emmanuelmuteti.co.ke/work/services/</loc><lastmod>2026-11-05</lastmod></url>
+  <url><loc>https://emmanuelmuteti.co.ke/work/contact/</loc><lastmod>2026-11-05</lastmod></url>
+  <url><loc>https://emmanuelmuteti.co.ke/work/privacy/</loc><lastmod>2026-11-05</lastmod></url>
 </urlset>
